@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import Chip from '@material-ui/core/Chip';
 import Paper from '@material-ui/core/Paper';
-import TagFacesIcon from '@material-ui/icons/TagFaces';
+// import TagFacesIcon from '@material-ui/icons/TagFaces';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -18,35 +18,35 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function ChipsArray() {
+export default function ChipsArray(props) {
   const classes = useStyles();
-  const [chipData, setChipData] = React.useState([
-    { key: 0, label: 'Angular' },
-    { key: 1, label: 'jQuery' },
-    { key: 2, label: 'Polymer' },
-    { key: 3, label: 'React' },
-    { key: 4, label: 'Vue.js' },
-  ]);
+  const [chipData, setChipData] = React.useState([]);
+  useEffect(() => {
+    setChipData(props.addedDeformityList)
+  }, [props.addedDeformityList])
 
   const handleDelete = (chipToDelete) => () => {
-    setChipData((chips) => chips.filter((chip) => chip.key !== chipToDelete.key));
+    setChipData((chips) => chips.filter((chip) => chip.label !== chipToDelete.label));
+    props.handleAddDeformity(chipToDelete)
   };
+
+  console.log("Chip Data: ", chipData);
 
   return (
     <Paper component="ul" className={classes.root}>
       {chipData.map((data) => {
-        let icon;
+        // let icon;
 
-        if (data.label === 'React') {
-          icon = <TagFacesIcon />;
-        }
+        // if (data.label === 'React') {
+        //   icon = <TagFacesIcon />;
+        // }
 
         return (
-          <li key={data.key}>
+          <li key={data.id}>
             <Chip
-              icon={icon}
+              // icon={icon}
               label={data.label}
-              onDelete={data.label === 'React' ? undefined : handleDelete(data)}
+              onDelete={handleDelete(data)}
               className={classes.chip}
             />
           </li>

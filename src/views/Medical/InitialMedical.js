@@ -25,187 +25,692 @@ import FormHelperText from "@material-ui/core/FormHelperText";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import ArrowForwardIosIcon from "@material-ui/icons/ArrowForwardIos";
 import DeformityListOne from "../../components/List/DeformityListOne";
-import Chips from '../../components/Chips/Chip'
+import Chips from "../../components/Chips/Chip";
 
-const medicalDeformityList = {
-  "Surgical": {
-    "Elbow Deformities": [
-      "Cubitus valgus (carrying angle)",
-      "Cubitus varum",
-      "Other elbow deformities (Add remarks space for manual entry of specific problem)"
+const medicalDeformityList = [
+  {
+    id: 0,
+    label: "Surgical",
+    values: [
+      {
+        id: 0,
+        label: "Elbow Deformities",
+        values: [
+          {
+            id: 0,
+            label: "Cubitus valgus (carrying angle)",
+          },
+          {
+            id: 1,
+            label: "Cubitus varum",
+          },
+          {
+            id: 2,
+            label:
+              "Other elbow deformities (Add remarks space for manual entry of specific problem)",
+          },
+        ],
+      },
+      {
+        id: 1,
+        label: "Chest Deformities",
+        values: [
+          {
+            id: 0,
+            label: "Pectus carinatum",
+          },
+          {
+            id: 1,
+            label: "Pectus excavatum",
+          },
+          {
+            id: 2,
+            label:
+              "Other chest deformities (Add remarks space for manual entry of specific problem)",
+          },
+        ],
+      },
+      {
+        id: 2,
+        label: "Knee Deformities ",
+        values: [
+          {
+            id: 0,
+            label: "Genu valgus (knee knock)",
+          },
+          {
+            id: 1,
+            label: "Genu varum ",
+          },
+        ],
+      },
+      {
+        id: 3,
+        label: "Foot Deformities",
+        values: [
+          {
+            id: 0,
+            label: "Hallux valgus",
+          },
+          {
+            id: 1,
+            label: "Hallux varum",
+          },
+          {
+            id: 2,
+            label: "Pes planus (flat foot)",
+          },
+          {
+            id: 3,
+            label: "Pes cavum (high arched foot)",
+          },
+          {
+            id: 4,
+            label: "Mobile Pes planum",
+          },
+          {
+            id: 5,
+            label: "Over riding toes",
+          },
+          {
+            id: 6,
+            label: "Hammer toes",
+          },
+          {
+            id: 7,
+            label:
+              "Other foot deformities (Add remarks space for manual entry of specific problem)",
+          },
+        ],
+      },
+      {
+        id: 4,
+        label: "Spinal Deformities",
+        values: [
+          {
+            id: 0,
+            label: "Kyphosis",
+          },
+          {
+            id: 1,
+            label: "Scoliosis",
+          },
+          {
+            id: 2,
+            label: "Spina bifida",
+          },
+          {
+            id: 3,
+            label: "Winging of Scapula",
+          },
+          {
+            id: 4,
+            label:
+              "Other spinal deformities (Add remarks space for manual entry of specific problem)",
+          },
+        ],
+      },
+      {
+        id: 5,
+        label: "External Genitalia ",
+        values: [
+          {
+            id: 0,
+            label: "Inguinal hernia",
+          },
+          {
+            id: 1,
+            label: "Paraumbilical hernia",
+          },
+          {
+            id: 2,
+            label:
+              "Other hernias (Add remarks space for manual entry of specific problem)",
+          },
+          {
+            id: 3,
+            label: "Epispadias",
+          },
+          {
+            id: 4,
+            label: "Hypospadias",
+          },
+          {
+            id: 5,
+            label: "Hydrocoele ",
+          },
+          {
+            id: 6,
+            label: "Varicocoele",
+          },
+          {
+            id: 7,
+            label: "Undescended testis",
+          },
+          {
+            id: 8,
+            label: "Atrophic testis",
+          },
+          {
+            id: 9,
+            label: "Scrotal swelling",
+          },
+          {
+            id: 10,
+            label: "External hemorrhoids",
+          },
+          {
+            id: 11,
+            label: "Internal hemarrhoids ",
+          },
+          {
+            id: 12,
+            label: "Anal fissure",
+          },
+          {
+            id: 13,
+            label:
+              "Other genital diseases (Add remarks space for manual entry of specific problem)",
+          },
+        ],
+      },
+      {
+        id: 6,
+        label: "Scar Marks",
+        values: [
+          {
+            id: 0,
+            label: "Appendectomy ",
+          },
+          {
+            id: 1,
+            label: "Right Hand",
+          },
+          {
+            id: 2,
+            label: "Left Hand",
+          },
+          {
+            id: 3,
+            label: "Right Forearm",
+          },
+          {
+            id: 4,
+            label: "Left Forearm",
+          },
+          {
+            id: 5,
+            label: "Right Arm",
+          },
+          {
+            id: 6,
+            label: "Left Arm",
+          },
+          {
+            id: 7,
+            label: "Right Shoulder",
+          },
+          {
+            id: 8,
+            label: "Left Shoulder ",
+          },
+          {
+            id: 9,
+            label: "Chest",
+          },
+          {
+            id: 10,
+            label: "Back",
+          },
+          {
+            id: 11,
+            label: "Abdomen",
+          },
+          {
+            id: 12,
+            label: "Scalp",
+          },
+          {
+            id: 13,
+            label: "Face",
+          },
+          {
+            id: 14,
+            label: "Neck",
+          },
+          {
+            id: 15,
+            label: "Right Hip",
+          },
+          {
+            id: 16,
+            label: "Left Hip",
+          },
+          {
+            id: 17,
+            label: "Right Thigh",
+          },
+          {
+            id: 18,
+            label: "Left Thigh",
+          },
+          {
+            id: 19,
+            label: "Right Leg",
+          },
+          {
+            id: 20,
+            label: "Left Leg",
+          },
+          {
+            id: 21,
+            label: "Right Foot",
+          },
+          {
+            id: 22,
+            label: "Left Foot",
+          },
+          {
+            id: 23,
+            label:
+              "Other scar marks (Add remarks space for manual entry of specific problem)",
+          },
+        ],
+      },
+      {
+        id: 7,
+        label:
+          "Other Surgical Defects (Add remarks space for manual entry of specific problem)",
+        values: [
+          {
+            id: 0,
+            label:
+              "Other scar marks (Add remarks space for manual entry of specific problem)",
+          },
+        ],
+      },
     ],
-    "Chest Deformities": [
-      "Pectus carinatum",
-      "Pectus excavatum",
-      "Other chest deformities (Add remarks space for manual entry of specific problem)"
-    ],
-    "Knee Deformities": [
-      "Genu valgus (knee knock)",
-      "Genu varum"
-    ],
-    "Foot Deformities": [
-      "Hallux valgus",
-      "Hallux varum",
-      "Pes planus (flat foot)",
-      "Pes cavum (high arched foot)",
-      "Mobile Pes planum",
-      "Over riding toes",
-      "Hammer toes",
-      "Other foot deformities (Add remarks space for manual entry of specific problem)"
-    ],
-    "Spinal Deformities": [
-      "Kyphosis",
-      "Scoliosis",
-      "Spina bifida",
-      "Winging of Scapula",
-      "Other spinal deformities (Add remarks space for manual entry of specific problem)"
-    ],
-    "External Genitalia": [
-      "Inguinal hernia",
-      "Paraumbilical hernia",
-      "Other hernias (Add remarks space for manual entry of specific problem)",
-      "Epispadias",
-      "Hypospadias",
-      "Hydrocoele",
-      "Varicocoele",
-      "Undescended testis",
-      "Atrophic testis",
-      "Scrotal swelling",
-      "External hemorrhoids",
-      "Internal hemarrhoids",
-      "Anal fissure",
-      "Other genital diseases (Add remarks space for manual entry of specific problem)"
-    ],
-    "Scar Marks": [
-      "Appendectomy",
-      "Right Hand",
-      "Left Hand",
-      "Right Forearm",
-      "Left Forearm",
-      "Right Arm",
-      "Left Arm",
-      "Right Shoulder",
-      "Left Shoulder",
-      "Chest",
-      "Back",
-      "Abdomen",
-      "Scalp",
-      "Face",
-      "Neck",
-      "Right Hip",
-      "Left Hip",
-      "Right Thigh",
-      "Left Thigh",
-      "Right Leg",
-      "Left Leg",
-      "Right Foot",
-      "Left Foot",
-      "Other scar marks (Add remarks space for manual entry of specific problem)"
-    ],
-    "Other Surgical Defects (Add remarks space for manual entry of specific problem)": ""
   },
-  "ENT": {
-    "Nasal Deformities": [
-      "DNS",
-      "Enlarged turbinates",
-      "Nasal polyp / polypi",
-      "Atrophic rhinitis",
-      "Other nasal deformities (Add remarks space for manual entry of specific problem)"
+  {
+    id: 1,
+    label: "ENT",
+    values: [
+      {
+        id: 0,
+        label: "Nasal Deformities",
+        values: [
+          {
+            id: 0,
+            label: "DNS",
+          },
+          {
+            id: 1,
+            label: "Enlarged turbinates",
+          },
+          {
+            id: 2,
+            label: "Nasal polyp / polypi ",
+          },
+          {
+            id: 3,
+            label: "Atrophic rhinitis",
+          },
+          {
+            id: 4,
+            label:
+              "Other nasal deformities (Add remarks space for manual entry of specific problem)",
+          },
+        ],
+      },
+      {
+        id: 1,
+        label: "Ear Deformities",
+        values: [
+          {
+            id: 0,
+            label:
+              "External ear defects (Add remarks space for manual entry of specific problem)",
+          },
+          {
+            id: 1,
+            label: "Otitis externa",
+          },
+          {
+            id: 2,
+            label: "Otitis media",
+          },
+          {
+            id: 3,
+            label: "Aural discharge",
+          },
+          {
+            id: 4,
+            label: "Wax",
+          },
+          {
+            id: 5,
+            label: "Perforated tampanic membrane",
+          },
+          {
+            id: 6,
+            label: "Wax + TM Exam",
+          },
+          {
+            id: 7,
+            label:
+              "Other ear defects (Add remarks space for manual entry of specific problem)",
+          },
+        ],
+      },
+      {
+        id: 2,
+        label: "Throat Deformities",
+        values: [
+          {
+            id: 0,
+            label: "Tonsillitis",
+          },
+          {
+            id: 1,
+            label: "Deformed uvula",
+          },
+          {
+            id: 2,
+            label:
+              "Other throat deformities (Add remarks space for manual entry of specific problem)",
+          },
+        ],
+      },
+      {
+        id: 3,
+        label:
+          "Other ENT Defects (Add remarks space for manual entry of specific problem)",
+      },
     ],
-    "Ear Deformities": [
-      "External ear defects (Add remarks space for manual entry of specific problem)",
-      "Otitis externa",
-      "Otitis media",
-      "Aural discharge",
-      "Wax",
-      "Perforated tampanic membrane",
-      "Wax + TM Exam",
-      "Other ear defects (Add remarks space for manual entry of specific problem)"
+  },
+  {
+    id: 2,
+    label: "Eye",
+    values: [
+      {
+        id: 0,
+        label: "Squint",
+      },
+      {
+        id: 1,
+        label: "Trachoma",
+      },
+      {
+        id: 2,
+        label: "Ptosis",
+      },
+      {
+        id: 3,
+        label: "Conjunctivitis",
+      },
+      {
+        id: 4,
+        label: "Lid swelling",
+      },
+      {
+        id: 5,
+        label: "Dirty sclera",
+      },
+      {
+        id: 6,
+        label:
+          "Other eye defects (Add remarks space for manual entry of specific problem)",
+      },
     ],
-    "Throat Deformities": [
-      "Tonsillitis",
-      "Deformed uvula",
-      "Other throat deformities (Add remarks space for manual entry of specific problem)"
+  },
+  {
+    id: 3,
+    label: "Skin",
+    values: [
+      {
+        id: 0,
+        label:
+          "Hyper-pigmentation (Add remarks space for manual entry of specific problem)",
+      },
+      {
+        id: 1,
+        label:
+          "Hypo-pigmentation (Add remarks space for manual entry of specific problem)",
+      },
+      {
+        id: 2,
+        label: "Hyperhydrosis",
+      },
+      {
+        id: 3,
+        label:
+          "Skin lesions (Add remarks space for manual entry of specific problem)",
+      },
+      {
+        id: 4,
+        label:
+          "Other skin deformities (Add remarks space for manual entry of specific problem)",
+      },
     ],
-    "Other ENT Defects (Add remarks space for manual entry of specific problem)": ""
   },
-  "Eye": {
-    "Squint": {},
-    "Trachoma": {},
-    "Ptosis": {},
-    "Conjunctivitis": {},
-    "Lid swelling": {},
-    "Dirty sclera": {},
-    "Other eye defects (Add remarks space for manual entry of specific problem)": {}
-  },
-  "Skin": {
-    "Hyper-pigmentation (Add remarks space for manual entry of specific problem)": {},
-    "Hypo-pigmentation (Add remarks space for manual entry of specific problem)": {},
-    "Hyperhydrosis": {},
-    "Skin lesions (Add remarks space for manual entry of specific problem)": {},
-    "Other skin deformities (Add remarks space for manual entry of specific problem)": {}
-  },
-  "Thyroid": {
-    "Goitre": {},
-    "Other thyroid defects (Add remarks space for manual entry of specific problem)": {}
-  },
-  "Lymph nodes": {
-    "Swellings (Add remarks space for manual entry of specific problem)": {},
-    "Lymphadenitis (Add remarks space for manual entry of specific problem)": {}
-  },
-  "Nail Deformities": {
-    "Koilonychia": {},
-    "Splinter hemorrhages": {},
-    "Other nail deformities (Add remarks space for manual entry of specific problem)": {}
-  },
-  "Medical": {
-    "Speech": [
-      "Stammer",
-      "Stutter",
-      "Slurring",
-      "Monotonous",
-      "Other speech defects (Add remarks space for manual entry of specific problem)"
+  {
+    id: 4,
+    label: "Thyroid",
+    values: [
+      {
+        id: 0,
+        label: "Goitre",
+      },
+      {
+        id: 1,
+        label:
+          "Other thyroid defects (Add remarks space for manual entry of specific problem)",
+      },
     ],
-    "General": [
-      "Anemia",
-      "Jaundice",
-      "Cyanosis (Add remarks space for manual entry of specific problem)",
-      "Edema (Add remarks space for manual entry of specific problem)",
-      "Clubbing (Add remarks space for manual entry of specific problem)"
-    ],
-    "Cardiac": [
-      "Tachycardia",
-"Bradycardia",
-"Heart murmur",
-"Hypertension",
-"Arrythmia",
-"Other cardiac defects (Add remarks space for manual entry of specific problem)"
-      ],
-    "Respiratory": [
-      "Asthma",
-"Bronchitis",
-"History of TB",
-"Other pulmonary diseases (Add remarks space for manual entry of specific problem)"
-      ],
-    "Abdominal": ["Defects (Add remarks space for manual entry of specific problem)"],
-    "Other Medical Defects (Add remarks space for manual entry of specific problem)": {}
   },
-  "Dental": {
-    "Dental hygiene": {},
-    "Caries": {},
-    "Pyorrhea": {},
-    "Scurvy": {},
-    "Other dental defects (Add remarks space for manual entry of specific problem)": {}
-  }
-}
+  {
+    id: 5,
+    label: "Lymph nodes",
+    values: [
+      {
+        id: 0,
+        label:
+          "Swellings (Add remarks space for manual entry of specific problem)",
+      },
+      {
+        id: 1,
+        label:
+          "Lymphadenitis (Add remarks space for manual entry of specific problem)",
+      },
+    ],
+  },
+  {
+    id: 6,
+    label: "Nail Deformities",
+    values: [
+      {
+        id: 0,
+        label: "Koilonychia",
+      },
+      {
+        id: 1,
+        label: "Splinter hemorrhages",
+      },
+      {
+        id: 2,
+        label:
+          "Other nail deformities (Add remarks space for manual entry of specific problem)",
+      },
+    ],
+  },
+  {
+    id: 7,
+    label: "Medical",
+    values: [
+      {
+        id: 0,
+        label: "Speech",
+        values: [
+          {
+            id: 0,
+            label: "Stammer",
+          },
+          {
+            id: 1,
+            label: "Stutter",
+          },
+          {
+            id: 2,
+            label: "Slurring",
+          },
+          {
+            id: 3,
+            label: "Monotonous",
+          },
+          {
+            id: 4,
+            label:
+              "Other speech defects (Add remarks space for manual entry of specific problem)",
+          },
+        ],
+      },
+      {
+        id: 1,
+        label: "General",
+        values: [
+          {
+            id: 0,
+            label: "Anemia",
+          },
+          {
+            id: 1,
+            label: "Jaundice",
+          },
+          {
+            id: 2,
+            label:
+              "Cyanosis (Add remarks space for manual entry of specific problem)",
+          },
+          {
+            id: 3,
+            label:
+              "Edema (Add remarks space for manual entry of specific problem)",
+          },
+          {
+            id: 4,
+            label:
+              "Clubbing (Add remarks space for manual entry of specific problem)",
+          },
+        ],
+      },
+      {
+        id: 2,
+        label: "Cardiac",
+        values: [
+          {
+            id: 0,
+            label: "Tachycardia",
+          },
+          {
+            id: 1,
+            label: "Bradycardia",
+          },
+          {
+            id: 2,
+            label: "Heart murmur",
+          },
+          {
+            id: 3,
+            label: "Hypertension",
+          },
+          {
+            id: 4,
+            label: "Arrythmia",
+          },
+          {
+            id: 5,
+            label:
+              "Other cardiac defects (Add remarks space for manual entry of specific problem)",
+          },
+        ],
+      },
+      {
+        id: 3,
+        label: "Respiratory",
+        values: [
+          {
+            id: 0,
+            label: "Asthma",
+          },
+          {
+            id: 1,
+            label: "Bronchitis",
+          },
+          {
+            id: 2,
+            label: "History of TB",
+          },
+          {
+            id: 3,
+            label:
+              "Other pulmonary diseases (Add remarks space for manual entry of specific problem)",
+          },
+        ],
+      },
+      {
+        id: 4,
+        label: "Abdominal ",
+        values: [
+          {
+            id: 0,
+            label:
+              "Defects (Add remarks space for manual entry of specific problem)",
+          },
+        ],
+      },
+      {
+        id: 5,
+        label:
+          "Other Medical Defects (Add remarks space for manual entry of specific problem)",
+      },
+    ],
+  },
+  {
+    id: 8,
+    label: "Dental",
+    values: [
+      {
+        id: 0,
+        label: "Dental hygiene ",
+      },
+      {
+        id: 1,
+        label: "Caries",
+      },
+      {
+        id: 2,
+        label: "Pyorrhea",
+      },
+      {
+        id: 3,
+        label: "Scurvy",
+      },
+      {
+        id: 4,
+        label:
+          "Other dental defects (Add remarks space for manual entry of specific problem)",
+      },
+    ],
+  },
+];
 
 const useStyles = makeStyles(componentStyles);
-const useStylesPopover = makeStyles(theme => ({
+const useStylesPopover = makeStyles((theme) => ({
   root: {
     "& .MuiPopover-paper": {
-      padding: '0px'
-    }
-  }
+      padding: "0px",
+    },
+  },
 }));
 
 const cnicRegex = /^[0-9]{5}-[0-9]{7}-[0-9]$/g;
@@ -223,6 +728,7 @@ function Form() {
     weight: "",
     bp: ["", ""],
   });
+  const [addedDeformityList, setAddedDeformityList] = useState([]);
 
   const [anchorEl, setAnchorEl] = React.useState(null);
   const handleClick = (event) => {
@@ -236,8 +742,20 @@ function Form() {
 
   const handleSubmit = () => {
     console.log("Handle Submit: ", initialMedicalData);
-    // setDialogMessage('Eligible/Not Eligible')
-    // setOpenConfirmationDialog(true)
+  };
+
+  const handleAddDeformity = (item) => {
+    console.log("Add Deformity: ", item);
+    let addedDeformityListTemp = addedDeformityList;
+    let index = addedDeformityListTemp.findIndex(
+      (listItem) => listItem.label === item.label
+    );
+    if (index >= 0) {
+      addedDeformityListTemp.splice(index, 1);
+    } else {
+      addedDeformityListTemp.push(item);
+    }
+    setAddedDeformityList(addedDeformityListTemp);
   };
 
   const handleFieldsChange = (e) => {
@@ -518,16 +1036,21 @@ function Form() {
                   </Button>
                 </Grid>
               </Grid>
-              <Grid
-                container
-                justify="flex-start"
-                alignItems="center"
-                style={{ marginBottom: "50px" }}
-              >
-                <Grid item xs={12}>
-                  <Chips />
+              {addedDeformityList.length > 0 && (
+                <Grid
+                  container
+                  justify="flex-start"
+                  alignItems="center"
+                  style={{ marginBottom: "50px" }}
+                >
+                  <Grid item xs={12}>
+                    <Chips
+                      addedDeformityList={addedDeformityList}
+                      handleAddDeformity={handleAddDeformity}
+                    />
+                  </Grid>
                 </Grid>
-              </Grid>
+              )}
               <Grid container justify="center" alignItems="center">
                 <Grid item>
                   <Button
@@ -558,7 +1081,11 @@ function Form() {
           }}
           style={{ marginLeft: "5px" }}
         >
-          <DeformityListOne deformityList={medicalDeformityList} />
+          <DeformityListOne
+            deformityList={medicalDeformityList}
+            handleAddDeformity={handleAddDeformity}
+            handleClose={handleClose}
+          />
         </Popover>
       </Grid>
     </>

@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, 
+  // useEffect
+ } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import List from "@material-ui/core/List";
 import ListItem from "@material-ui/core/ListItem";
@@ -48,29 +50,34 @@ export default function SelectedListItem(props) {
   const classesList = useStylesListItem();
 
   const [anchorEl, setAnchorEl] = React.useState(null);
-  const [selectedIndex, setSelectedIndex] = React.useState(0);
-  const [selectedListItem, setSelectedListItem] = useState("")
-  const [deformityListArray, setDeformityListArray] = useState([]);
-
-  useEffect(() => {
-    setDeformityListArray(Object.keys(props.deformityList));
-  }, [props.deformityList]);
+  const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
   const handleClose = () => {
     setAnchorEl(null);
+    props.handleClose()
   };
-  const open = Boolean(anchorEl);
+
+  const [selectedIndex, setSelectedIndex] = React.useState(0);
+  const [selectedListItem, setSelectedListItem] = useState([])
+
+  const deformityListArray = props.deformityList;
 
   const handleListItemClick = (event, item, index) => {
     setSelectedIndex(index);
-    setSelectedListItem(item)
+    if(item.values) {
+      setSelectedListItem(item.values)
+      handleClick(event);
+    } else {
+      props.handleAddDeformity(item)
+      props.handleClose()
+    }
   };
-  
-  console.log("List 1: ", props.deformityList)
 
+  // console.log("One: ", deformityListArray);
+  
   return (
     <div className={classes.root}>
       <List
@@ -79,24 +86,24 @@ export default function SelectedListItem(props) {
         aria-label="main mailbox folders"
         className={classes.list}
       >
-        {deformityListArray.map((item, index) => {
+        {deformityListArray && deformityListArray.map((item, index) => {
           return (
             <>
               <ListItem
                 button
+                key={item.id}
                 selected={selectedIndex === index}
                 className={classesList.root}
                 onClick={(event) => {
                   handleListItemClick(event, item, index);
-                  handleClick(event);
                 }}
               >
-                <ListItemText primary={item} />
+                <ListItemText primary={item.label} />{ item.values && 
                 <ListItemSecondaryAction>
                   <IconButton edge="end" aria-label="delete">
                     {selectedIndex === index && <ArrowForwardIosIcon />}
                   </IconButton>
-                </ListItemSecondaryAction>
+                </ListItemSecondaryAction>}
               </ListItem>
               <Divider />
             </>
@@ -119,7 +126,7 @@ export default function SelectedListItem(props) {
         }}
         style={{ marginLeft: "5px" }}
       >
-        <DeformityListTwo deformityList={props.deformityList[selectedListItem]} />
+        <DeformityListTwo deformityList={selectedListItem}handleAddDeformity={props.handleAddDeformity} handleClose={handleClose} />
       </Popover>
     </div>
   );
