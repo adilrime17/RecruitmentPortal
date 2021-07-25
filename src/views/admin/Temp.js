@@ -32,6 +32,7 @@ import HeaderTemp from "components/Headers/HeaderTemp.js";
 // import FormComponent from "../../components/FormComponents/Form.js"
 import MedicalEligibility from "../Medical/MedicalEligibility";
 import InitialMedical from "../Medical/InitialMedical";
+import FinalMedical from "../Medical/FinalMedical";
 
 import {
   chartOptions,
@@ -41,6 +42,23 @@ import {
 } from "variables/charts.js";
 
 import componentStyles from "assets/theme/views/admin/dashboard.js";
+import PersonalInformation from "views/DataEntry/PersonalInformation";
+import Education from "views/DataEntry/Education";
+import WoaWos from "views/DataEntry/WoaWos";
+import TestsToAppear from "views/DataEntry/TestsToAppear";
+import PrintSlip from "views/DataEntry/PrintSlip";
+import Summary from "views/DataEntry/Summary";
+import IntelligenceTest from "views/Marks/IntelligenceTest";
+import PersonalityTest from "views/Marks/PersonalityTest";
+import WrittenMatric from "views/Marks/WrittenMatric";
+import WrittenUnderMatric from "views/Marks/WrittenUnderMatric";
+import ClkTest from "views/Marks/ClkTest";
+import TechTest from "views/Marks/TechTest";
+import CptrDiploma from "views/Marks/CptrDiploma";
+import DrivingTest from "views/Marks/DrivingTest";
+import HafizTest from "views/Marks/HafizTest";
+import Pet from "views/Marks/Pet";
+import SummaryMarks from "views/Marks/SummaryMarks";
 
 const useStyles = makeStyles(componentStyles);
 
@@ -50,8 +68,10 @@ function Dashboard() {
   const [activeNav, setActiveNav] = React.useState(1);
   const [chartExample1Data, setChartExample1Data] = React.useState("data1");
   let location = useLocation();
-  location = location.pathname.substring(location.pathname.lastIndexOf('/') + 1)
-  console.log(location)
+  location = location.pathname.substring(
+    location.pathname.lastIndexOf("/") + 1
+  );
+  console.log(location);
 
   if (window.Chart) {
     parseOptions(Chart, chartOptions());
@@ -72,9 +92,49 @@ function Dashboard() {
         classes={{ root: classes.containerRoot }}
       >
         <Grid container className={classes.formContainer}>
-          {
-            location === 'medical-eligibility' ? <MedicalEligibility /> : location === 'initial-medical' ? <InitialMedical /> : ""
-          }
+          {location === "medical-eligibility" ? (
+            <MedicalEligibility />
+          ) : location === "initial-medical" ? (
+            <InitialMedical />
+          ) : location === "final-medical" ? (
+            <FinalMedical />
+          ) : location === "personal-information" ? (
+            <PersonalInformation />
+          ) : location === "education" ? (
+            <Education />
+          ) : location === "woa-wos" ? (
+            <WoaWos />
+          ) : location === "tests-to-appear" ? (
+            <TestsToAppear />
+          ) : location === "print-slip" ? (
+            <PrintSlip />
+          ) : location === "summary" ? (
+            <Summary />
+          ) : location === "intelligence-test" ? (
+            <IntelligenceTest />
+          ) : location === "personality-test" ? (
+            <PersonalityTest />
+          ) : location === "written-test-matric" ? (
+            <WrittenMatric />
+          ) : location === "written-test-u-matric" ? (
+            <WrittenUnderMatric />
+          ) : location === "clk-test" ? (
+            <ClkTest />
+          ) : location === "tech-test" ? (
+            <TechTest />
+          ) : location === "cptr-diploma-test" ? (
+            <CptrDiploma />
+          ) : location === "driving-test" ? (
+            <DrivingTest />
+          ) : location === "hafiz-test" ? (
+            <HafizTest />
+          ) : location === "PET" ? (
+            <Pet />
+          ) : location === "summary-marks" ? (
+            <SummaryMarks />
+          ) : (
+            ""
+          )}
         </Grid>
       </Container>
     </>

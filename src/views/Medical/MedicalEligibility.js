@@ -14,14 +14,16 @@ import FormControl from "@material-ui/core/FormControl";
 import FormGroup from "@material-ui/core/FormGroup";
 import FormLabel from "@material-ui/core/FormLabel";
 import Grid from "@material-ui/core/Grid";
-import InputAdornment from '@material-ui/core/InputAdornment';
+import InputAdornment from "@material-ui/core/InputAdornment";
 import Typography from "@material-ui/core/Typography";
 import componentStyles from "assets/theme/views/admin/profile.js";
 import { Checkbox, Button } from "@material-ui/core";
 // import boxShadows from "assets/theme/box-shadow.js";
 import ConfirmationDialog from "../../components/Dialogs/ConfirmationDialog";
-import FormHelperText from '@material-ui/core/FormHelperText';
-import CheckCircleIcon from '@material-ui/icons/CheckCircle';
+import FormHelperText from "@material-ui/core/FormHelperText";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import Select from "@material-ui/core/Select";
+import MenuItem from "@material-ui/core/MenuItem";
 
 const useStyles = makeStyles(componentStyles);
 
@@ -32,30 +34,48 @@ function Form() {
   const theme = useTheme();
   const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
   const [medicalEligibilityData, setMedicalEligibilityData] = useState({
+    ncse: false,
     firstName: "",
     middleName: "",
     lastName: "",
+    fatherName: "",
+    district: "",
+    class: "",
+    civilQualification: "",
     cnic: "",
     dob: "",
-    height: '',
-    chest: '',
-    weight: '',
-    deformity: false
+    height: "",
+    chest: "",
+    weight: "",
+    deformity: false,
   });
-  const [dialogMessage, setDialogMessage] = useState('')
+  const [dialogMessage, setDialogMessage] = useState("");
 
   const handleSubmit = () => {
     console.log("Handle Submit: ", medicalEligibilityData);
-    setDialogMessage('Eligible/Not Eligible')
-    setOpenConfirmationDialog(true)
+    setDialogMessage("Eligible/Not Eligible");
+    setOpenConfirmationDialog(true);
   };
 
   const handleFieldsChange = (e) => {
     console.log(e.target.value);
+    console.log(e.target.checked);
     console.log(e.target.name);
+
     setMedicalEligibilityData({
       ...medicalEligibilityData,
-      [e.target.name]: e.target.name === 'deformity' ? e.target.checked : e.target.value,
+      [e.target.name]: e.target.value,
+    });
+  };
+
+  const handleCheckFieldsChange = (e) => {
+    console.log(e.target.value);
+    console.log(e.target.checked);
+    console.log(e.target.name);
+
+    setMedicalEligibilityData({
+      ...medicalEligibilityData,
+      [e.target.name]: e.target.checked,
     });
   };
 
@@ -118,9 +138,20 @@ function Form() {
               User Information
             </Box> */}
             <div className={classes.plLg4}>
+              <Grid container justify="flex-end" alignItems="center">
+                <Grid item>
+                  <FormLabel>Applying as NCsE</FormLabel>
+                  <Checkbox
+                    name="ncse"
+                    color="primary"
+                    checked={medicalEligibilityData.ncse}
+                    onChange={handleCheckFieldsChange}
+                  />
+                </Grid>
+              </Grid>
               <Grid container>
                 <Grid item xs={12} lg={4}>
-                  <FormGroup>
+                  <FormGroup style={{ marginBottom: "0.5rem" }}>
                     <FormLabel>First Name</FormLabel>
                     <FormControl
                       variant="filled"
@@ -143,7 +174,7 @@ function Form() {
                   </FormGroup>
                 </Grid>
                 <Grid item xs={12} lg={4}>
-                  <FormGroup>
+                  <FormGroup style={{ marginBottom: "0.5rem" }}>
                     <FormLabel>Middle Name</FormLabel>
                     <FormControl
                       variant="filled"
@@ -166,7 +197,7 @@ function Form() {
                   </FormGroup>
                 </Grid>
                 <Grid item xs={12} lg={4}>
-                  <FormGroup>
+                  <FormGroup style={{ marginBottom: "0.5rem" }}>
                     <FormLabel>Last Name</FormLabel>
                     <FormControl
                       variant="filled"
@@ -191,7 +222,96 @@ function Form() {
               </Grid>
               <Grid container>
                 <Grid item xs={12} lg={4}>
-                  <FormGroup>
+                  <FormGroup style={{ marginBottom: "0.5rem" }}>
+                    <FormLabel>Father's Name</FormLabel>
+                    <FormControl
+                      variant="filled"
+                      component={Box}
+                      width="100%"
+                      marginBottom="1rem!important"
+                    >
+                      <Box
+                        paddingLeft="0.75rem"
+                        paddingRight="0.75rem"
+                        component={FilledInput}
+                        autoComplete="off"
+                        type="text"
+                        name="fatherName"
+                        placeholder="Provide Father's Name"
+                        value={medicalEligibilityData.fatherName}
+                        onChange={handleFieldsChange}
+                      />
+                    </FormControl>
+                  </FormGroup>
+                </Grid>
+                <Grid item xs={12} lg={4}>
+                  <FormGroup style={{ marginBottom: "0.5rem" }}>
+                    <FormLabel>District</FormLabel>
+                    <FormControl
+                      variant="filled"
+                      component={Box}
+                      width="100%"
+                      marginBottom="1rem!important"
+                    >
+                      <Box
+                        paddingLeft="0.75rem"
+                        paddingRight="0.75rem"
+                        component={Select}
+                        autoComplete="off"
+                        type="text"
+                        name="district"
+                        displayEmpty
+                        placeholder="Select District"
+                        value={medicalEligibilityData.district}
+                        onChange={handleFieldsChange}
+                      >
+                        {["Multan", "ISB", "Lahore", "Karachi"].map(
+                          (option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          )
+                        )}
+                      </Box>
+                    </FormControl>
+                  </FormGroup>
+                </Grid>
+                <Grid item xs={12} lg={4}>
+                  <FormGroup style={{ marginBottom: "0.5rem" }}>
+                    <FormLabel>Class</FormLabel>
+                    <FormControl
+                      variant="filled"
+                      component={Box}
+                      width="100%"
+                      marginBottom="1rem!important"
+                    >
+                      <Box
+                        paddingLeft="0.75rem"
+                        paddingRight="0.75rem"
+                        component={Select}
+                        autoComplete="off"
+                        type="text"
+                        name="class"
+                        displayEmpty
+                        placeholder="Select Class"
+                        value={medicalEligibilityData.class}
+                        onChange={handleFieldsChange}
+                      >
+                        {["class1", "class2", "class3", "class4"].map(
+                          (option) => (
+                            <MenuItem key={option} value={option}>
+                              {option}
+                            </MenuItem>
+                          )
+                        )}
+                      </Box>
+                    </FormControl>
+                  </FormGroup>
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={12} lg={4}>
+                  <FormGroup style={{ marginBottom: "0.5rem" }}>
                     <FormLabel>CNIC (Format: xxxxx-xxxxxxx-x)</FormLabel>
                     <FormControl
                       variant="filled"
@@ -213,20 +333,30 @@ function Form() {
                         name="cnic"
                         placeholder="xxxxx-xxxxxxx-x"
                         value={medicalEligibilityData.cnic}
-                        endAdornment={<InputAdornment position="end"><CheckCircleIcon classes={{ root: classes.iconCnic }} /></InputAdornment>}
+                        endAdornment={
+                          <InputAdornment position="end">
+                            <CheckCircleIcon
+                              classes={{ root: classes.iconCnic }}
+                            />
+                          </InputAdornment>
+                        }
                         onChange={handleFieldsChange}
                       />
                     </FormControl>
                     {!cnicRegex.test(medicalEligibilityData.cnic) &&
                       medicalEligibilityData.cnic.length > 0 && (
-                        <FormHelperText error id="standard-weight-helper-text" color='error'>
+                        <FormHelperText
+                          error
+                          id="standard-weight-helper-text"
+                          color="error"
+                        >
                           Please follow CNIC format!
-                          </FormHelperText>
+                        </FormHelperText>
                       )}
                   </FormGroup>
                 </Grid>
                 <Grid item xs={12} lg={4}>
-                  <FormGroup>
+                  <FormGroup style={{ marginBottom: "0.5rem" }}>
                     <FormLabel>Date of Birth</FormLabel>
                     <FormControl
                       variant="filled"
@@ -250,7 +380,73 @@ function Form() {
               </Grid>
               <Grid container>
                 <Grid item xs={12} lg={4}>
-                  <FormGroup>
+                  <FormGroup style={{ marginBottom: "0.5rem" }}>
+                    <FormLabel>Max Qualification</FormLabel>
+                    <FormControl
+                      variant="filled"
+                      component={Box}
+                      width="100%"
+                      marginBottom="1rem!important"
+                    >
+                      <Box
+                        paddingLeft="0.75rem"
+                        paddingRight="0.75rem"
+                        component={Select}
+                        autoComplete="off"
+                        type="text"
+                        name="maxQualification"
+                        displayEmpty
+                        placeholder="Select Max Qualification"
+                        value={medicalEligibilityData.maxQualification}
+                        onChange={handleFieldsChange}
+                      >
+                        {[
+                          "Under Matric",
+                          "Matric",
+                          "FSc",
+                          "Diploma",
+                          "Bachelor",
+                          "Masters",
+                        ].map((option) => (
+                          <MenuItem key={option} value={option}>
+                            {option}
+                          </MenuItem>
+                        ))}
+                      </Box>
+                    </FormControl>
+                  </FormGroup>
+                </Grid>
+                <Grid item xs={12} lg={2} className={classes.selectBoxes}>
+                  <FormLabel>WOS</FormLabel>
+                  <Checkbox
+                    name="wos"
+                    color="primary"
+                    checked={medicalEligibilityData.wos}
+                    onChange={handleCheckFieldsChange}
+                  />
+                </Grid>
+                <Grid item xs={12} lg={2} className={classes.selectBoxes}>
+                  <FormLabel>WOA</FormLabel>
+                  <Checkbox
+                    name="woa"
+                    color="primary"
+                    checked={medicalEligibilityData.woa}
+                    onChange={handleCheckFieldsChange}
+                  />
+                </Grid>
+                <Grid item xs={12} lg={2} className={classes.selectBoxes}>
+                  <FormLabel>DLH</FormLabel>
+                  <Checkbox
+                    name="dlh"
+                    color="primary"
+                    checked={medicalEligibilityData.dlh}
+                    onChange={handleCheckFieldsChange}
+                  />
+                </Grid>
+              </Grid>
+              <Grid container>
+                <Grid item xs={12} lg={4}>
+                  <FormGroup style={{ marginBottom: "0.5rem" }}>
                     <FormLabel>Height (Inches)</FormLabel>
                     <FormControl
                       variant="filled"
@@ -273,7 +469,7 @@ function Form() {
                   </FormGroup>
                 </Grid>
                 <Grid item xs={12} lg={4}>
-                  <FormGroup>
+                  <FormGroup style={{ marginBottom: "0.5rem" }}>
                     <FormLabel>Chest (Inches)</FormLabel>
                     <FormControl
                       variant="filled"
@@ -296,7 +492,7 @@ function Form() {
                   </FormGroup>
                 </Grid>
                 <Grid item xs={12} lg={4}>
-                  <FormGroup>
+                  <FormGroup style={{ marginBottom: "0.5rem" }}>
                     <FormLabel>Weight (Kg)</FormLabel>
                     <FormControl
                       variant="filled"
@@ -323,11 +519,16 @@ function Form() {
                 container
                 justify="center"
                 alignItems="center"
-                style={{ marginBottom: "50px" }}
+                style={{ marginBottom: "30px" }}
               >
                 <Grid item>
                   <FormLabel>Some Visible Deformity? </FormLabel>
-                  <Checkbox name='deformity' color="primary" checked={medicalEligibilityData.deformity} onChange={handleFieldsChange} />
+                  <Checkbox
+                    name="deformity"
+                    color="primary"
+                    checked={medicalEligibilityData.deformity}
+                    onChange={handleCheckFieldsChange}
+                  />
                 </Grid>
               </Grid>
               <Grid container justify="center" alignItems="center">
@@ -363,7 +564,7 @@ function Form() {
             <div className={classes.plLg4}>
               <Grid container>
                 <Grid item xs={12}>
-                  <FormGroup>
+                  <FormGroup style={{marginBottom: '0.5rem'}}>
                     <FormLabel>Address</FormLabel>
                     <FormControl
                       variant="filled"
@@ -385,7 +586,7 @@ function Form() {
               </Grid>
               <Grid container>
                 <Grid item xs={12} lg={4}>
-                  <FormGroup>
+                  <FormGroup style={{marginBottom: '0.5rem'}}>
                     <FormLabel>City</FormLabel>
                     <FormControl
                       variant="filled"
@@ -405,7 +606,7 @@ function Form() {
                   </FormGroup>
                 </Grid>
                 <Grid item xs={12} lg={4}>
-                  <FormGroup>
+                  <FormGroup style={{marginBottom: '0.5rem'}}>
                     <FormLabel>Country</FormLabel>
                     <FormControl
                       variant="filled"
@@ -425,7 +626,7 @@ function Form() {
                   </FormGroup>
                 </Grid>
                 <Grid item xs={12} lg={4}>
-                  <FormGroup>
+                  <FormGroup style={{marginBottom: '0.5rem'}}>
                     <FormLabel>Postal code</FormLabel>
                     <FormControl
                       variant="filled"
@@ -467,7 +668,7 @@ function Form() {
             <div className={classes.plLg4}>
               <Grid container>
                 <Grid item xs={12}>
-                  <FormGroup>
+                  <FormGroup style={{marginBottom: '0.5rem'}}>
                     <FormLabel>About me</FormLabel>
                     <FormControl
                       variant="filled"

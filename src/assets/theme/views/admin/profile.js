@@ -1,6 +1,9 @@
 import boxShadows from "assets/theme/box-shadow.js";
 
 const componentStyles = (theme) => ({
+  selectBoxes: {
+    paddingTop: '20px'
+  },
   iconCnic: {
     color: '#027b35',
     width: '23px',
@@ -33,6 +36,7 @@ const componentStyles = (theme) => ({
   plLg4: {
     [theme.breakpoints.up("md")]: {
       paddingLeft: "1.5rem",
+      paddingRight: "1.5rem",
     },
   },
   ptMd4: {

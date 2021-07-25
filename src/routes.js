@@ -4,7 +4,7 @@ import Temp from "views/admin/Temp.js";
 // import Icons from "views/admin/Icons.js";
 // import Login from "views/auth/Login.js";
 // import Maps from "views/admin/Maps.js";
-import Profile from "views/admin/Profile.js";
+// import Profile from "views/admin/Profile.js";
 // import Register from "views/auth/Register.js";
 // import Tables from "views/admin/Tables.js";
 // @material-ui/icons components
@@ -23,7 +23,7 @@ var routes = [
   //>> Medical routes :
   {
     path: "/medical-eligibility",
-    name: "Medical Eligibility",
+    name: "Eligibility Check",
     // icon: Tv,
     // iconColor: "Primary",
     component: Temp,
@@ -51,8 +51,8 @@ var routes = [
 
   //>> Data Entry Routes :
   {
-    path: "/data-entry",
-    name: "Data Entry",
+    path: "/personal-information",
+    name: "Personal Information",
     // icon: Tv,
     // iconColor: "Primary",
     component: Temp,
@@ -69,8 +69,8 @@ var routes = [
     key: 'data'
   },
   {
-    path: "/special-requirement",
-    name: "Special Requirement",
+    path: "/woa-wos",
+    name: "WOA/WOS",
     // icon: Tv,
     // iconColor: "Primary",
     component: Temp,
@@ -78,8 +78,8 @@ var routes = [
     key: 'data'
   },
   {
-    path: "/assign-trade",
-    name: "Assign Trade",
+    path: "/tests-to-appear",
+    name: "Test to Appear",
     // icon: Tv,
     // iconColor: "Primary",
     component: Temp,
@@ -95,12 +95,21 @@ var routes = [
     layout: "/admin",
     key: 'data'
   },
+  {
+    path: "/summary",
+    name: "Summary",
+    // icon: Tv,
+    // iconColor: "Primary",
+    component: Temp,
+    layout: "/admin",
+    key: 'data'
+  },
 
   // >> Marks Entry Routes :
 
   {
-    path: "/initial-test",
-    name: "Initial/Personality Test",
+    path: "/intelligence-test",
+    name: "Intelligence Test",
     // icon: Tv,
     // iconColor: "Primary",
     component: Temp,
@@ -108,8 +117,8 @@ var routes = [
     key: 'marks'
   },
   {
-    path: "/written-test",
-    name: "Written Test",
+    path: "/personality-test",
+    name: "Personality Test",
     // icon: Tv,
     // iconColor: "Primary",
     component: Temp,
@@ -117,8 +126,64 @@ var routes = [
     key: 'marks'
   },
   {
-    path: "/special-tests",
-    name: "Special Tests",
+    path: "/written-test-matric",
+    name: "Written Test (Matric)",
+    // icon: Tv,
+    // iconColor: "Primary",
+    component: Temp,
+    layout: "/admin",
+    key: 'marks'
+  },
+  {
+    path: "/written-test-u-matric",
+    name: "Written Test (U/Matric)",
+    // icon: Tv,
+    // iconColor: "Primary",
+    component: Temp,
+    layout: "/admin",
+    key: 'marks'
+  },
+  {
+    path: "/clk-test",
+    name: "CLK Test",
+    // icon: Tv,
+    // iconColor: "Primary",
+    component: Temp,
+    layout: "/admin",
+    key: 'marks'
+  },
+  {
+    path: "/tech-test",
+    name: "Tech Test",
+    // icon: Tv,
+    // iconColor: "Primary",
+    component: Temp,
+    layout: "/admin",
+    key: 'marks'
+  },
+  {
+    path: "/cptr-diploma-test",
+    name: "Cptr Diploma Test",
+    // icon: Tv,
+    // iconColor: "Primary",
+    component: Temp,
+    layout: "/admin",
+    key: 'marks'
+  },
+  
+  {
+    path: "/driving-test",
+    name: "Driving Test",
+    // icon: Tv,
+    // iconColor: "Primary",
+    component: Temp,
+    layout: "/admin",
+    key: 'marks'
+  },
+  
+  {
+    path: "/hafiz-test",
+    name: "Hafiz Test",
     // icon: Tv,
     // iconColor: "Primary",
     component: Temp,
@@ -128,6 +193,24 @@ var routes = [
   {
     path: "/PET",
     name: "PET",
+    // icon: Tv,
+    // iconColor: "Primary",
+    component: Temp,
+    layout: "/admin",
+    key: 'marks'
+  },
+  {
+    path: "/summary-marks",
+    name: "Summary Marks",
+    // icon: Tv,
+    // iconColor: "Primary",
+    component: Temp,
+    layout: "/admin",
+    key: 'marks'
+  },
+  {
+    path: "/view-print-nominal-rolls",
+    name: "View/Print Nominal Rolls",
     // icon: Tv,
     // iconColor: "Primary",
     component: Temp,
@@ -174,14 +257,14 @@ var routes = [
   //   component: Maps,
   //   layout: "/admin",
   // },
-  {
-    path: "/user-profile",
-    name: "User Profile",
-    // icon: Person,
-    iconColor: "WarningLight",
-    component: Profile,
-    layout: "/admin",
-  },
+  // {
+  //   path: "/user-profile",
+  //   name: "User Profile",
+  //   // icon: Person,
+  //   iconColor: "WarningLight",
+  //   component: Profile,
+  //   layout: "/admin",
+  // },
   // {
   //   path: "/tables",
   //   name: "Tables",

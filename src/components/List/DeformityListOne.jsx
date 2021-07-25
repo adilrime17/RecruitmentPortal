@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const useStylesPopover = makeStyles((theme) => ({
+const useStylesPopover = makeStyles(() => ({
   root: {
     "& .MuiPopover-paper": {
       padding: "0px",
@@ -35,7 +35,7 @@ const useStylesPopover = makeStyles((theme) => ({
   },
 }));
 
-const useStylesListItem = makeStyles((theme) => ({
+const useStylesListItem = makeStyles(() => ({
   root: {
     "& .MuiTouchRipple-root": {
       zIndex: 1,
