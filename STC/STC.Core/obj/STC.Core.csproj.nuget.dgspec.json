@@ -1,0 +1,136 @@
+{
+  "format": 1,
+  "restore": {
+    "C:\\Users\\shozib\\github_repos\\stc_recruitment_drive\\STC\\STC.Core\\STC.Core.csproj": {}
+  },
+  "projects": {
+    "C:\\Users\\shozib\\github_repos\\stc_recruitment_drive\\STC\\STC.Core\\STC.Core.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\shozib\\github_repos\\stc_recruitment_drive\\STC\\STC.Core\\STC.Core.csproj",
+        "projectName": "STC.Core",
+        "projectPath": "C:\\Users\\shozib\\github_repos\\stc_recruitment_drive\\STC\\STC.Core\\STC.Core.csproj",
+        "packagesPath": "C:\\Users\\shozib\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\shozib\\github_repos\\stc_recruitment_drive\\STC\\STC.Core\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\shozib\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
+            "projectReferences": {
+              "C:\\Users\\shozib\\github_repos\\stc_recruitment_drive\\STC\\STC.Data\\STC.Data.csproj": {
+                "projectPath": "C:\\Users\\shozib\\github_repos\\stc_recruitment_drive\\STC\\STC.Data\\STC.Data.csproj"
+              }
+            }
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.301\\RuntimeIdentifierGraph.json"
+        }
+      }
+    },
+    "C:\\Users\\shozib\\github_repos\\stc_recruitment_drive\\STC\\STC.Data\\STC.Data.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "C:\\Users\\shozib\\github_repos\\stc_recruitment_drive\\STC\\STC.Data\\STC.Data.csproj",
+        "projectName": "STC.Data",
+        "projectPath": "C:\\Users\\shozib\\github_repos\\stc_recruitment_drive\\STC\\STC.Data\\STC.Data.csproj",
+        "packagesPath": "C:\\Users\\shozib\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\shozib\\github_repos\\stc_recruitment_drive\\STC\\STC.Data\\obj\\",
+        "projectStyle": "PackageReference",
+        "configFilePaths": [
+          "C:\\Users\\shozib\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "netcoreapp3.1"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "netcoreapp3.1": {
+            "targetAlias": "netcoreapp3.1",
+            "projectReferences": {}
+          }
+        },
+        "warningProperties": {
+          "warnAsError": [
+            "NU1605"
+          ]
+        }
+      },
+      "frameworks": {
+        "netcoreapp3.1": {
+          "targetAlias": "netcoreapp3.1",
+          "dependencies": {
+            "Microsoft.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[5.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore.Design": {
+              "include": "Runtime, Build, Native, ContentFiles, Analyzers, BuildTransitive",
+              "suppressParent": "All",
+              "target": "Package",
+              "version": "[5.0.8, )"
+            },
+            "Pomelo.EntityFrameworkCore.MySql": {
+              "target": "Package",
+              "version": "[5.0.1, )"
+            }
+          },
+          "imports": [
+            "net461",
+            "net462",
+            "net47",
+            "net471",
+            "net472",
+            "net48"
+          ],
+          "assetTargetFallback": true,
+          "warn": true,
+          "frameworkReferences": {
+            "Microsoft.NETCore.App": {
+              "privateAssets": "all"
+            }
+          },
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.301\\RuntimeIdentifierGraph.json"
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,86 @@
+#cnic::-webkit-outer-spin-button,
+#cnic::-webkit-inner-spin-button {
+    /* display: none; <- Crashes Chrome on hover */
+    -webkit-appearance: none;
+    margin: 0; /* <-- Apparently some margin are still there even though it's hidden */
+}
+
+#cnic[type=number] {
+    -moz-appearance:textfield; /* Firefox */
+}
+
+body {
+    background-color: #f6f6f6;
+}
+
+/* Provide sufficient contrast against white background */
+a {
+    color: #0366d6;
+}
+
+code {
+    color: #E01A76;
+}
+
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
+}
+
+.login-container {
+    height: 100vh;
+    background: linear-gradient(180deg, #027b35, #01411c);
+}
+
+.dashboard-container {
+    height: 100vh;
+    width: 100%;
+    max-width: 100vw;
+    display: flex;
+    flex-direction: row;
+}
+
+.dashboard-container .nav-drawer {
+    width: 15vw;
+    height: 100vh;
+    padding: 0.5rem;
+    background: #027b35;
+    position: fixed;
+}
+
+.dashboard-container .nav-drawer .nav-pills .nav-link {
+    color: var(--light);
+    border-radius: 0;
+}
+
+.dashboard-container .nav-drawer .nav-pills .nav-link.active, .dashboard-container .nav-drawer .nav-pills .nav-link:hover {
+    background: var(--success);
+    color: var(--light);
+}
+
+.dashboard-container .content-container {
+    width: 85vw;
+    margin-left: 15vw;
+}
+
+.dashboard-container .content-container .navbar {
+    background: #027b35;
+}
+
+.dashboard-container .content-container .content {
+    padding-top: 0.5rem;
+    padding-bottom: 0.5rem;
+    background-color: white;
+}
+
+.dashboard-container .content-container .content label:not(.form-check-label) {
+    font-weight: 500;
+    color: #666;
+    font-size: smaller;
+    text-transform: uppercase;
+}
+
+.dashboard-container .content-container .content label.form-check-label {
+    color: #495057;
+}
