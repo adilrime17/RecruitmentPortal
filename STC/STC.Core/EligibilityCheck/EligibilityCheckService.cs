@@ -21,7 +21,7 @@ namespace STC.Core.EligibilityCheck
 
             if(NCsE)
             {
-                if(age >= 17.5 && age <= 35)
+                if(age >= 17 && age <= 35)
                 {
                     return true;
                 }
