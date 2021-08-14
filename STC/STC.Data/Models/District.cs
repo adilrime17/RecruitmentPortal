@@ -33,6 +33,8 @@ namespace STC.Data.Models
         public string Province { get; set; }
         [Column("leniency")]
         public bool Leniency { get; set; }
+        [Column("class")]
+        public int Class { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("update_time", TypeName = "timestamp")]

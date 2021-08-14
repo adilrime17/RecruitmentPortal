@@ -1,20 +1,20 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\shozib\\github_repos\\stc_recruitment_drive\\STC\\STC.Data\\STC.Data.csproj": {}
+    "C:\\Users\\LENOVO\\Source\\Repos\\adilrime17\\RecruitmentPortal\\STC\\STC.Data\\STC.Data.csproj": {}
   },
   "projects": {
-    "C:\\Users\\shozib\\github_repos\\stc_recruitment_drive\\STC\\STC.Data\\STC.Data.csproj": {
+    "C:\\Users\\LENOVO\\Source\\Repos\\adilrime17\\RecruitmentPortal\\STC\\STC.Data\\STC.Data.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\shozib\\github_repos\\stc_recruitment_drive\\STC\\STC.Data\\STC.Data.csproj",
+        "projectUniqueName": "C:\\Users\\LENOVO\\Source\\Repos\\adilrime17\\RecruitmentPortal\\STC\\STC.Data\\STC.Data.csproj",
         "projectName": "STC.Data",
-        "projectPath": "C:\\Users\\shozib\\github_repos\\stc_recruitment_drive\\STC\\STC.Data\\STC.Data.csproj",
-        "packagesPath": "C:\\Users\\shozib\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\shozib\\github_repos\\stc_recruitment_drive\\STC\\STC.Data\\obj\\",
+        "projectPath": "C:\\Users\\LENOVO\\Source\\Repos\\adilrime17\\RecruitmentPortal\\STC\\STC.Data\\STC.Data.csproj",
+        "packagesPath": "C:\\Users\\LENOVO\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\LENOVO\\Source\\Repos\\adilrime17\\RecruitmentPortal\\STC\\STC.Data\\obj\\",
         "projectStyle": "PackageReference",
         "configFilePaths": [
-          "C:\\Users\\shozib\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Users\\LENOVO\\AppData\\Roaming\\NuGet\\NuGet.Config",
           "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
@@ -26,7 +26,6 @@
         },
         "frameworks": {
           "netcoreapp3.1": {
-            "targetAlias": "netcoreapp3.1",
             "projectReferences": {}
           }
         },
@@ -38,7 +37,6 @@
       },
       "frameworks": {
         "netcoreapp3.1": {
-          "targetAlias": "netcoreapp3.1",
           "dependencies": {
             "Microsoft.EntityFrameworkCore": {
               "target": "Package",
@@ -70,7 +68,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\5.0.301\\RuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\3.1.301\\RuntimeIdentifierGraph.json"
         }
       }
     }

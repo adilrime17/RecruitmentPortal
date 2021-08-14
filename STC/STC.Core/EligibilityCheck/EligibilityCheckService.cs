@@ -16,11 +16,12 @@ namespace STC.Core.EligibilityCheck
         public bool Check(Candidate candidate, bool NCsE)
         {
             int age = DateTime.Today.Year - candidate.DateOfBirth.Year;
+
             if (candidate.DateOfBirth.Date > DateTime.Today.AddYears(-age)) age--;
 
             if(NCsE)
             {
-                if(age > 19 && age < 27)
+                if(age >= 17.5 && age <= 35)
                 {
                     return true;
                 }
