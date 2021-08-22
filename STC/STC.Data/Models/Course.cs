@@ -13,7 +13,11 @@ namespace STC.Data.Models
     {
         public Course()
         {
+            CandidateCourseSummaries = new HashSet<CandidateCourseSummary>();
             CandidateHasCourses = new HashSet<CandidateHasCourse>();
+            CandidateMedicalInfos = new HashSet<CandidateMedicalInfo>();
+            CourseHasTests = new HashSet<CourseHasTest>();
+            PhysicalTestScores = new HashSet<PhysicalTestScore>();
             UserHasCourses = new HashSet<UserHasCourse>();
         }
 
@@ -34,8 +38,16 @@ namespace STC.Data.Models
         [Column("is_deleted")]
         public bool IsDeleted { get; set; }
 
+        [InverseProperty(nameof(CandidateCourseSummary.Course))]
+        public virtual ICollection<CandidateCourseSummary> CandidateCourseSummaries { get; set; }
         [InverseProperty(nameof(CandidateHasCourse.Course))]
         public virtual ICollection<CandidateHasCourse> CandidateHasCourses { get; set; }
+        [InverseProperty(nameof(CandidateMedicalInfo.Course))]
+        public virtual ICollection<CandidateMedicalInfo> CandidateMedicalInfos { get; set; }
+        [InverseProperty(nameof(CourseHasTest.Course))]
+        public virtual ICollection<CourseHasTest> CourseHasTests { get; set; }
+        [InverseProperty(nameof(PhysicalTestScore.Course))]
+        public virtual ICollection<PhysicalTestScore> PhysicalTestScores { get; set; }
         [InverseProperty(nameof(UserHasCourse.Course))]
         public virtual ICollection<UserHasCourse> UserHasCourses { get; set; }
     }

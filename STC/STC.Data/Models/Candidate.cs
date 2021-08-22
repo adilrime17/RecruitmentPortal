@@ -16,7 +16,12 @@ namespace STC.Data.Models
     {
         public Candidate()
         {
+            CandidateCourseSummaries = new HashSet<CandidateCourseSummary>();
             CandidateHasCourses = new HashSet<CandidateHasCourse>();
+            CandidateHasEducations = new HashSet<CandidateHasEducation>();
+            CandidateMedicalInfos = new HashSet<CandidateMedicalInfo>();
+            CandidateTestScores = new HashSet<CandidateTestScore>();
+            PhysicalTestScores = new HashSet<PhysicalTestScore>();
         }
 
         [Key]
@@ -29,6 +34,8 @@ namespace STC.Data.Models
         public int LocationClassId { get; set; }
         [Column("max_qualification_id")]
         public int MaxQualificationId { get; set; }
+        [Column("n_c_s_e")]
+        public bool NCSE { get; set; }
         [Required]
         [Column("first_name")]
         [StringLength(250)]
@@ -52,14 +59,18 @@ namespace STC.Data.Models
         public bool WOA { get; set; }
         [Column("d_l_h")]
         public bool DLH { get; set; }
-        [Column("height")]
-        public float Height { get; set; }
-        [Column("chest")]
-        public float Chest { get; set; }
-        [Column("weight")]
-        public float Weight { get; set; }
-        [Column("visible_deformity")]
-        public bool VisibleDeformity { get; set; }
+        [Column("d_i_t")]
+        public bool DIT { get; set; }
+        [Column("hafiz")]
+        public bool Hafiz { get; set; }
+        [Column("contact_phone")]
+        [StringLength(50)]
+        public string ContactPhone { get; set; }
+        [Column("guardian_phone")]
+        [StringLength(50)]
+        public string GuardianPhone { get; set; }
+        [Column("svas_xmatch")]
+        public bool? SvasXmatch { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("update_time", TypeName = "timestamp")]
@@ -74,7 +85,19 @@ namespace STC.Data.Models
         [ForeignKey(nameof(MaxQualificationId))]
         [InverseProperty(nameof(Qualification.Candidates))]
         public virtual Qualification MaxQualification { get; set; }
+        [InverseProperty("CandidateCnicNavigation")]
+        public virtual CandidateArmyInfo CandidateArmyInfo { get; set; }
+        [InverseProperty(nameof(CandidateCourseSummary.CandidateCnicNavigation))]
+        public virtual ICollection<CandidateCourseSummary> CandidateCourseSummaries { get; set; }
         [InverseProperty(nameof(CandidateHasCourse.CandidateCnicNavigation))]
         public virtual ICollection<CandidateHasCourse> CandidateHasCourses { get; set; }
+        [InverseProperty(nameof(CandidateHasEducation.CandidateCnicNavigation))]
+        public virtual ICollection<CandidateHasEducation> CandidateHasEducations { get; set; }
+        [InverseProperty(nameof(CandidateMedicalInfo.CandidateCnicNavigation))]
+        public virtual ICollection<CandidateMedicalInfo> CandidateMedicalInfos { get; set; }
+        [InverseProperty(nameof(CandidateTestScore.CandidateCnicNavigation))]
+        public virtual ICollection<CandidateTestScore> CandidateTestScores { get; set; }
+        [InverseProperty(nameof(PhysicalTestScore.CandidateCnicNavigation))]
+        public virtual ICollection<PhysicalTestScore> PhysicalTestScores { get; set; }
     }
 }

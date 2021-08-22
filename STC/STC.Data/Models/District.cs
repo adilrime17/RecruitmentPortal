@@ -13,6 +13,7 @@ namespace STC.Data.Models
     {
         public District()
         {
+            CandidateCourseSummaries = new HashSet<CandidateCourseSummary>();
             Candidates = new HashSet<Candidate>();
         }
 
@@ -33,13 +34,13 @@ namespace STC.Data.Models
         public string Province { get; set; }
         [Column("leniency")]
         public bool Leniency { get; set; }
-        [Column("class")]
-        public int Class { get; set; }
         [Column("create_time", TypeName = "timestamp")]
         public DateTime CreateTime { get; set; }
         [Column("update_time", TypeName = "timestamp")]
         public DateTime? UpdateTime { get; set; }
 
+        [InverseProperty(nameof(CandidateCourseSummary.District))]
+        public virtual ICollection<CandidateCourseSummary> CandidateCourseSummaries { get; set; }
         [InverseProperty(nameof(Candidate.District))]
         public virtual ICollection<Candidate> Candidates { get; set; }
     }

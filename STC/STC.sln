@@ -9,7 +9,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DbContextScaffoldOverride",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "STC.Data", "STC.Data\STC.Data.csproj", "{6D5B8D6C-85A6-427B-863B-5A776DBB0420}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STC.Core", "STC.Core\STC.Core.csproj", "{4C2A4D49-038F-436F-A88F-DD18D21F4D6C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "STC.Core", "STC.Core\STC.Core.csproj", "{4C2A4D49-038F-436F-A88F-DD18D21F4D6C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STC.Web.API", "STC.Web.API\STC.Web.API.csproj", "{F734A497-820A-4ED3-886B-8E266E1A3877}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "STC.Common", "STC.Common\STC.Common.csproj", "{AE033BF2-DE25-4DDC-845F-D8DB8432F581}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +37,14 @@ Global
 		{4C2A4D49-038F-436F-A88F-DD18D21F4D6C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4C2A4D49-038F-436F-A88F-DD18D21F4D6C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4C2A4D49-038F-436F-A88F-DD18D21F4D6C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F734A497-820A-4ED3-886B-8E266E1A3877}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F734A497-820A-4ED3-886B-8E266E1A3877}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F734A497-820A-4ED3-886B-8E266E1A3877}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F734A497-820A-4ED3-886B-8E266E1A3877}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AE033BF2-DE25-4DDC-845F-D8DB8432F581}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AE033BF2-DE25-4DDC-845F-D8DB8432F581}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AE033BF2-DE25-4DDC-845F-D8DB8432F581}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AE033BF2-DE25-4DDC-845F-D8DB8432F581}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -12,6 +12,7 @@ namespace STC.Data.Models
     [Index(nameof(CandidateCnic), Name = "fk_candidate_has_course_candidate1_idx")]
     [Index(nameof(CourseId), Name = "fk_candidate_has_course_course1_idx")]
     [Index(nameof(StatusId), Name = "fk_candidate_has_course_status1_idx")]
+    [Index(nameof(RegistrationNumber), Name = "registration_number_UNIQUE", IsUnique = true)]
     public partial class CandidateHasCourse
     {
         [Key]
@@ -25,6 +26,16 @@ namespace STC.Data.Models
         [Column("status_id")]
         [StringLength(250)]
         public string StatusId { get; set; }
+        [Required]
+        [Column("registration_number")]
+        [StringLength(250)]
+        public string RegistrationNumber { get; set; }
+        [Column("registered_date", TypeName = "timestamp")]
+        public DateTime? RegisteredDate { get; set; }
+        [Column("create_time", TypeName = "timestamp")]
+        public DateTime CreateTime { get; set; }
+        [Column("update_time", TypeName = "timestamp")]
+        public DateTime? UpdateTime { get; set; }
 
         [ForeignKey(nameof(CandidateCnic))]
         [InverseProperty(nameof(Candidate.CandidateHasCourses))]

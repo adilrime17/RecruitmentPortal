@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\STC.Common\STC.Common.csproj" />
     <ProjectReference Include="..\STC.Data\STC.Data.csproj" />
   </ItemGroup>
 
