@@ -25,10 +25,6 @@ namespace STC.Core.EligibilityCheck
                 {
                     return true;
                 }
-                else
-                {
-                    return false;
-                }
             }
 
             if(age > 17.5 && age < 26)
