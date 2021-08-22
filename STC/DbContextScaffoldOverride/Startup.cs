@@ -34,7 +34,7 @@ namespace DbContextScaffoldOverride
 			{
 				endpoints.MapGet("/", async context =>
 				{
-					// Scaffold-DbContext "Server=localhost;Database=grainia;User=root;Password=root;TreatTinyAsBoolean=true;" Pomelo.EntityFrameworkCore.MySql -ContextDir ./ -OutputDir Models -Context InternalDbContext -DataAnnotations -Force
+					// Scaffold-DbContext "Server=localhost;Database=stc;User=root;Password=root;TreatTinyAsBoolean=true;" Pomelo.EntityFrameworkCore.MySql -ContextDir ./ -OutputDir Models -Context InternalDbContext -DataAnnotations -Force
 					await context.Response.WriteAsync("Scaffold-DbContext \"Server = localhost; Database = stc; User = root; Password = root; TreatTinyAsBoolean = true; \" Pomelo.EntityFrameworkCore.MySql -ContextDir ./ -OutputDir Models -Context InternalDbContext -DataAnnotations -Force");
 				});
 			});
