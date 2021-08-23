@@ -1,0 +1,16 @@
+test_id,test_name,total_marks,passing_marks,equivalence,remarks,added_by,added_at,updated_by,updated_at
+1,Personality Tes,120,30,<=,Suitable/Unsuitable,mhussain,24/07/2021 14:17,NULL,NULL
+2,Int Test,50,20,>=,Pass/Fail,mhussain,24/07/2021 14:17,NULL,NULL
+3,Written U/Matri,50,25,>=,Pass/Fail,mhussain,24/07/2021 14:17,NULL,NULL
+4,Written test,100,50,>=,Pass/Fail,mhussain,24/07/2021 14:17,NULL,NULL
+5,Tech test,100,50,>=,Pass/Fail,mhussain,24/07/2021 14:17,NULL,NULL
+6,Clk Test,100,50,>=,Pass/Fail,mhussain,24/07/2021 14:17,NULL,NULL
+7,Aptitude test,20,10,>=,For DLH Pass/Fail,mhussain,24/07/2021 14:17,NULL,NULL
+8,Computer Diplom,50,25,>=,For DIT Pass/Fail,mhussain,24/07/2021 14:17,NULL,NULL
+9,Hifz Test,1,1,==,Pass/Fail,mhussain,24/07/2021 14:17,NULL,NULL
+10,PET,25,12,>=,Any event Fail Consider fail,mhussain,24/07/2021 14:17,NULL,NULL
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,
+,,,,,,,,,

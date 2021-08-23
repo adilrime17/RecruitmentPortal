@@ -6,7 +6,7 @@ namespace STC.Common.Requests
 {
     public class EducationalDataRequest
     {
-        public IList<EducationalData> CandidateEducationalData { get; set; }
+        public IList<EducationalData> CandidateEducationalData { get; set; } = new List<EducationalData>();
     }
 
     public class EducationalData

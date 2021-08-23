@@ -10,7 +10,8 @@ namespace STC.Data.Models
 {
     [Table("candidate_test_score")]
     [Index(nameof(CandidateCnic), Name = "fk_candidate_has_course_has_test_candidate1_idx")]
-    [Index(nameof(CourseId), nameof(TestId), Name = "fk_candidate_has_course_has_test_course_has_test1_idx")]
+    [Index(nameof(CourseId), Name = "fk_candidate_test_score_course1_idx")]
+    [Index(nameof(TestId), Name = "fk_candidate_test_score_test1_idx")]
     public partial class CandidateTestScore
     {
         [Key]
@@ -40,8 +41,11 @@ namespace STC.Data.Models
         [ForeignKey(nameof(CandidateCnic))]
         [InverseProperty(nameof(Candidate.CandidateTestScores))]
         public virtual Candidate CandidateCnicNavigation { get; set; }
-        [ForeignKey("CourseId,TestId")]
+        [ForeignKey(nameof(CourseId))]
         [InverseProperty("CandidateTestScores")]
-        public virtual CourseHasTest CourseHasTest { get; set; }
+        public virtual Course Course { get; set; }
+        [ForeignKey(nameof(TestId))]
+        [InverseProperty("CandidateTestScores")]
+        public virtual Test Test { get; set; }
     }
 }

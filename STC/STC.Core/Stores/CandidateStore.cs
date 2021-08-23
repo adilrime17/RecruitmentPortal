@@ -113,5 +113,38 @@ namespace STC.Core.Stores
                 Dod = candidate.CandidateArmyInfo.DOD.ToString()
             };           
         }
+
+        public bool UpdateArmyData(string cnic, CandidateArmyDataRequest request)
+        {
+            CandidateArmyInfo armyInfo = _dbContext.CandidateArmyInfos.FirstOrDefault(x => x.CandidateCnic == cnic);
+            if(armyInfo == null)
+            {
+                armyInfo = new CandidateArmyInfo()
+                {
+                    CandidateCnic = cnic,
+                    ArmyNumber = request.ArmyNo,
+                    Unit = request.Unit,
+                    Corps = request.Corps
+                };
+                if(!string.IsNullOrEmpty(request.Dod))
+                {
+                    armyInfo.DOD = DateTime.Parse(request.Dod);
+                }
+                _dbContext.CandidateArmyInfos.Add(armyInfo);
+                _dbContext.SaveChanges();
+            }
+            else
+            {
+                armyInfo.ArmyNumber = request.ArmyNo;
+                armyInfo.Unit = request.Unit;
+                armyInfo.Corps = request.Corps;
+                if (!string.IsNullOrEmpty(request.Dod))
+                {
+                    armyInfo.DOD = DateTime.Parse(request.Dod);
+                }
+                _dbContext.SaveChanges();
+            }
+            return true;
+        }
     }
 }

@@ -44,6 +44,7 @@ namespace STC.Web.API
             services.AddScoped<LocationClassStore>();
             services.AddScoped<EducationStore>();
             services.AddScoped<CandidateStore>();
+            services.AddScoped<TestsStore>();
 
         }
 

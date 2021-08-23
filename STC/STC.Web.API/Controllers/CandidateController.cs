@@ -68,7 +68,7 @@ namespace STC.Web.API.Controllers
         [HttpPut("{cnic}/army_data")]
         public bool UpdateArmyData(string cnic, [FromBody] CandidateArmyDataRequest request)
         {
-            return _store.UpdateData(cnic, request);
+            return _store.UpdateArmyData(cnic, request);
         }
 
         // DELETE api/<CandidateController>/5

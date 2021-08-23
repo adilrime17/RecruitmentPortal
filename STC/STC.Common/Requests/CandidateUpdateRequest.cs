@@ -25,7 +25,7 @@ namespace STC.Common.Requests
         public bool Dit { get; set; }
         public bool Hafiz { get; set; }
         public float Height { get; set; }
-        public ChestSize Chest { get; set; }
+        public ChestSize Chest { get; set; } = new ChestSize();
         public float Weight { get; set; }
     }
 

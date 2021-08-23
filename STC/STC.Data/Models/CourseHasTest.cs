@@ -13,19 +13,14 @@ namespace STC.Data.Models
     [Index(nameof(TestId), Name = "fk_course_has_test_test1_idx")]
     public partial class CourseHasTest
     {
-        public CourseHasTest()
-        {
-            CandidateTestScores = new HashSet<CandidateTestScore>();
-        }
-
         [Key]
         [Column("course_id")]
         public int CourseId { get; set; }
         [Key]
         [Column("test_id")]
         public int TestId { get; set; }
-        [Column("max_marks")]
-        public float MaxMarks { get; set; }
+        [Column("total_marks")]
+        public float TotalMarks { get; set; }
         [Column("required_marks")]
         public float RequiredMarks { get; set; }
         [Column("create_time", TypeName = "timestamp")]
@@ -39,7 +34,5 @@ namespace STC.Data.Models
         [ForeignKey(nameof(TestId))]
         [InverseProperty("CourseHasTests")]
         public virtual Test Test { get; set; }
-        [InverseProperty(nameof(CandidateTestScore.CourseHasTest))]
-        public virtual ICollection<CandidateTestScore> CandidateTestScores { get; set; }
     }
 }

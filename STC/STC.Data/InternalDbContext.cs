@@ -210,11 +210,17 @@ namespace STC.Data
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_candidate_has_course_has_test_candidate1");
 
-                entity.HasOne(d => d.CourseHasTest)
+                entity.HasOne(d => d.Course)
                     .WithMany(p => p.CandidateTestScores)
-                    .HasForeignKey(d => new { d.CourseId, d.TestId })
+                    .HasForeignKey(d => d.CourseId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("fk_candidate_has_course_has_test_course_has_test1");
+                    .HasConstraintName("fk_candidate_test_score_course1");
+
+                entity.HasOne(d => d.Test)
+                    .WithMany(p => p.CandidateTestScores)
+                    .HasForeignKey(d => d.TestId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_candidate_test_score_test1");
             });
 
             modelBuilder.Entity<Course>(entity =>

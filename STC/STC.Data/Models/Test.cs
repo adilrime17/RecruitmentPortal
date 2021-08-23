@@ -13,6 +13,7 @@ namespace STC.Data.Models
     {
         public Test()
         {
+            CandidateTestScores = new HashSet<CandidateTestScore>();
             CourseHasTests = new HashSet<CourseHasTest>();
         }
 
@@ -30,6 +31,8 @@ namespace STC.Data.Models
         [Column("is_deleted")]
         public bool IsDeleted { get; set; }
 
+        [InverseProperty(nameof(CandidateTestScore.Test))]
+        public virtual ICollection<CandidateTestScore> CandidateTestScores { get; set; }
         [InverseProperty(nameof(CourseHasTest.Test))]
         public virtual ICollection<CourseHasTest> CourseHasTests { get; set; }
     }

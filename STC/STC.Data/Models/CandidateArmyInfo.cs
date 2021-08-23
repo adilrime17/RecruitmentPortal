@@ -18,10 +18,6 @@ namespace STC.Data.Models
         [Column("army_number")]
         [StringLength(250)]
         public string ArmyNumber { get; set; }
-        [Column("w_o_s")]
-        public bool WOS { get; set; }
-        [Column("w_o_a")]
-        public bool WOA { get; set; }
         [Column("unit")]
         [StringLength(250)]
         public string Unit { get; set; }
