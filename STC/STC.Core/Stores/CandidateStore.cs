@@ -8,6 +8,7 @@ using System.Linq;
 using System.Text;
 using STC.Common.MiscUtil;
 using STC.Core.EligibilityCheck;
+using Microsoft.EntityFrameworkCore;
 
 namespace STC.Core.Stores
 {
@@ -96,6 +97,21 @@ namespace STC.Core.Stores
             Candidate candidate = _dbContext.Candidates.FirstOrDefault(x => x.Cnic == cnic);
             request.CopyProperties(candidate);
             return _dbContext.SaveChanges() > 0;
+        }
+
+        public CandidateArmyDataResponse GetArmyData(string cnic)
+        {
+            Candidate candidate = _dbContext.Candidates.Include(x => x.CandidateArmyInfo).First(x => x.Cnic == cnic);
+            return new CandidateArmyDataResponse()
+            {
+                ArmyNo = candidate.CandidateArmyInfo.ArmyNumber,
+                Name = candidate.FirstName + ' ' + candidate.MiddleName + ' ' + candidate.LastName,
+                FatherName = candidate.FatherName,
+                Unit = candidate.CandidateArmyInfo.Unit,
+                Corps = candidate.CandidateArmyInfo.Corps,
+                Contact = candidate.GuardianPhone,
+                Dod = candidate.CandidateArmyInfo.DOD.ToString()
+            };           
         }
     }
 }

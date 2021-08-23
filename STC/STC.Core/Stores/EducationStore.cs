@@ -90,12 +90,19 @@ namespace STC.Core.Stores
                 {
                     candidateHasEducation = new CandidateHasEducation();
                     candidateHasEducation.EducationLevelId = _dbContext.EducationLevels.First(x => x.Name == data.Qualification).Id;
+                    candidateHasEducation.EducationMajorId = _dbContext.EducationMajors.First(x => x.Name == data.Major).Id;
+                    candidateHasEducation.EducationSubjectId = _dbContext.EducationSubjects.First(x => x.Name == data.Subject).Id;
+                    candidateHasEducation.ObtainedMarks = data.Obtained;
+                    candidateHasEducation.TotalMarks = data.Total;
+                    candidateHasEducation.Grade = data.Grade;
+                    _dbContext.CandidateHasEducations.Add(candidateHasEducation);
+                } else {
+                    candidateHasEducation.EducationMajorId = _dbContext.EducationMajors.First(x => x.Name == data.Major).Id;
+                    candidateHasEducation.EducationSubjectId = _dbContext.EducationSubjects.First(x => x.Name == data.Subject).Id;
+                    candidateHasEducation.ObtainedMarks = data.Obtained;
+                    candidateHasEducation.TotalMarks = data.Total;
+                    candidateHasEducation.Grade = data.Grade;
                 }
-                candidateHasEducation.EducationMajorId = _dbContext.EducationMajors.First(x => x.Name == data.Major).Id;
-                candidateHasEducation.EducationSubjectId = _dbContext.EducationSubjects.First(x => x.Name == data.Subject).Id;
-                candidateHasEducation.ObtainedMarks = data.Obtained;
-                candidateHasEducation.TotalMarks = data.Total;
-                candidateHasEducation.Grade = data.Grade;
                 _dbContext.SaveChanges();
             }
             return true;

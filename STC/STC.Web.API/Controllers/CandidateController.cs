@@ -36,6 +36,13 @@ namespace STC.Web.API.Controllers
             return _store.GetDetails(cnic);
         }
 
+        // GET api/<CandidateController>/5/army_data
+        [HttpGet("{cnic}/army_data")]
+        public CandidateArmyDataResponse GetArmyData(string cnic)
+        {
+            return _store.GetArmyData(cnic);
+        }
+
         // POST api/<CandidateController>/check_eligibility
         [HttpPost]
         [Route("check_eligibility")]
@@ -52,7 +59,14 @@ namespace STC.Web.API.Controllers
 
         // PUT api/<CandidateController>/12345-1234567-8
         [HttpPut("{cnic}")]
-        public bool Put(string cnic, [FromBody] CandidateCreateRequest request)
+        public bool UpdateData(string cnic, [FromBody] CandidateCreateRequest request)
+        {
+            return _store.UpdateData(cnic, request);
+        }
+
+        // PUT api/<CandidateController>/12345-1234567-8/army_data
+        [HttpPut("{cnic}/army_data")]
+        public bool UpdateArmyData(string cnic, [FromBody] CandidateArmyDataRequest request)
         {
             return _store.UpdateData(cnic, request);
         }
