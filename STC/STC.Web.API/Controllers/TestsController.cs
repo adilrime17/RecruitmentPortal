@@ -43,6 +43,20 @@ namespace STC.Web.API.Controllers
             return _store.GetPrintSlip(cnic);
         }
 
+        // GET api/<TestsController>/12345-1234567-1/summary
+        [HttpGet("{cnic}/summary")]
+        public CandidateMarksSummaryResponse GetCandidateMarksSummary(string cnic)
+        {
+            return _store.GetCandidateMarksSummary(cnic);
+        }
+
+        // GET api/<TestsController>/12345-1234567-1/test_name
+        [HttpGet("{cnic}/{testName}")]
+        public CandidateTestDetailResponse GetCandidateTestDetails(string cnic, string testName)
+        {
+            return _store.GetCandidateTestDetail(cnic, testName);
+        }
+
         // POST api/<TestsController>
         [HttpPost]
         public void Post([FromBody] string value)
@@ -54,6 +68,20 @@ namespace STC.Web.API.Controllers
         public bool UpdateTestsToAppear(string cnic, [FromBody] TestsRequest request)
         {
             return _store.UpdateTestsToAppear(cnic, request);
+        }
+
+        // GET api/<TestsController>/12345-1234567-1/test_name
+        [HttpPut("{cnic}/summary")]
+        public bool UpdateCandidateMarksSummary(string cnic, string testName, [FromBody] CandidateMarksSummaryRequest request)
+        {
+            return _store.UpdateCandidateMarksSummary(cnic, request);
+        }
+
+        // GET api/<TestsController>/12345-1234567-1/test_name
+        [HttpPut("{cnic}/{testName}")]
+        public bool UpdateCandidateTestDetails(string cnic, string testName, [FromBody] CandidateTestDetailRequest request)
+        {
+            return _store.UpdateCandidateTestDetail(cnic, testName, request);
         }
 
         // PUT api/<TestsController>/5

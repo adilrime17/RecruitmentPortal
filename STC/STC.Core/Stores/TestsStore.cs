@@ -7,6 +7,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace STC.Core.Stores
 {
@@ -79,136 +80,60 @@ namespace STC.Core.Stores
                     _dbContext.SaveChanges();
                 }
 
+                Test test = null;
                 if (request.TestsToAppear.Personality)
                 {
-                    Test test = tests.First(x => x.Id == 1);
-                    CandidateTestScore candidateTestScore = new CandidateTestScore()
-                    {
-                        CandidateCnic = cnic,
-                        CourseId = 1,
-                        TestId = test.Id,
-                        TestDate = DateTime.Now.AddDays(1).Date
-                    };
-                    _dbContext.CandidateTestScores.Add(candidateTestScore);
-                    _dbContext.SaveChanges();
+                    test = tests.First(x => x.Id == 1);
                 }
                 if (request.TestsToAppear.Intelligence)
                 {
-                    Test test = tests.First(x => x.Id == 2);
-                    CandidateTestScore candidateTestScore = new CandidateTestScore()
-                    {
-                        CandidateCnic = cnic,
-                        CourseId = 1,
-                        TestId = test.Id,
-                        TestDate = DateTime.Now.AddDays(1).Date
-                    };
-                    _dbContext.CandidateTestScores.Add(candidateTestScore);
-                    _dbContext.SaveChanges();
+                    test = tests.First(x => x.Id == 2);
                 }
                 if (request.TestsToAppear.WrittenUnderMatric)
                 {
-                    Test test = tests.First(x => x.Id == 3);
-                    CandidateTestScore candidateTestScore = new CandidateTestScore()
-                    {
-                        CandidateCnic = cnic,
-                        CourseId = 1,
-                        TestId = test.Id,
-                        TestDate = DateTime.Now.AddDays(1).Date
-                    };
-                    _dbContext.CandidateTestScores.Add(candidateTestScore);
-                    _dbContext.SaveChanges();
+                    test = tests.First(x => x.Id == 3);
                 }
                 if (request.TestsToAppear.WrittenMatric)
                 {
-                    Test test = tests.First(x => x.Id == 4);
-                    CandidateTestScore candidateTestScore = new CandidateTestScore()
-                    {
-                        CandidateCnic = cnic,
-                        CourseId = 1,
-                        TestId = test.Id,
-                        TestDate = DateTime.Now.AddDays(1).Date
-                    };
-                    _dbContext.CandidateTestScores.Add(candidateTestScore);
-                    _dbContext.SaveChanges();
+                    test = tests.First(x => x.Id == 4);
                 }
                 if (request.TestsToAppear.Tech)
                 {
-                    Test test = tests.First(x => x.Id == 5);
-                    CandidateTestScore candidateTestScore = new CandidateTestScore()
-                    {
-                        CandidateCnic = cnic,
-                        CourseId = 1,
-                        TestId = test.Id,
-                        TestDate = DateTime.Now.AddDays(1).Date
-                    };
-                    _dbContext.CandidateTestScores.Add(candidateTestScore);
-                    _dbContext.SaveChanges();
+                    test = tests.First(x => x.Id == 5);
                 }
                 if (request.TestsToAppear.Clerk)
                 {
-                    Test test = tests.First(x => x.Id == 6);
-                    CandidateTestScore candidateTestScore = new CandidateTestScore()
-                    {
-                        CandidateCnic = cnic,
-                        CourseId = 1,
-                        TestId = test.Id,
-                        TestDate = DateTime.Now.AddDays(1).Date
-                    };
-                    _dbContext.CandidateTestScores.Add(candidateTestScore);
-                    _dbContext.SaveChanges();
+                    test = tests.First(x => x.Id == 6);
                 }
                 if (request.TestsToAppear.Apt)
                 {
-                    Test test = tests.First(x => x.Id == 7);
-                    CandidateTestScore candidateTestScore = new CandidateTestScore()
-                    {
-                        CandidateCnic = cnic,
-                        CourseId = 1,
-                        TestId = test.Id,
-                        TestDate = DateTime.Now.AddDays(1).Date
-                    };
-                    _dbContext.CandidateTestScores.Add(candidateTestScore);
-                    _dbContext.SaveChanges();
+                    test = tests.First(x => x.Id == 7);
                 }
                 if (request.TestsToAppear.Dit)
                 {
-                    Test test = tests.First(x => x.Id == 8);
-                    CandidateTestScore candidateTestScore = new CandidateTestScore()
-                    {
-                        CandidateCnic = cnic,
-                        CourseId = 1,
-                        TestId = test.Id,
-                        TestDate = DateTime.Now.AddDays(1).Date
-                    };
-                    _dbContext.CandidateTestScores.Add(candidateTestScore);
-                    _dbContext.SaveChanges();
+                    test = tests.First(x => x.Id == 8);
                 }
                 if (request.TestsToAppear.Hafiz)
                 {
-                    Test test = tests.First(x => x.Id == 9);
-                    CandidateTestScore candidateTestScore = new CandidateTestScore()
-                    {
-                        CandidateCnic = cnic,
-                        CourseId = 1,
-                        TestId = test.Id,
-                        TestDate = DateTime.Now.AddDays(1).Date
-                    };
-                    _dbContext.CandidateTestScores.Add(candidateTestScore);
-                    _dbContext.SaveChanges();
+                    test = tests.First(x => x.Id == 9);
                 }
                 if (request.TestsToAppear.Pet)
                 {
-                    Test test = tests.First(x => x.Id == 10);
-                    CandidateTestScore candidateTestScore = new CandidateTestScore()
-                    {
-                        CandidateCnic = cnic,
-                        CourseId = 1,
-                        TestId = test.Id,
-                        TestDate = DateTime.Now.AddDays(1).Date
-                    };
-                    _dbContext.CandidateTestScores.Add(candidateTestScore);
-                    _dbContext.SaveChanges();
+                    test = tests.First(x => x.Id == 10);
                 }
+                if (request.TestsToAppear.Dlh)
+                {
+                    test = tests.First(x => x.Id == 11);
+                }
+                CandidateTestScore candidateTestScore = new CandidateTestScore()
+                {
+                    CandidateCnic = cnic,
+                    CourseId = 1,
+                    TestId = test.Id,
+                    TestDate = DateTime.Now.AddDays(1).Date
+                };
+                _dbContext.CandidateTestScores.Add(candidateTestScore);
+                _dbContext.SaveChanges();
                 candidateTestCharge = new CandidateTestCharge()
                 {
                     CandidateCnic = cnic,
@@ -235,6 +160,142 @@ namespace STC.Core.Stores
                     Day = x.TestDate
                 }).ToList();
             return response;
+        }
+
+        public CandidateTestDetailResponse GetCandidateTestDetail(string cnic, string testName)
+        {
+            CandidateTestDetailResponse response = new CandidateTestDetailResponse();
+            Candidate candidate = _dbContext.Candidates.Include(x => x.CandidateTestCharges).First(x => x.Cnic == cnic);
+            response.RegistrationNo = candidate.CandidateHasCourses.First(x => x.CourseId == 1).RegistrationNumber;
+            response.Name = candidate.FirstName + ' ' + candidate.MiddleName + ' ' + candidate.LastName;
+            int testId = 0;
+            switch (testName)
+            {
+                case "intelligence":
+                    testId = 2;
+                    break;
+                case "personality":
+                    testId = 1;
+                    break;
+                case "writtenMatric":
+                    testId = 4;
+                    break;
+                case "writtenUnderMatric":
+                    testId = 3;
+                    break;
+                case "clerk":
+                    testId = 6;
+                    break;
+                case "tech":
+                    testId = 5;
+                    break;
+                case "dit":
+                    testId = 8;
+                    break;
+                case "dlh":
+                    testId = 11;
+                    break;
+                case "hafiz":
+                    testId = 9;
+                    break;
+                case "pet":
+                    testId = 10;
+                    break;
+            }
+            response.MarksObtained = _dbContext.CandidateTestScores.First(x => x.CandidateCnic == cnic && x.CourseId == 1 && x.TestId == testId).ObtainedMarks.Value;
+            response.TotalFail = _dbContext.CandidateTestScores.Count(x => x.ObtainedMarks < _dbContext.CourseHasTests.First(y => y.CourseId == 1 && y.TestId == testId).RequiredMarks);
+            response.TotalPass = _dbContext.CandidateTestScores.Count(x => x.ObtainedMarks >= _dbContext.CourseHasTests.First(y => y.CourseId == 1 && y.TestId == testId).RequiredMarks);
+            response.TodayFail = _dbContext.CandidateTestScores.Count(x => x.ObtainedMarks < _dbContext.CourseHasTests.First(y => y.CourseId == 1 && y.TestId == testId).RequiredMarks && (x.UpdateTime.HasValue ? x.UpdateTime.Value.Date == DateTime.Now.Date : false));
+            response.TodayPass = _dbContext.CandidateTestScores.Count(x => x.ObtainedMarks >= _dbContext.CourseHasTests.First(y => y.CourseId == 1 && y.TestId == testId).RequiredMarks && (x.UpdateTime.HasValue ? x.UpdateTime.Value.Date == DateTime.Now.Date : false));
+            return response;
+        }
+
+        public bool UpdateCandidateTestDetail(string cnic, string testName, CandidateTestDetailRequest request)
+        {
+            int testId = 0;
+            switch (testName)
+            {
+                case "intelligence":
+                    testId = 2;
+                    break;
+                case "personality":
+                    testId = 1;
+                    break;
+                case "writtenMatric":
+                    testId = 4;
+                    break;
+                case "writtenUnderMatric":
+                    testId = 3;
+                    break;
+                case "clerk":
+                    testId = 6;
+                    break;
+                case "tech":
+                    testId = 5;
+                    break;
+                case "dit":
+                    testId = 8;
+                    break;
+                case "dlh":
+                    testId = 11;
+                    break;
+                case "hafiz":
+                    testId = 9;
+                    break;
+                case "pet":
+                    testId = 10;
+                    break;
+            }
+            CandidateTestScore candidateTestScore = _dbContext.CandidateTestScores.First(x => x.CandidateCnic == cnic && x.CourseId == 1 && x.TestId == testId);
+            candidateTestScore.ObtainedMarks = request.TestResults;
+            return _dbContext.SaveChanges() > 0;
+        }
+
+        public CandidateMarksSummaryResponse GetCandidateMarksSummary(string cnic)
+        {
+            CandidateMarksSummaryResponse response = new CandidateMarksSummaryResponse();
+            Candidate candidate = _dbContext.Candidates.First(x => x.Cnic == cnic);
+            IList<CandidateTestScore> candidateTestScore = _dbContext.CandidateTestScores.Where(x => x.CandidateCnic == cnic && x.CourseId == 1).ToList();
+            IList<CourseHasTest> courseHasTests = _dbContext.CourseHasTests.Where(x => x.CourseId == 1).ToList();
+            response.RegistrationNo = candidate.CandidateHasCourses.First(x => x.CourseId == 1).RegistrationNumber;
+            response.Name = candidate.FirstName + ' ' + candidate.MiddleName + ' ' + candidate.LastName;
+            response.District = candidate.District.Name;
+            response.Personality = candidateTestScore.First(x => x.TestId == 1).ObtainedMarks >= courseHasTests.First(x => x.TestId == 1).RequiredMarks ? "Unsuitable" : "Suitable";
+            response.Initial = candidateTestScore.First(x => x.TestId == 2).ObtainedMarks.Value;
+            response.Written = candidateTestScore.First(x => x.TestId == 3 || x.TestId == 4).ObtainedMarks.Value;
+            response.Dlh = candidateTestScore.First(x => x.TestId == 11).ObtainedMarks.Value < courseHasTests.First(x => x.TestId == 11).RequiredMarks ? "Fail" : "Pass";
+            response.Dit = candidateTestScore.First(x => x.TestId == 8).ObtainedMarks.Value < courseHasTests.First(x => x.TestId == 8).RequiredMarks ? "Fail" : "Pass";
+            response.Pet = candidateTestScore.First(x => x.TestId == 10).ObtainedMarks.Value < courseHasTests.First(x => x.TestId == 10).RequiredMarks ? "Fail" : "Pass";
+            CandidateCourseSummary candidateCourseSummary = _dbContext.CandidateCourseSummaries.First(x => x.CandidateCnic == cnic && x.CourseId == 1);
+            response.Sponser = candidateCourseSummary.Sponsor;
+            response.Woswoa = candidateCourseSummary.WardVerified ? "Verified" : "Unverified";
+            response.Clerk = candidateTestScore.First(x => x.TestId == 6).ObtainedMarks.Value;
+            response.Tech = candidateTestScore.First(x => x.TestId == 5).ObtainedMarks.Value;
+            response.Hafiz = candidateTestScore.First(x => x.TestId == 9).ObtainedMarks.Value < courseHasTests.First(x => x.TestId == 11).RequiredMarks ? "Fail" : "Pass";
+            response.MedicalStatus = candidate.CandidateMedicalInfos.Last().FinalStatus;
+            return response;
+        }
+
+        public bool UpdateCandidateMarksSummary(string cnic, CandidateMarksSummaryRequest request)
+        {
+            Candidate candidate = _dbContext.Candidates.First(x => x.Cnic == cnic);
+            IList<CandidateTestScore> candidateTestScore = _dbContext.CandidateTestScores.Where(x => x.CandidateCnic == cnic && x.CourseId == 1).ToList();
+            IList<CourseHasTest> courseHasTests = _dbContext.CourseHasTests.Where(x => x.CourseId == 1).ToList();
+            CandidateCourseSummary candidateCourseSummary = _dbContext.CandidateCourseSummaries.FirstOrDefault(x => x.CandidateCnic == cnic && x.CourseId == 1);
+            candidateCourseSummary.District = _dbContext.Districts.First(x => x.Name == request.District);
+            candidateTestScore.First(x => x.TestId == 1).FinalStatus = request.Personality;
+            candidateTestScore.First(x => x.TestId == 2).FinalStatus = request.Initial.ToString();
+            candidateTestScore.First(x => x.TestId == 3 || x.TestId == 4).FinalStatus = request.Written.ToString();
+            candidateTestScore.First(x => x.TestId == 11).FinalStatus = request.Dlh;
+            candidateTestScore.First(x => x.TestId == 8).FinalStatus = request.Dit;
+            candidateTestScore.First(x => x.TestId == 10).FinalStatus = request.Pet;
+            candidateCourseSummary.Sponsor = request.Sponser;
+            candidateCourseSummary.WardVerified = request.Woswoa == "Verified" ? true : false;
+            candidateTestScore.First(x => x.TestId == 6).FinalStatus = request.Clerk.ToString();
+            candidateTestScore.First(x => x.TestId == 5).FinalStatus = request.Tech.ToString();
+            candidateTestScore.First(x => x.TestId == 9).FinalStatus = request.Hafiz;
+            candidate.CandidateMedicalInfos.Last().FinalStatus = request.MedicalStatus;
+            return _dbContext.SaveChanges() > 0;
         }
     }
 }
