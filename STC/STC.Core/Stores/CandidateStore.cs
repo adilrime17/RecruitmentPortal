@@ -146,5 +146,21 @@ namespace STC.Core.Stores
             }
             return true;
         }
+
+        public IList<CandidateSummaryResponse> GetSummary()
+        {
+            IList<CandidateSummaryResponse> candidateSummaryResponses = new List<CandidateSummaryResponse>();
+            candidateSummaryResponses = _dbContext.CandidateHasCourses.Where(x => x.CourseId == 1)
+                .Select(x => new CandidateSummaryResponse()
+                {
+                    RegistrationNo = x.RegistrationNumber,
+                    Name = x.CandidateCnicNavigation.FirstName + ' ' + x.CandidateCnicNavigation.MiddleName + ' ' + x.CandidateCnicNavigation.LastName,
+                    FathersName = x.CandidateCnicNavigation.FatherName,
+                    District = x.CandidateCnicNavigation.District.Name,
+                    Date = x.CandidateCnicNavigation.CandidateTestCharges.First(x => x.CourseId == 1).CreateTime.ToString(),
+                    AmountPaid = x.CandidateCnicNavigation.CandidateTestCharges.First(x => x.CourseId == 1).AmountPaid.Value
+                }).ToList();
+            return candidateSummaryResponses;
+        }
     }
 }

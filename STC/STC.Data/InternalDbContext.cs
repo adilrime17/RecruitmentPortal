@@ -24,6 +24,7 @@ namespace STC.Data
         public virtual DbSet<CandidateHasCourse> CandidateHasCourses { get; set; }
         public virtual DbSet<CandidateHasEducation> CandidateHasEducations { get; set; }
         public virtual DbSet<CandidateMedicalInfo> CandidateMedicalInfos { get; set; }
+        public virtual DbSet<CandidateTestCharge> CandidateTestCharges { get; set; }
         public virtual DbSet<CandidateTestScore> CandidateTestScores { get; set; }
         public virtual DbSet<Course> Courses { get; set; }
         public virtual DbSet<CourseHasTest> CourseHasTests { get; set; }
@@ -194,6 +195,27 @@ namespace STC.Data
                     .HasForeignKey(d => d.CourseId)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_candidate_medical_info_course2");
+            });
+
+            modelBuilder.Entity<CandidateTestCharge>(entity =>
+            {
+                entity.HasKey(e => new { e.CandidateCnic, e.CourseId })
+                    .HasName("PRIMARY")
+                    .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+
+                entity.Property(e => e.CreateTime).HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+                entity.HasOne(d => d.CandidateCnicNavigation)
+                    .WithMany(p => p.CandidateTestCharges)
+                    .HasForeignKey(d => d.CandidateCnic)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_default_candidate2");
+
+                entity.HasOne(d => d.Course)
+                    .WithMany(p => p.CandidateTestCharges)
+                    .HasForeignKey(d => d.CourseId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_default_course1");
             });
 
             modelBuilder.Entity<CandidateTestScore>(entity =>

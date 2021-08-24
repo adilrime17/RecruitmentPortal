@@ -16,6 +16,7 @@ namespace STC.Data.Models
             CandidateCourseSummaries = new HashSet<CandidateCourseSummary>();
             CandidateHasCourses = new HashSet<CandidateHasCourse>();
             CandidateMedicalInfos = new HashSet<CandidateMedicalInfo>();
+            CandidateTestCharges = new HashSet<CandidateTestCharge>();
             CandidateTestScores = new HashSet<CandidateTestScore>();
             CourseHasTests = new HashSet<CourseHasTest>();
             PhysicalTestScores = new HashSet<PhysicalTestScore>();
@@ -45,6 +46,8 @@ namespace STC.Data.Models
         public virtual ICollection<CandidateHasCourse> CandidateHasCourses { get; set; }
         [InverseProperty(nameof(CandidateMedicalInfo.Course))]
         public virtual ICollection<CandidateMedicalInfo> CandidateMedicalInfos { get; set; }
+        [InverseProperty(nameof(CandidateTestCharge.Course))]
+        public virtual ICollection<CandidateTestCharge> CandidateTestCharges { get; set; }
         [InverseProperty(nameof(CandidateTestScore.Course))]
         public virtual ICollection<CandidateTestScore> CandidateTestScores { get; set; }
         [InverseProperty(nameof(CourseHasTest.Course))]

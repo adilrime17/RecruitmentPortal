@@ -1,4 +1,5 @@
-﻿using STC.Common.Requests;
+﻿using Microsoft.EntityFrameworkCore;
+using STC.Common.Requests;
 using STC.Common.Responses;
 using STC.Data;
 using STC.Data.Models;
@@ -22,7 +23,7 @@ namespace STC.Core.Stores
         {
             TestsResponse response = new TestsResponse();
             IList<CandidateTestScore> candidateTestScore = _dbContext.CandidateTestScores.Where(x => x.CandidateCnic == cnic && x.CourseId == 1).ToList();
-            Candidate candidate = _dbContext.Candidates.First(x => x.Cnic == cnic);
+            Candidate candidate = _dbContext.Candidates.Include(x => x.CandidateTestCharges).First(x => x.Cnic == cnic);
             response.TestsToAppear.RegistrationNo = candidate.CandidateHasCourses.First(x => x.CourseId == 1).RegistrationNumber;
             foreach(CandidateTestScore test in candidateTestScore)
             {
@@ -60,7 +61,7 @@ namespace STC.Core.Stores
                         break;
                 }
             }
-            response.ChargesPaid = candidateTestScore.First().ChargesPaid;
+            response.ChargesPaid = candidate.CandidateTestCharges.First(x => x.CourseId == 1).ChargesPaid;
             return response;
         }
 
@@ -69,6 +70,15 @@ namespace STC.Core.Stores
             IList<Test> tests = _dbContext.Tests.OrderBy(x => x.Id).ToList();
             using (var transaction = _dbContext.Database.BeginTransaction())
             {
+                IList<CandidateTestScore> candidateTestScores = _dbContext.CandidateTestScores.Where(x => x.CandidateCnic == cnic && x.CourseId == 1).ToList();
+                CandidateTestCharge candidateTestCharge = _dbContext.CandidateTestCharges.First(x => x.CandidateCnic == cnic && x.CourseId == 1);
+                if (candidateTestScores.Count > 0)
+                {
+                    _dbContext.CandidateTestScores.RemoveRange(candidateTestScores);
+                    _dbContext.CandidateTestCharges.Remove(candidateTestCharge);
+                    _dbContext.SaveChanges();
+                }
+
                 if (request.TestsToAppear.Personality)
                 {
                     Test test = tests.First(x => x.Id == 1);
@@ -77,7 +87,6 @@ namespace STC.Core.Stores
                         CandidateCnic = cnic,
                         CourseId = 1,
                         TestId = test.Id,
-                        ChargesPaid = request.ChargesPaid,
                         TestDate = DateTime.Now.AddDays(1).Date
                     };
                     _dbContext.CandidateTestScores.Add(candidateTestScore);
@@ -91,7 +100,6 @@ namespace STC.Core.Stores
                         CandidateCnic = cnic,
                         CourseId = 1,
                         TestId = test.Id,
-                        ChargesPaid = request.ChargesPaid,
                         TestDate = DateTime.Now.AddDays(1).Date
                     };
                     _dbContext.CandidateTestScores.Add(candidateTestScore);
@@ -105,7 +113,6 @@ namespace STC.Core.Stores
                         CandidateCnic = cnic,
                         CourseId = 1,
                         TestId = test.Id,
-                        ChargesPaid = request.ChargesPaid,
                         TestDate = DateTime.Now.AddDays(1).Date
                     };
                     _dbContext.CandidateTestScores.Add(candidateTestScore);
@@ -119,7 +126,6 @@ namespace STC.Core.Stores
                         CandidateCnic = cnic,
                         CourseId = 1,
                         TestId = test.Id,
-                        ChargesPaid = request.ChargesPaid,
                         TestDate = DateTime.Now.AddDays(1).Date
                     };
                     _dbContext.CandidateTestScores.Add(candidateTestScore);
@@ -133,7 +139,6 @@ namespace STC.Core.Stores
                         CandidateCnic = cnic,
                         CourseId = 1,
                         TestId = test.Id,
-                        ChargesPaid = request.ChargesPaid,
                         TestDate = DateTime.Now.AddDays(1).Date
                     };
                     _dbContext.CandidateTestScores.Add(candidateTestScore);
@@ -147,7 +152,6 @@ namespace STC.Core.Stores
                         CandidateCnic = cnic,
                         CourseId = 1,
                         TestId = test.Id,
-                        ChargesPaid = request.ChargesPaid,
                         TestDate = DateTime.Now.AddDays(1).Date
                     };
                     _dbContext.CandidateTestScores.Add(candidateTestScore);
@@ -161,7 +165,6 @@ namespace STC.Core.Stores
                         CandidateCnic = cnic,
                         CourseId = 1,
                         TestId = test.Id,
-                        ChargesPaid = request.ChargesPaid,
                         TestDate = DateTime.Now.AddDays(1).Date
                     };
                     _dbContext.CandidateTestScores.Add(candidateTestScore);
@@ -175,7 +178,6 @@ namespace STC.Core.Stores
                         CandidateCnic = cnic,
                         CourseId = 1,
                         TestId = test.Id,
-                        ChargesPaid = request.ChargesPaid,
                         TestDate = DateTime.Now.AddDays(1).Date
                     };
                     _dbContext.CandidateTestScores.Add(candidateTestScore);
@@ -189,7 +191,6 @@ namespace STC.Core.Stores
                         CandidateCnic = cnic,
                         CourseId = 1,
                         TestId = test.Id,
-                        ChargesPaid = request.ChargesPaid,
                         TestDate = DateTime.Now.AddDays(1).Date
                     };
                     _dbContext.CandidateTestScores.Add(candidateTestScore);
@@ -203,12 +204,21 @@ namespace STC.Core.Stores
                         CandidateCnic = cnic,
                         CourseId = 1,
                         TestId = test.Id,
-                        ChargesPaid = request.ChargesPaid,
                         TestDate = DateTime.Now.AddDays(1).Date
                     };
                     _dbContext.CandidateTestScores.Add(candidateTestScore);
                     _dbContext.SaveChanges();
                 }
+                candidateTestCharge = new CandidateTestCharge()
+                {
+                    CandidateCnic = cnic,
+                    CourseId = 1,
+                    AmountToPay = 0,
+                    AmountPaid = request.ChargesPaid ? 500 : 0,
+                    ChargesPaid = request.ChargesPaid
+                };
+                _dbContext.CandidateTestCharges.Add(candidateTestCharge);
+                _dbContext.SaveChanges();
                 transaction.Commit();
             }
             return true;

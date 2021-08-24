@@ -28,8 +28,6 @@ namespace STC.Data.Models
         public DateTime TestDate { get; set; }
         [Column("obtained_marks")]
         public float? ObtainedMarks { get; set; }
-        [Column("charges_paid")]
-        public bool ChargesPaid { get; set; }
         [Column("final_status")]
         [StringLength(250)]
         public string FinalStatus { get; set; }

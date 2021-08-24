@@ -43,6 +43,13 @@ namespace STC.Web.API.Controllers
             return _store.GetArmyData(cnic);
         }
 
+        // GET api/<CandidateController>/5/army_data
+        [HttpGet("summary")]
+        public IEnumerable<CandidateSummaryResponse> GetSummary(string cnic)
+        {
+            return _store.GetSummary();
+        }
+
         // POST api/<CandidateController>/check_eligibility
         [HttpPost]
         [Route("check_eligibility")]
