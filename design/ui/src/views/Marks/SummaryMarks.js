@@ -14,32 +14,78 @@ import {
   InputAdornment,
   FormHelperText,
   Button,
-	Select,
-	MenuItem
+  IconButton,
 } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import componentStyles from "assets/theme/views/admin/profile.js";
+import API from "../../utils/api";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import CustomTextField from "components/CustomFields/CustomTextField";
+import CustomSelectField from "components/CustomFields/CustomSelectField";
 
 const useStyles = makeStyles(componentStyles);
-const cnicRegex = /^[0-9]{5}-[0-9]{7}-[0-9]$/g;
+const cnicRegex = /^(\d{13})$/gm;
 
 function SummaryMarks() {
   const classes = useStyles();
-  const [marksData, setMarksData] = useState({
-    cnic: "",
+  const [cnic, setCnic] = useState("");
+  const [isCnicVerified, setIsCnicVerified] = useState(false);
+  const [checkCnicFormat, setCheckCnicFormat] = useState(false);
+  const [summaryMarks, setSummaryMarks] = useState({
+    registrationNo: "123",
+    name: "john",
+    district: "Rawalpindi",
+    personality: "Unsuitable",
+    initial: "20",
+    written: "30",
+    dlh: "Fail",
+    dit: "Fail",
+    pet: "Fail",
+    sponser: "Name here",
+    woswoa: "Verified",
+    clerk: "20",
+    tech: "30",
+    hafiz: "Fail",
+    medicalStatus: "FIT",
   });
 
+  const handleCnicVerify = () => {
+    API.getCandidateMarksSummary(cnic)
+      .then((res) => {
+        console.log(res);
+        setSummaryMarks(res.candidateMarksSummary);
+        setIsCnicVerified(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("Some error in handleCnicVerify Promise summary marks test");
+      });
+  };
+
   const handleSubmit = () => {
-    console.log("Handle Submit: ", marksData);
+    console.log("Handle Submit: ", summaryMarks);
+    API.updateCandidateMarksSummary(cnic, summaryMarks)
+      .then((res) => {
+        alert(res.updated);
+      })
+      .catch((err) => {
+        alert(err);
+      });
   };
 
   const handleFieldsChange = (e) => {
-    console.log(e.target.value);
-    console.log(e.target.name);
-    setMarksData({
-      ...marksData,
-      [e.target.name]: e.target.value,
-    });
+    console.log(e.target.name + " = " + e.target.value);
+
+    if (e.target.name === "cnic") {
+      setCheckCnicFormat(cnicRegex.test(e.target.value));
+      setIsCnicVerified(false);
+      setCnic(e.target.value);
+    } else {
+      setSummaryMarks({
+        ...summaryMarks,
+        [e.target.name]: e.target.value,
+      });
+    }
   };
 
   return (
@@ -82,39 +128,14 @@ function SummaryMarks() {
             <div className={classes.plLg4}>
               <Grid container>
                 <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Registration #:</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="registration"
-                        placeholder="Registration No"
-                        value={marksData.registration}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>CNIC (Format: xxxxx-xxxxxxx-x)</FormLabel>
+                  <FormGroup style={{ marginBottom: "1.5rem" }}>
+                    <FormLabel>CNIC (Format: 1234512345671)</FormLabel>
                     <FormControl
                       variant="filled"
                       component={Box}
                       width="100%"
                       marginBottom={
-                        cnicRegex.test(marksData.cnic)
-                          ? "1rem!important"
-                          : "5px"
+                        cnicRegex.test(cnic) ? "1rem!important" : "5px"
                       }
                     >
                       <Box
@@ -125,296 +146,197 @@ function SummaryMarks() {
                         autoComplete="off"
                         type="text"
                         name="cnic"
-                        placeholder="xxxxx-xxxxxxx-x"
-                        value={marksData.cnic}
+                        placeholder="Provide only numbers without dashes"
+                        value={cnic}
                         endAdornment={
                           <InputAdornment position="end">
-                            <CheckCircleIcon
-                              classes={{ root: classes.iconCnic }}
-                            />
+                            {isCnicVerified ? (
+                              <IconButton disabled>
+                                <CheckCircleIcon
+                                  classes={{ root: classes.iconCnic }}
+                                />
+                              </IconButton>
+                            ) : checkCnicFormat ? (
+                              <IconButton
+                                onClick={handleCnicVerify}
+                                disabled={!checkCnicFormat}
+                              >
+                                <HelpOutlineIcon
+                                  classes={{ root: classes.iconCnic }}
+                                />
+                              </IconButton>
+                            ) : (
+                              <span />
+                            )}
                           </InputAdornment>
                         }
                         onChange={handleFieldsChange}
                       />
                     </FormControl>
-                    {!cnicRegex.test(marksData.cnic) &&
-                      marksData.cnic.length > 0 && (
-                        <FormHelperText
-                          error
-                          id="standard-weight-helper-text"
-                          color="error"
-                        >
-                          Please follow CNIC format!
-                        </FormHelperText>
-                      )}
+                    {!checkCnicFormat && cnic.length > 0 && (
+                      <FormHelperText
+                        error
+                        id="standard-weight-helper-text"
+                        color="error"
+                      >
+                        Please follow CNIC format!
+                      </FormHelperText>
+                    )}
                   </FormGroup>
                 </Grid>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="name"
-                        placeholder="Name"
-                        value={marksData.name}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
+                <Grid
+                  item
+                  xs={12}
+                  lg={4}
+                  style={isCnicVerified ? {} : { display: "none" }}
+                >
+                  <CustomTextField
+                    label="Registration #:"
+                    type="text"
+                    name="registrationNo"
+                    placeholder="Registration No"
+                    value={summaryMarks.registrationNo}
+                    // onChange={handleFieldsChange}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  lg={4}
+                  style={isCnicVerified ? {} : { display: "none" }}
+                >
+                  <CustomTextField
+                    label="Name: "
+                    type="text"
+                    name="name"
+                    placeholder="Name"
+                    value={summaryMarks.name}
+                    // onChange={handleFieldsChange}
+                  />
                 </Grid>
               </Grid>
-							<Grid
+              <div style={isCnicVerified ? {} : { display: "none" }}>
+              <Grid
                 container
                 direction="row"
                 justifyContent="center"
                 alignItems="flex-start"
               >
-              <Grid item xs={12} lg={4}>
-                <Grid
-                  container
-                  direction="column"
-                  justifyContent="center"
-                  alignItems="flex-start"
-                >
-                  <Grid item>
-                    <FormGroup style={{ marginBottom: "0.5rem" }}>
-                      <FormLabel>District</FormLabel>
-                      <FormControl
-                        variant="filled"
-                        component={Box}
-                        width="100%"
-                        marginBottom="1rem!important"
-                      >
-                        <Box
-                          paddingLeft="0.75rem"
-                          paddingRight="0.75rem"
-                          component={FilledInput}
-                          autoComplete="off"
-                          type="text"
-                          name="district"
-                          placeholder="District"
-                          value={marksData.district}
-                          onChange={handleFieldsChange}
-                        />
-                      </FormControl>
-                    </FormGroup>
-                  </Grid>
-                  <Grid item>
-									<FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Pers</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={Select}
-                        autoComplete="off"
-                        type="text"
-                        name="pers"
-                        displayEmpty
-                        placeholder="Suitable/Unsuitable"
-                        value={marksData.pers}
-                        onChange={handleFieldsChange}
-                      >
-                        {["Suitable", "Unsuitable"].map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </Box>
-                    </FormControl>
-                  </FormGroup>
-                  </Grid>
-                  <Grid item>
-                    <FormGroup style={{ marginBottom: "0.5rem" }}>
-                      <FormLabel>Int</FormLabel>
-                      <FormControl
-                        variant="filled"
-                        component={Box}
-                        width="100%"
-                        marginBottom="1rem!important"
-                      >
-                        <Box
-                          paddingLeft="0.75rem"
-                          paddingRight="0.75rem"
-                          component={FilledInput}
-                          autoComplete="off"
-                          type="text"
-                          name="int"
-                          placeholder="Int"
-                          value={marksData.int}
-                          onChange={handleFieldsChange}
-                        />
-                      </FormControl>
-                    </FormGroup>
-                  </Grid>
-                  <Grid item>
-                    <FormGroup style={{ marginBottom: "0.5rem" }}>
-                      <FormLabel>Wtn</FormLabel>
-                      <FormControl
-                        variant="filled"
-                        component={Box}
-                        width="100%"
-                        marginBottom="1rem!important"
-                      >
-                        <Box
-                          paddingLeft="0.75rem"
-                          paddingRight="0.75rem"
-                          component={FilledInput}
-                          autoComplete="off"
-                          type="text"
-                          name="wtn"
-                          placeholder="Wtn"
-                          value={marksData.wtn}
-                          onChange={handleFieldsChange}
-                        />
-                      </FormControl>
-                    </FormGroup>
-                  </Grid>
-                  
-                </Grid>
-              </Grid>
-              {/* </Grid> */}
-
-              
                 <Grid item xs={12} lg={4}>
-								<Grid
-                  container
-                  direction="column"
-                  justifyContent="center"
-                  alignItems="flex-start"
-                >
-<Grid item>
-                    
-										<FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>DLH</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={Select}
-                        autoComplete="off"
+                  <Grid
+                    container
+                    direction="column"
+                    justifyContent="center"
+                    alignItems="flex-start"
+                  >
+                    <Grid item>
+                      <CustomTextField
+                        label="District"
+                        type="text"
+                        name="district"
+                        placeholder="District"
+                        value={summaryMarks.district}
+                        // onChange={handleFieldsChange}
+                      />
+                    </Grid>
+                    <Grid item>
+                      <CustomSelectField
+                        label="Personality"
+                        type="text"
+                        name="personality"
+                        placeholder="Suitable/Unsuitable"
+                        menuList={[
+                          { id: 0, label: "Suitable" },
+                          { id: 1, label: "Unsuitable" },
+                        ]}
+                        value={summaryMarks.personality}
+                        onChange={handleFieldsChange}
+                      />
+                    </Grid>
+                    <Grid item>
+                      <CustomTextField
+                        label="Initial Test"
+                        type="text"
+                        name="initial"
+                        placeholder="Initial Test"
+                        value={summaryMarks.initial}
+                        onChange={handleFieldsChange}
+                      />
+                    </Grid>
+                    <Grid item>
+                      <CustomTextField
+                        label="Written Test"
+                        type="text"
+                        name="written"
+                        placeholder="Written Test"
+                        value={summaryMarks.written}
+                        onChange={handleFieldsChange}
+                      />
+                    </Grid>
+                  </Grid>
+                </Grid>
+                {/* </Grid> */}
+
+                <Grid item xs={12} lg={4}>
+                  <Grid
+                    container
+                    direction="column"
+                    justifyContent="center"
+                    alignItems="flex-start"
+                  >
+                    <Grid item>
+                      <CustomSelectField
+                        label="DLH"
                         type="text"
                         name="dlh"
-                        displayEmpty
                         placeholder="Pass/Fail"
-                        value={marksData.dlh}
+                        menuList={[
+                          { id: 0, label: "Pass" },
+                          { id: 1, label: "Fail" },
+                        ]}
+                        value={summaryMarks.dlh}
                         onChange={handleFieldsChange}
-                      >
-                        {["Pass", "Fail"].map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </Box>
-                    </FormControl>
-                  </FormGroup>
-                  </Grid>
-									<Grid item>
-                    
-										<FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>DIT</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={Select}
-                        autoComplete="off"
+                      />
+                    </Grid>
+                    <Grid item>
+                      <CustomSelectField
+                        label="DIT"
                         type="text"
                         name="dit"
-                        displayEmpty
                         placeholder="Pass/Fail"
-                        value={marksData.dit}
+                        menuList={[
+                          { id: 0, label: "Pass" },
+                          { id: 1, label: "Fail" },
+                        ]}
+                        value={summaryMarks.dit}
                         onChange={handleFieldsChange}
-                      >
-                        {["Pass", "Fail"].map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </Box>
-                    </FormControl>
-                  </FormGroup>
-                  </Grid>
-									<Grid item>
-                    
-										<FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>PET</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={Select}
-                        autoComplete="off"
+                      />
+                    </Grid>
+                    <Grid item>
+                      <CustomSelectField
+                        label="PET"
                         type="text"
                         name="pet"
-                        displayEmpty
                         placeholder="Pass/Fail"
-                        value={marksData.pet}
+                        menuList={[
+                          { id: 0, label: "Pass" },
+                          { id: 1, label: "Fail" },
+                        ]}
+                        value={summaryMarks.pet}
                         onChange={handleFieldsChange}
-                      >
-                        {["Pass", "Fail"].map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </Box>
-                    </FormControl>
-                  </FormGroup>
+                      />
+                    </Grid>
+                    <Grid item>
+                      <CustomTextField
+                        label="Sponser"
+                        type="text"
+                        name="sponser"
+                        placeholder="Sponser"
+                        value={summaryMarks.sponser}
+                        onChange={handleFieldsChange}
+                      />
+                    </Grid>
                   </Grid>
-									<Grid item>
-                    <FormGroup style={{ marginBottom: "0.5rem" }}>
-                      <FormLabel>Sponser</FormLabel>
-                      <FormControl
-                        variant="filled"
-                        component={Box}
-                        width="100%"
-                        marginBottom="1rem!important"
-                      >
-                        <Box
-                          paddingLeft="0.75rem"
-                          paddingRight="0.75rem"
-                          component={FilledInput}
-                          autoComplete="off"
-                          type="text"
-                          name="sponser"
-                          placeholder="Sponser"
-                          value={marksData.sponser}
-                          onChange={handleFieldsChange}
-                        />
-                      </FormControl>
-                    </FormGroup>
-                  </Grid>
-								</Grid>
                 </Grid>
                 <Grid item xs={12} lg={4}>
                   <Grid
@@ -424,144 +346,68 @@ function SummaryMarks() {
                     alignItems="flex-end"
                   >
                     <Grid item>
-                    
-										<FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>WOS/WOA</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={Select}
-                        autoComplete="off"
+                      <CustomSelectField
+                        label="WOS/WOA"
                         type="text"
-                        name="wosWoa"
-                        displayEmpty
+                        name="woswoa"
                         placeholder="Pass/Fail"
-                        value={marksData.wosWoa}
+                        menuList={[
+                          { id: 0, label: "Verified" },
+                          { id: 1, label: "Not Verified" },
+                        ]}
+                        value={summaryMarks.woswoa}
                         onChange={handleFieldsChange}
-                      >
-                        {["Verified", "Unverified"].map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </Box>
-                    </FormControl>
-                  </FormGroup>
-                  </Grid>
-                    <Grid item>
-                      <FormGroup style={{ marginBottom: "0.5rem" }}>
-                        <FormLabel>Clk</FormLabel>
-                        <FormControl
-                          variant="filled"
-                          component={Box}
-                          width="100%"
-                          marginBottom="1rem!important"
-                        >
-                          <Box
-                            paddingLeft="0.75rem"
-                            paddingRight="0.75rem"
-                            component={FilledInput}
-                            autoComplete="off"
-                            type="text"
-                            name="clk"
-                            placeholder="Clk"
-                            value={marksData.clk}
-                            onChange={handleFieldsChange}
-                          />
-                        </FormControl>
-                      </FormGroup>
+                      />
                     </Grid>
                     <Grid item>
-                      <FormGroup style={{ marginBottom: "0.5rem" }}>
-                        <FormLabel>Tech</FormLabel>
-                        <FormControl
-                          variant="filled"
-                          component={Box}
-                          width="100%"
-                          marginBottom="1rem!important"
-                        >
-                          <Box
-                            paddingLeft="0.75rem"
-                            paddingRight="0.75rem"
-                            component={FilledInput}
-                            autoComplete="off"
-                            type="text"
-                            name="tech"
-                            placeholder="Tech"
-                            value={marksData.tech}
-                            onChange={handleFieldsChange}
-                          />
-                        </FormControl>
-                      </FormGroup>
+                      <CustomTextField
+                        label="Clerk Test"
+                        type="text"
+                        name="clerk"
+                        placeholder="Clerk"
+                        value={summaryMarks.clerk}
+                        onChange={handleFieldsChange}
+                      />
                     </Grid>
                     <Grid item>
-                    
-										<FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Hafiz</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={Select}
-                        autoComplete="off"
+                      <CustomTextField
+                        label="Tech Test"
+                        type="text"
+                        name="tech"
+                        placeholder="Tech"
+                        value={summaryMarks.tech}
+                        onChange={handleFieldsChange}
+                      />
+                    </Grid>
+                    <Grid item>
+                      <CustomSelectField
+                        label="Hafiz"
                         type="text"
                         name="hafiz"
-                        displayEmpty
                         placeholder="Pass/Fail"
-                        value={marksData.hafiz}
+                        menuList={[
+                          { id: 0, label: "Pass" },
+                          { id: 1, label: "Fail" },
+                        ]}
+                        value={summaryMarks.hafiz}
                         onChange={handleFieldsChange}
-                      >
-                        {["Pass", "Fail"].map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </Box>
-                    </FormControl>
-                  </FormGroup>
-                  </Grid>
-									<Grid item>
-                    
-										<FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Med Status</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={Select}
-                        autoComplete="off"
+                      />
+                    </Grid>
+                    <Grid item>
+                      <CustomSelectField
+                        label="Med Status"
                         type="text"
-                        name="medStatus"
-                        displayEmpty
-                        placeholder="Pass/Fail"
-                        value={marksData.medStatus}
+                        name="medicalStatus"
+                        placeholder="Med Status"
+                        menuList={[
+                          { id: 0, label: "MUF" },
+                          { id: 1, label: "FIT" },
+                          { id: 2, label: "Ref" },
+                        ]}
+                        value={summaryMarks.medicalStatus}
                         onChange={handleFieldsChange}
-                      >
-                        {["MUF", "FIT", "Ref"].map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </Box>
-                    </FormControl>
-                  </FormGroup>
-                  </Grid>
+                      />
+                    </Grid>
                   </Grid>
                 </Grid>
               </Grid>
@@ -582,6 +428,7 @@ function SummaryMarks() {
                   </Button>
                 </Grid>
               </Grid>
+              </div>
             </div>
           </CardContent>
         </Card>

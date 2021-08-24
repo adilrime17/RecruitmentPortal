@@ -1,23 +1,4 @@
-// core components
-// import Dashboard from "views/admin/Dashboard.js";
-import Temp from "views/admin/Temp.js";
-// import Icons from "views/admin/Icons.js";
-// import Login from "views/auth/Login.js";
-// import Maps from "views/admin/Maps.js";
-// import Profile from "views/admin/Profile.js";
-// import Register from "views/auth/Register.js";
-// import Tables from "views/admin/Tables.js";
-// @material-ui/icons components
-// import AccountCircle from "@material-ui/icons/AccountCircle";
-// import Dns from "@material-ui/icons/Dns";
-// import FlashOn from "@material-ui/icons/FlashOn";
-// import FormatListBulleted from "@material-ui/icons/FormatListBulleted";
-// import Grain from "@material-ui/icons/Grain";
-// import LocationOn from "@material-ui/icons/LocationOn";
-// import Palette from "@material-ui/icons/Palette";
-// import Person from "@material-ui/icons/Person";
-// import Tv from "@material-ui/icons/Tv";
-// import VpnKey from "@material-ui/icons/VpnKey";
+import MainComponent from "views/admin/MainComponent";
 
 var routes = [
   //>> Medical routes :
@@ -26,7 +7,7 @@ var routes = [
     name: "Eligibility Check",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'medical'
   },
@@ -35,7 +16,7 @@ var routes = [
     name: "Initial Medical",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'medical'
   },
@@ -44,7 +25,7 @@ var routes = [
     name: "Final Medical",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'medical'
   },
@@ -55,7 +36,7 @@ var routes = [
     name: "Personal Information",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'data'
   },
@@ -64,7 +45,7 @@ var routes = [
     name: "Education",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'data'
   },
@@ -73,7 +54,7 @@ var routes = [
     name: "WOA/WOS",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'data'
   },
@@ -82,7 +63,7 @@ var routes = [
     name: "Test to Appear",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'data'
   },
@@ -91,7 +72,7 @@ var routes = [
     name: "Print Slip",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'data'
   },
@@ -100,7 +81,7 @@ var routes = [
     name: "Summary",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'data'
   },
@@ -112,7 +93,7 @@ var routes = [
     name: "Intelligence Test",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'marks'
   },
@@ -121,7 +102,7 @@ var routes = [
     name: "Personality Test",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'marks'
   },
@@ -130,7 +111,7 @@ var routes = [
     name: "Written Test (Matric)",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'marks'
   },
@@ -139,7 +120,7 @@ var routes = [
     name: "Written Test (U/Matric)",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'marks'
   },
@@ -148,7 +129,7 @@ var routes = [
     name: "CLK Test",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'marks'
   },
@@ -157,7 +138,7 @@ var routes = [
     name: "Tech Test",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'marks'
   },
@@ -166,7 +147,7 @@ var routes = [
     name: "Cptr Diploma Test",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'marks'
   },
@@ -176,7 +157,7 @@ var routes = [
     name: "Driving Test",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'marks'
   },
@@ -186,7 +167,7 @@ var routes = [
     name: "Hafiz Test",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'marks'
   },
@@ -195,7 +176,7 @@ var routes = [
     name: "PET",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'marks'
   },
@@ -204,114 +185,18 @@ var routes = [
     name: "Summary Marks",
     // icon: Tv,
     // iconColor: "Primary",
-    component: Temp,
+    component: MainComponent,
     layout: "/admin",
     key: 'marks'
   },
-  {
-    path: "/view-print-nominal-rolls",
-    name: "View/Print Nominal Rolls",
-    // icon: Tv,
-    // iconColor: "Primary",
-    component: Temp,
-    layout: "/admin",
-    key: 'marks'
-  },
-
-
   // {
-  //   path: "/temp",
-  //   name: "Temp",
+  //   path: "/view-print-nominal-rolls",
+  //   name: "View/Print Nominal Rolls",
   //   // icon: Tv,
-  //   iconColor: "Primary",
-  //   component: Dashboard,
+  //   // iconColor: "Primary",
+  //   component: MainComponent,
   //   layout: "/admin",
-  // },
-  // {
-  //   href: "#pablo",
-  //   name: "Upgrade to pro",
-  //   icon: FlashOn,
-  //   upgradeToPro: true,
-  // },
-  // {
-  //   path: "/index",
-  //   name: "Dashboard",
-  //   icon: Tv,
-  //   iconColor: "Primary",
-  //   component: Dashboard,
-  //   layout: "/admin",
-  // },
-  // {
-  //   path: "/icons",
-  //   name: "Icons",
-  //   icon: Grain,
-  //   iconColor: "Primary",
-  //   component: Icons,
-  //   layout: "/admin",
-  // },
-  // {
-  //   path: "/maps",
-  //   name: "Maps",
-  //   icon: LocationOn,
-  //   iconColor: "Warning",
-  //   component: Maps,
-  //   layout: "/admin",
-  // },
-  // {
-  //   path: "/user-profile",
-  //   name: "User Profile",
-  //   // icon: Person,
-  //   iconColor: "WarningLight",
-  //   component: Profile,
-  //   layout: "/admin",
-  // },
-  // {
-  //   path: "/tables",
-  //   name: "Tables",
-  //   icon: FormatListBulleted,
-  //   iconColor: "Error",
-  //   component: Tables,
-  //   layout: "/admin",
-  // },
-  // {
-  //   path: "/login",
-  //   name: "Login",
-  //   icon: VpnKey,
-  //   iconColor: "Info",
-  //   component: Login,
-  //   layout: "/auth",
-  // },
-  // {
-  //   path: "/register",
-  //   name: "Register",
-  //   icon: AccountCircle,
-  //   iconColor: "ErrorLight",
-  //   component: Register,
-  //   layout: "/auth",
-  // },
-  // {
-  //   divider: true,
-  // },
-  // {
-  //   title: "Documentation",
-  // },
-  // {
-  //   href:
-  //     "https://www.creative-tim.com/learning-lab/material-ui/overview/argon-dashboard?ref=admui-admin-sidebar",
-  //   name: "Getting started",
-  //   icon: FlashOn,
-  // },
-  // {
-  //   href:
-  //     "https://www.creative-tim.com/learning-lab/material-ui/colors/argon-dashboard?ref=admui-admin-sidebar",
-  //   name: "Foundation",
-  //   icon: Palette,
-  // },
-  // {
-  //   href:
-  //     "https://www.creative-tim.com/learning-lab/material-ui/alerts/argon-dashboard?ref=admui-admin-sidebar",
-  //   name: "Components",
-  //   icon: Dns,
-  // },
+  //   key: 'marks'
+  // }
 ];
 export default routes;

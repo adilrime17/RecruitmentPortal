@@ -14,32 +14,75 @@ import {
   InputAdornment,
   FormHelperText,
   Button,
-	Select,
-	MenuItem
+  IconButton,
 } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
 import componentStyles from "assets/theme/views/admin/profile.js";
+import API from "../../utils/api";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import CustomTextField from "components/CustomFields/CustomTextField";
+import CustomSelectField from "components/CustomFields/CustomSelectField";
 
 const useStyles = makeStyles(componentStyles);
-const cnicRegex = /^[0-9]{5}-[0-9]{7}-[0-9]$/g;
+const cnicRegex = /^(\d{13})$/gm;
 
 function Pet() {
   const classes = useStyles();
+  const [cnic, setCnic] = useState("");
+  const [isCnicVerified, setIsCnicVerified] = useState(false);
+  const [checkCnicFormat, setCheckCnicFormat] = useState(false);
   const [marksData, setMarksData] = useState({
-    cnic: "",
+    registrationNo: "123",
+    name: "john",
+    totalPetObtained: "5",
+    oneMile: "1",
+    pullUp: "2",
+    pushUp: "2",
+    crunches: "3",
+    ditch: "clear",
+    todayFail: "2",
+    totalFail: "100",
+    todayPass: "5",
+    totalPass: "100",
   });
+
+  const handleCnicVerify = () => {
+    API.getCandidateTestDetail(cnic, "pet")
+      .then((res) => {
+        console.log(res);
+        setMarksData(res.candidateTestDetail);
+        setIsCnicVerified(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("Some error in handleCnicVerify Promise pet test");
+      });
+  };
 
   const handleSubmit = () => {
     console.log("Handle Submit: ", marksData);
+    API.updateCandidateTestMarks(cnic, marksData, "pet")
+      .then((res) => {
+        alert(res.updated);
+      })
+      .catch((err) => {
+        alert(err);
+      });
   };
 
   const handleFieldsChange = (e) => {
-    console.log(e.target.value);
-    console.log(e.target.name);
-    setMarksData({
-      ...marksData,
-      [e.target.name]: e.target.value,
-    });
+    console.log(e.target.name + " = " + e.target.value);
+
+    if (e.target.name === "cnic") {
+      setCheckCnicFormat(cnicRegex.test(e.target.value));
+      setIsCnicVerified(false);
+      setCnic(e.target.value);
+    } else {
+      setMarksData({
+        ...marksData,
+        [e.target.name]: e.target.value,
+      });
+    }
   };
 
   return (
@@ -82,39 +125,14 @@ function Pet() {
             <div className={classes.plLg4}>
               <Grid container>
                 <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Registration #:</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="registration"
-                        placeholder="Registration No"
-                        value={marksData.registration}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>CNIC (Format: xxxxx-xxxxxxx-x)</FormLabel>
+                  <FormGroup style={{ marginBottom: "1.5rem" }}>
+                    <FormLabel>CNIC (Format: 1234512345671)</FormLabel>
                     <FormControl
                       variant="filled"
                       component={Box}
                       width="100%"
                       marginBottom={
-                        cnicRegex.test(marksData.cnic)
-                          ? "1rem!important"
-                          : "5px"
+                        cnicRegex.test(cnic) ? "1rem!important" : "5px"
                       }
                     >
                       <Box
@@ -125,337 +143,225 @@ function Pet() {
                         autoComplete="off"
                         type="text"
                         name="cnic"
-                        placeholder="xxxxx-xxxxxxx-x"
-                        value={marksData.cnic}
+                        placeholder="Provide only numbers without dashes"
+                        value={cnic}
                         endAdornment={
                           <InputAdornment position="end">
-                            <CheckCircleIcon
-                              classes={{ root: classes.iconCnic }}
-                            />
+                            {isCnicVerified ? (
+                              <IconButton disabled>
+                                <CheckCircleIcon
+                                  classes={{ root: classes.iconCnic }}
+                                />
+                              </IconButton>
+                            ) : checkCnicFormat ? (
+                              <IconButton
+                                onClick={handleCnicVerify}
+                                disabled={!checkCnicFormat}
+                              >
+                                <HelpOutlineIcon
+                                  classes={{ root: classes.iconCnic }}
+                                />
+                              </IconButton>
+                            ) : (
+                              <span />
+                            )}
                           </InputAdornment>
                         }
                         onChange={handleFieldsChange}
                       />
                     </FormControl>
-                    {!cnicRegex.test(marksData.cnic) &&
-                      marksData.cnic.length > 0 && (
-                        <FormHelperText
-                          error
-                          id="standard-weight-helper-text"
-                          color="error"
-                        >
-                          Please follow CNIC format!
-                        </FormHelperText>
-                      )}
+                    {!checkCnicFormat && cnic.length > 0 && (
+                      <FormHelperText
+                        error
+                        id="standard-weight-helper-text"
+                        color="error"
+                      >
+                        Please follow CNIC format!
+                      </FormHelperText>
+                    )}
                   </FormGroup>
                 </Grid>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="name"
-                        placeholder="Name"
-                        value={marksData.name}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
+                <Grid
+                  item
+                  xs={12}
+                  lg={4}
+                  style={isCnicVerified ? {} : { display: "none" }}
+                >
+                  <CustomTextField
+                    label="Registration #:"
+                    type="text"
+                    name="registrationNo"
+                    placeholder="Registration No"
+                    value={marksData.registrationNo}
+                    // onChange={handleFieldsChange}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  lg={4}
+                  style={isCnicVerified ? {} : { display: "none" }}
+                >
+                  <CustomTextField
+                    label="Name: "
+                    type="text"
+                    name="name"
+                    placeholder="Name"
+                    value={marksData.name}
+                    // onChange={handleFieldsChange}
+                  />
                 </Grid>
               </Grid>
-							<Grid
-                container
-                direction="row"
-                justifyContent="center"
-                alignItems="flex-start"
-              >
-              <Grid item xs={12} lg={4}>
+              <div style={isCnicVerified ? {} : { display: "none" }}>
                 <Grid
                   container
-                  direction="column"
+                  direction="row"
                   justifyContent="center"
                   alignItems="flex-start"
                 >
-                  <Grid item>
-                    <FormGroup style={{ marginBottom: "0.5rem" }}>
-                      <FormLabel>1 Mile</FormLabel>
-                      <FormControl
-                        variant="filled"
-                        component={Box}
-                        width="100%"
-                        marginBottom="1rem!important"
-                      >
-                        <Box
-                          paddingLeft="0.75rem"
-                          paddingRight="0.75rem"
-                          component={FilledInput}
-                          autoComplete="off"
+                  <Grid item xs={12} lg={4}>
+                    <Grid
+                      container
+                      direction="column"
+                      justifyContent="center"
+                      alignItems="flex-start"
+                    >
+                      <Grid item>
+                        <CustomTextField
+                          label="1 Mile"
                           type="text"
                           name="oneMile"
                           placeholder="1 Mile"
                           value={marksData.oneMile}
                           onChange={handleFieldsChange}
                         />
-                      </FormControl>
-                    </FormGroup>
-                  </Grid>
-                  <Grid item>
-                    <FormGroup style={{ marginBottom: "0.5rem" }}>
-                      <FormLabel>Pull Up</FormLabel>
-                      <FormControl
-                        variant="filled"
-                        component={Box}
-                        width="100%"
-                        marginBottom="1rem!important"
-                      >
-                        <Box
-                          paddingLeft="0.75rem"
-                          paddingRight="0.75rem"
-                          component={FilledInput}
-                          autoComplete="off"
+                      </Grid>
+                      <Grid item>
+                        <CustomTextField
+                          label="Pull Up"
                           type="text"
                           name="pullUp"
                           placeholder="Pull Up"
                           value={marksData.pullUp}
                           onChange={handleFieldsChange}
                         />
-                      </FormControl>
-                    </FormGroup>
-                  </Grid>
-                  <Grid item>
-                    <FormGroup style={{ marginBottom: "0.5rem" }}>
-                      <FormLabel>Push Up</FormLabel>
-                      <FormControl
-                        variant="filled"
-                        component={Box}
-                        width="100%"
-                        marginBottom="1rem!important"
-                      >
-                        <Box
-                          paddingLeft="0.75rem"
-                          paddingRight="0.75rem"
-                          component={FilledInput}
-                          autoComplete="off"
+                      </Grid>
+                      <Grid item>
+                        <CustomTextField
+                          label="Push Up"
                           type="text"
                           name="pushUp"
                           placeholder="Push Up"
                           value={marksData.pushUp}
                           onChange={handleFieldsChange}
                         />
-                      </FormControl>
-                    </FormGroup>
-                  </Grid>
-                  <Grid item>
-                    <FormGroup style={{ marginBottom: "0.5rem" }}>
-                      <FormLabel>Crunches</FormLabel>
-                      <FormControl
-                        variant="filled"
-                        component={Box}
-                        width="100%"
-                        marginBottom="1rem!important"
-                      >
-                        <Box
-                          paddingLeft="0.75rem"
-                          paddingRight="0.75rem"
-                          component={FilledInput}
-                          autoComplete="off"
+                      </Grid>
+                      <Grid item>
+                        <CustomTextField
+                          label="Crunches"
                           type="text"
                           name="crunches"
                           placeholder="Crunches"
                           value={marksData.crunches}
                           onChange={handleFieldsChange}
                         />
-                      </FormControl>
-                    </FormGroup>
+                      </Grid>
+                      <Grid item>
+                        <CustomSelectField
+                          label="Ditch"
+                          type="text"
+                          name="ditch"
+                          placeholder="Clear/Unclear"
+                          menuList={[
+                            { id: 0, label: "Unclear" },
+                            { id: 1, label: "Clear" },
+                          ]}
+                          value={marksData.ditch}
+                          onChange={handleFieldsChange}
+                        />
+                      </Grid>
+                    </Grid>
                   </Grid>
+                  {/* </Grid> */}
+
+                  <Grid item xs={12} lg={4}>
+                    <CustomTextField
+                      label="Total PET Marks"
+                      type="text"
+                      name="totalPetObtained"
+                      placeholder="Marks Obtained"
+                      value={marksData.totalPetObtained}
+                      onChange={handleFieldsChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} lg={4}>
+                    <Grid
+                      container
+                      direction="column"
+                      justifyContent="center"
+                      alignItems="flex-end"
+                    >
+                      <Grid item>
+                        <CustomTextField
+                          label="Today Fail"
+                          type="text"
+                          name="todayFail"
+                          placeholder="Today Fail"
+                          value={marksData.todayFail}
+                          // onChange={handleFieldsChange}
+                        />
+                      </Grid>
+                      <Grid item>
+                        <CustomTextField
+                          label="Total Fail"
+                          type="text"
+                          name="totalFail"
+                          placeholder="Total Fail"
+                          value={marksData.totalFail}
+                          // onChange={handleFieldsChange}
+                        />
+                      </Grid>
+                      <Grid item>
+                        <CustomTextField
+                          label="Today Pass"
+                          type="text"
+                          name="todayPass"
+                          placeholder="Today Pass"
+                          value={marksData.todayPass}
+                          // onChange={handleFieldsChange}
+                        />
+                      </Grid>
+                      <Grid item>
+                        <CustomTextField
+                          label="Total Pass"
+                          type="text"
+                          name="totalPass"
+                          placeholder="Total Pass"
+                          value={marksData.totalPass}
+                          // onChange={handleFieldsChange}
+                        />
+                      </Grid>
+                    </Grid>
+                  </Grid>
+                </Grid>
+
+                <Grid
+                  container
+                  justify="center"
+                  alignItems="center"
+                  style={{ marginTop: "50px" }}
+                >
                   <Grid item>
-                    
-										<FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Ditch</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleSubmit}
                     >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={Select}
-                        autoComplete="off"
-                        type="text"
-                        name="ditch"
-                        displayEmpty
-                        placeholder="Clear/Unclear"
-                        value={marksData.ditch}
-                        onChange={handleFieldsChange}
-                      >
-                        {["Clear", "Unclear"].map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </Box>
-                    </FormControl>
-                  </FormGroup>
+                      Submit
+                    </Button>
                   </Grid>
                 </Grid>
-              </Grid>
-              {/* </Grid> */}
-
-              
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Total PET Marks</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="marks"
-                        placeholder="Marks Obtained"
-                        value={marksData.marks}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-                <Grid item xs={12} lg={4}>
-                  <Grid
-                    container
-                    direction="column"
-                    justifyContent="center"
-                    alignItems="flex-end"
-                  >
-                    <Grid item>
-                      <FormGroup style={{ marginBottom: "0.5rem" }}>
-                        <FormLabel>Today Fail</FormLabel>
-                        <FormControl
-                          variant="filled"
-                          component={Box}
-                          width="100%"
-                          marginBottom="1rem!important"
-                        >
-                          <Box
-                            paddingLeft="0.75rem"
-                            paddingRight="0.75rem"
-                            component={FilledInput}
-                            autoComplete="off"
-                            type="text"
-                            name="todayFail"
-                            placeholder="Today Fail"
-                            value={marksData.todayFail}
-                            onChange={handleFieldsChange}
-                          />
-                        </FormControl>
-                      </FormGroup>
-                    </Grid>
-                    <Grid item>
-                      <FormGroup style={{ marginBottom: "0.5rem" }}>
-                        <FormLabel>Total Fail</FormLabel>
-                        <FormControl
-                          variant="filled"
-                          component={Box}
-                          width="100%"
-                          marginBottom="1rem!important"
-                        >
-                          <Box
-                            paddingLeft="0.75rem"
-                            paddingRight="0.75rem"
-                            component={FilledInput}
-                            autoComplete="off"
-                            type="text"
-                            name="totalFail"
-                            placeholder="Total Fail"
-                            value={marksData.totalFail}
-                            onChange={handleFieldsChange}
-                          />
-                        </FormControl>
-                      </FormGroup>
-                    </Grid>
-                    <Grid item>
-                      <FormGroup style={{ marginBottom: "0.5rem" }}>
-                        <FormLabel>Today Pass</FormLabel>
-                        <FormControl
-                          variant="filled"
-                          component={Box}
-                          width="100%"
-                          marginBottom="1rem!important"
-                        >
-                          <Box
-                            paddingLeft="0.75rem"
-                            paddingRight="0.75rem"
-                            component={FilledInput}
-                            autoComplete="off"
-                            type="text"
-                            name="todayPass"
-                            placeholder="Today Pass"
-                            value={marksData.todayPass}
-                            onChange={handleFieldsChange}
-                          />
-                        </FormControl>
-                      </FormGroup>
-                    </Grid>
-                    <Grid item>
-                      <FormGroup style={{ marginBottom: "0.5rem" }}>
-                        <FormLabel>Total Pass</FormLabel>
-                        <FormControl
-                          variant="filled"
-                          component={Box}
-                          width="100%"
-                          marginBottom="1rem!important"
-                        >
-                          <Box
-                            paddingLeft="0.75rem"
-                            paddingRight="0.75rem"
-                            component={FilledInput}
-                            autoComplete="off"
-                            type="text"
-                            name="totalPass"
-                            placeholder="Total Pass"
-                            value={marksData.totalPass}
-                            onChange={handleFieldsChange}
-                          />
-                        </FormControl>
-                      </FormGroup>
-                    </Grid>
-                  </Grid>
-                </Grid>
-              </Grid>
-
-              <Grid
-                container
-                justify="center"
-                alignItems="center"
-                style={{ marginTop: "50px" }}
-              >
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSubmit}
-                  >
-                    Submit
-                  </Button>
-                </Grid>
-              </Grid>
+              </div>
             </div>
           </CardContent>
         </Card>

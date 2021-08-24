@@ -22,8 +22,16 @@ import {
   TableRow,
   TableCell,
   TableBody,
-  TextField, Button,
+  TextField,
+  Button,
+  IconButton,
+  Select,
+  MenuItem,
 } from "@material-ui/core";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import API from "utils/api";
+import CustomTextField from "components/CustomFields/CustomTextField";
+import CustomCheckboxField from "components/CustomFields/CustomCheckboxField";
 
 const StyledTableCell = withStyles((theme) => ({
   head: {
@@ -35,44 +43,119 @@ const StyledTableCell = withStyles((theme) => ({
     fontSize: 14,
   },
 }))(TableCell);
+
 const useStyles = makeStyles(componentStyles);
-const cnicRegex = /^[0-9]{5}-[0-9]{7}-[0-9]$/g;
+const cnicRegex = /^(\d{13})$/gm;
 
-function createData(name, calories, fat, carbs, slash, protein, grades) {
-  return { name, calories, fat, carbs, slash, protein, grades };
-}
-
+// function createData(qualification, major, subject, obtained, total, grade) {
+//   return { qualification, major, subject, obtained, total, grade };
+// }
 
 function Education() {
   const classes = useStyles();
-  const [educationPageData, setEducationPageData] = useState({
-    cnic: "",
+  // const history = useHistory();
+  const [cnic, setCnic] = useState("");
+  const [isCnicVerified, setIsCnicVerified] = useState(false);
+  const [checkCnicFormat, setCheckCnicFormat] = useState(false);
+  const [candidateEducationData, setCandidateEducationData] = useState({
+    registrationNo: "",
+    ncse: false,
+    maxQualification: "",
+    candidateEducationalData: [],
   });
-  const [rows, setRows] = useState([
-    createData("Matric", "S", "S", 24, "/", 100, "A"),
-    createData("Inter", "CS", "CS", 37, "/", 100, "B"),
-    createData("Bachelors", "T", "T", 24, "/", 100, "C"),
-    createData("Masters", "-", "-", 67, "/", 100, "D"),
-  ])
+  const [qualifications, setQualifications] = useState([]);
+  const [qualificationMajors, setQualificationMajors] = useState([]);
+  const [qualificationMajorsSubjects, setQualificationMajorsSubjects] =
+    useState([]);
+  const [qualificationDegree, setQualificationDegree] = useState([])
+
+  // const [rows, setRows] = useState([])
+
+  // const handleTableData = async (data) => {
+  //   console.log("Handle Table Data", data);
+  //   await setRows(data.map(item => {
+  //     return createData(item.qualification, item.major, item.subject, item.obtained, item.total, item.grade)
+  //   }))
+  // }
+
+  const handleCnicVerify = () => {
+    Promise.all([
+      API.getQualificationLevel(),
+      API.getCandidateEducationalData(cnic),
+      API.getQualificationMajorList(),
+      API.getQualificationMajorSubjectList(),
+      API.getQualificationDegree()
+    ])
+      .then((res) => {
+        console.log(res);
+        setQualifications(res[0].data);
+        setCandidateEducationData(res[1]);
+        // handleTableData(res[1].candidateEducationalData)
+        setQualificationMajors(res[2].majorsList);
+        setQualificationMajorsSubjects(res[3].majorSubjectsList);
+        setQualificationDegree(res[4].data)
+        setIsCnicVerified(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("Some error in handleCnicVerify Promise Personal Info");
+      });
+  };
+
+  // console.log("ROWS: ", rows);
+
+  const handleSubmit = () => {
+    console.log("Handle Submit: ", candidateEducationData);
+    API.updateCandidateEducationalData(cnic, candidateEducationData)
+      .then((res) => {
+        alert(res.updated);
+      })
+      .catch((err) => {
+        alert(err);
+      });
+  };
 
   const handleFieldsChange = (e) => {
-    console.log(e.target.value);
-    console.log(e.target.name);
-    setEducationPageData({
-      ...educationPageData,
-      [e.target.name]: e.target.value,
+    console.log(e.target.name + " = " + e.target.value);
+
+    if (e.target.name === "cnic") {
+      setCheckCnicFormat(cnicRegex.test(e.target.value));
+      setIsCnicVerified(false);
+      setCnic(e.target.value);
+    } else {
+      setCandidateEducationData({
+        ...candidateEducationData,
+        [e.target.name]: e.target.value,
+      });
+    }
+  };
+
+  const handleTableEducationData = (index, key, value) => {
+    let temp = candidateEducationData.candidateEducationalData;
+    temp[index][key] = value;
+    setCandidateEducationData({
+      ...candidateEducationData,
+      candidateEducationalData: temp,
     });
+    console.log(temp);
   };
 
   const handleAddEducation = () => {
-    setRows([
-      ...rows,
-      createData("", "", "", "", "/", "", ""),
-    ])
-  }
-
-  const handleSubmit = () => {
-    console.log("Handle Submit: ", educationPageData);
+    setCandidateEducationData({
+      ...candidateEducationData,
+      candidateEducationalData: [
+        ...candidateEducationData.candidateEducationalData,
+        {
+          level: "",
+          degree: "",
+          major: "",
+          subject: "",
+          obtained: "",
+          total: "",
+          grade: "",
+        },
+      ],
+    });
   };
 
   return (
@@ -114,40 +197,15 @@ function Education() {
           <CardContent>
             <div className={classes.plLg4}>
               <Grid container>
-                <Grid item xs={12} lg={6}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Registration #:</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="registration"
-                        placeholder="Registration No"
-                        value={educationPageData.registration}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-                <Grid item xs={12} lg={6}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>CNIC (Format: xxxxx-xxxxxxx-x)</FormLabel>
+                <Grid item xs={12} lg={3}>
+                  <FormGroup style={{ marginBottom: "1.5rem" }}>
+                    <FormLabel>CNIC (Format: 1234512345671)</FormLabel>
                     <FormControl
                       variant="filled"
                       component={Box}
                       width="100%"
                       marginBottom={
-                        cnicRegex.test(educationPageData.cnic)
-                          ? "1rem!important"
-                          : "5px"
+                        cnicRegex.test(cnic) ? "1rem!important" : "5px"
                       }
                     >
                       <Box
@@ -158,242 +216,309 @@ function Education() {
                         autoComplete="off"
                         type="text"
                         name="cnic"
-                        placeholder="xxxxx-xxxxxxx-x"
-                        value={educationPageData.cnic}
+                        placeholder="Provide only numbers without dashes"
+                        value={cnic}
                         endAdornment={
                           <InputAdornment position="end">
-                            <CheckCircleIcon
-                              classes={{ root: classes.iconCnic }}
-                            />
+                            {isCnicVerified ? (
+                              <IconButton disabled>
+                                <CheckCircleIcon
+                                  classes={{ root: classes.iconCnic }}
+                                />
+                              </IconButton>
+                            ) : checkCnicFormat ? (
+                              <IconButton
+                                onClick={handleCnicVerify}
+                                disabled={!checkCnicFormat}
+                              >
+                                <HelpOutlineIcon
+                                  classes={{ root: classes.iconCnic }}
+                                />
+                              </IconButton>
+                            ) : null}
                           </InputAdornment>
                         }
                         onChange={handleFieldsChange}
                       />
                     </FormControl>
-                    {!cnicRegex.test(educationPageData.cnic) &&
-                      educationPageData.cnic.length > 0 && (
-                        <FormHelperText
-                          error
-                          id="standard-weight-helper-text"
-                          color="error"
-                        >
-                          Please follow CNIC format!
-                        </FormHelperText>
-                      )}
+                    {!checkCnicFormat && cnic.length > 0 && (
+                      <FormHelperText
+                        error
+                        id="standard-weight-helper-text"
+                        color="error"
+                      >
+                        Please follow CNIC format!
+                      </FormHelperText>
+                    )}
                   </FormGroup>
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  lg={3}
+                  style={isCnicVerified ? {} : { display: "none" }}
+                >
+                  <CustomTextField
+                    label="Registration #:"
+                    type="text"
+                    name="registrationNo"
+                    placeholder="Registration No"
+                    value={candidateEducationData.registrationNo}
+                    // onChange={handleFieldsChange}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  lg={3}
+                  style={isCnicVerified ? {} : { display: "none" }}
+                >
+                  <CustomTextField
+                    label="Max Qualification"
+                    type="text"
+                    name="maxQualification"
+                    placeholder="Max Qualification"
+                    value={candidateEducationData.maxQualification}
+                    // onChange={handleFieldsChange}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  lg={3}
+                  style={
+                    isCnicVerified
+                      ? { direction: "rtl", paddingTop: "20px" }
+                      : { display: "none" }
+                  }
+                >
+                  <CustomCheckboxField
+                    label="Applying as NCsE"
+                    name="ncse"
+                    checked={candidateEducationData.ncse}
+                    // onChange={handleCheckFieldsChange}
+                  />
                 </Grid>
               </Grid>
-
-              <Grid container>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>For NCsE</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="ncse"
-                        placeholder="For NCsE"
-                        value={educationPageData.ncse}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Under Matric</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="underMatric"
-                        placeholder="Under Matric Info"
-                        value={educationPageData.underMatric}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-                <Grid item xs={12} lg={4}>
-                  <Grid container justify='flex-end'>
-                  <Button onClick={handleAddEducation} variant="contained" style={{backgroundColor: '#01411c', color: 'white', marginTop: '20px', marginRight: '15px'}}>
-                    Add Education
-                  </Button>
+              <div style={isCnicVerified ? {} : { display: "none" }}>
+                <Grid container>
+                  <Grid item xs={12}>
+                    <Grid container justify="flex-end">
+                      <Button
+                        onClick={handleAddEducation}
+                        variant="contained"
+                        style={{
+                          backgroundColor: "#01411c",
+                          color: "white",
+                          marginRight: "15px",
+                          marginBottom: "15px",
+                        }}
+                      >
+                        Add Education
+                      </Button>
+                    </Grid>
                   </Grid>
                 </Grid>
-              </Grid>
 
-              <Grid container>
-                <Grid item xs={12}>
-                  <TableContainer component={Paper}>
-                    <Table>
-                      <TableHead>
-                        <TableRow>
-                          <StyledTableCell align="center">
-                            Level of Education
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            Major
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            Subject
-                          </StyledTableCell>
-                          {/* <StyledTableCell align='center'>Marks Obtained</StyledTableCell>
-            <StyledTableCell align='center'>/</StyledTableCell>
-            <StyledTableCell align='center'>Total Marks</StyledTableCell> */}
-                          <StyledTableCell align="center">
-                            Marks Obtained / Total Marks
-                          </StyledTableCell>
-                          <StyledTableCell align="center">
-                            Grade
-                          </StyledTableCell>
-                        </TableRow>
-                      </TableHead>
-                      <TableBody>
-                        {rows.map((row) => (
-                          <TableRow key={row.name}>
-                            <TableCell align="center">
-                              <TextField
-                                id="outlined-select-currency-native"
-                                select
-                                // label="Native select"
-                                value={row.name}
-                                // onChange={handleChange}
-                                SelectProps={{
-                                  native: true,
-                                }}
-                                // helperText="Please select your currency"
-                                variant="outlined"
-                              >
-                                {[
-                                  "Matric",
-                                  "Inter",
-                                  "Bachelors",
-                                  "Masters",
-                                ].map((option) => (
-                                  <option key={option} value={option}>
-                                    {option}
-                                  </option>
-                                ))}
-                              </TextField>
-                            </TableCell>
-                            <TableCell align="center">
-                              <TextField
-                                id="outlined-select-cunativerrency-"
-                                select
-                                // label="Native select"
-                                value={row.calories}
-                                // onChange={handleChange}
-                                SelectProps={{
-                                  native: true,
-                                }}
-                                // helperText="Please select your currency"
-                                variant="outlined"
-                              >
-                                {["S", "CS", "T", "-"].map((option) => (
-                                  <option key={option} value={option}>
-                                    {option}
-                                  </option>
-                                ))}
-                              </TextField>
-                            </TableCell>
-                            <TableCell align="center">
-                              <TextField
-                                id="outlined-select-cunativerrency-"
-                                select
-                                // label="Native select"
-                                value={row.fat}
-                                // onChange={handleChange}
-                                SelectProps={{
-                                  native: true,
-                                }}
-                                // helperText="Please select your currency"
-                                variant="outlined"
-                              >
-                                {["S", "CS", "T", "-"].map((option) => (
-                                  <option key={option} value={option}>
-                                    {option}
-                                  </option>
-                                ))}
-                              </TextField>
-                            </TableCell>
-                            {/* <TableCell align='center'>{row.carbs}</TableCell>
-              <TableCell align='center'>{row.slash}</TableCell>
-              <TableCell align='center'>{row.protein}</TableCell> */}
-                            <TableCell align="center">
-                              <TextField
-                                id="outlined-select-cunativerrency-"
-                                style={{width: 100}}
-                                // select
-                                // label="Native select"
-                                value={row.carbs}
-                                // onChange={handleChange}
-                                // SelectProps={{
-                                //   native: true,
-                                // }}
-                                // helperText="Please select your currency"
-                                variant="outlined"
-                              />
-                              <span
-                                style={{
-                                  fontSize: "25px",
-                                  marginLeft: "5px",
-                                  marginRight: "5px",
-                                }}
-                              >
-                                {row.slash}
-                              </span>
-                              <TextField
-                                id="outlined-select-cunativerrency-"
-                                style={{width: 100}}
-                                // select
-                                // label="Native select"
-                                value={row.protein}
-                                // onChange={handleChange}
-                                // SelectProps={{
-                                //   native: true,
-                                // }}
-                                // helperText="Please select your currency"
-                                variant="outlined"
-                              />
-                            </TableCell>
-                            <TableCell align="center">{row.grades}</TableCell>
+                <Grid container>
+                  <Grid item xs={12}>
+                    <TableContainer component={Paper}>
+                      <Table>
+                        <TableHead>
+                          <TableRow>
+                            <StyledTableCell align="center">
+                              Level of Education
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              Degree
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              Major
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              Subject
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              Marks Obtained
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              Total Marks
+                            </StyledTableCell>
+                            <StyledTableCell align="center">
+                              Grade
+                            </StyledTableCell>
                           </TableRow>
-                        ))}
-                      </TableBody>
-                    </Table>
-                  </TableContainer>
+                        </TableHead>
+                        <TableBody>
+                          {candidateEducationData.candidateEducationalData.map(
+                            (row, index) => (
+                              <TableRow key={index}>
+                                <TableCell align="center">
+                                  <FormControl
+                                    variant="filled"
+                                    component={Box}
+                                    width="60%"
+                                    // marginBottom="1rem!important"
+                                  >
+                                    <Box
+                                      // paddingLeft="0.75rem"
+                                      // paddingRight="0.75rem"
+                                      component={Select}
+                                      autoComplete="off"
+                                      displayEmpty
+                                      type="text"
+                                      name="level"
+                                      value={row.level}
+                                      onChange={(e) => handleTableEducationData(index, e.target.name, e.target.value)}
+                                    >
+                                      {qualifications.map((option) => (
+                                        <MenuItem
+                                          key={option.id}
+                                          value={option.label}
+                                        >
+                                          {option.label}
+                                        </MenuItem>
+                                      ))}
+                                    </Box>
+                                  </FormControl>
+                                </TableCell>
+                                <TableCell align="center">
+                                  <FormControl
+                                    variant="filled"
+                                    component={Box}
+                                    width="60%"
+                                    // marginBottom="1rem!important"
+                                  >
+                                    <Box
+                                      // paddingLeft="0.75rem"
+                                      // paddingRight="0.75rem"
+                                      component={Select}
+                                      autoComplete="off"
+                                      displayEmpty
+                                      type="text"
+                                      name="degree"
+                                      value={row.degree}
+                                      onChange={(e) => handleTableEducationData(index, e.target.name, e.target.value)}
+                                    >
+                                      {qualificationDegree.map((option) => (
+                                        <MenuItem
+                                          key={option.id}
+                                          value={option.label}
+                                        >
+                                          {option.label}
+                                        </MenuItem>
+                                      ))}
+                                    </Box>
+                                  </FormControl>
+                                </TableCell>
+                                <TableCell align="center">
+                                  <FormControl
+                                    variant="filled"
+                                    component={Box}
+                                    width="60%"
+                                    // marginBottom="1rem!important"
+                                  >
+                                    <Box
+                                      // paddingLeft="0.75rem"
+                                      // paddingRight="0.75rem"
+                                      component={Select}
+                                      autoComplete="off"
+                                      displayEmpty
+                                      type="text"
+                                      name="major"
+                                      value={row.major}
+                                      onChange={(e) => handleTableEducationData(index, e.target.name, e.target.value)}
+                                    >
+                                      {qualificationMajors.map((option) => (
+                                        <MenuItem
+                                          key={option.id}
+                                          value={option.id}
+                                        >
+                                          {option.label}
+                                        </MenuItem>
+                                      ))}
+                                    </Box>
+                                  </FormControl>
+                                </TableCell>
+                                <TableCell align="center">
+                                  <FormControl
+                                    variant="filled"
+                                    component={Box}
+                                    width="60%"
+                                    // marginBottom="1rem!important"
+                                  >
+                                    <Box
+                                      // paddingLeft="0.75rem"
+                                      // paddingRight="0.75rem"
+                                      component={Select}
+                                      autoComplete="off"
+                                      displayEmpty
+                                      type="text"
+                                      name="subject"
+                                      value={row.subject}
+                                      onChange={(e) => handleTableEducationData(index, e.target.name, e.target.value)}
+                                    >
+                                      {qualificationMajorsSubjects.map(
+                                        (option) => (
+                                          <MenuItem
+                                            key={option.id}
+                                            value={option.id}
+                                          >
+                                            {option.label}
+                                          </MenuItem>
+                                        )
+                                      )}
+                                    </Box>
+                                  </FormControl>
+                                </TableCell>
+                                <TableCell align="center">
+                                  <TextField
+                                    id="obtained"
+                                    style={{ width: "60%" }}
+                                    name="obtained"
+                                    value={row.obtained}
+                                    onChange={(e) => handleTableEducationData(index, e.target.name, e.target.value)}
+                                    variant="outlined"
+                                  />
+                                </TableCell>
+                                <TableCell align="center">
+                                  <TextField
+                                    id="total"
+                                    style={{ width: "60%" }}
+                                    name="total"
+                                    value={row.total}
+                                    onChange={(e) => handleTableEducationData(index, e.target.name, e.target.value)}
+                                    variant="outlined"
+                                  />
+                                </TableCell>
+                                <TableCell align="center">
+                                  {row.grade}
+                                </TableCell>
+                              </TableRow>
+                            )
+                          )}
+                        </TableBody>
+                      </Table>
+                    </TableContainer>
+                  </Grid>
                 </Grid>
-              </Grid>
-              <Grid container justify="center" alignItems="center" style={{marginTop: '50px'}}>
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSubmit}
-                  >
-                    Submit
-                  </Button>
+                <Grid
+                  container
+                  justify="center"
+                  alignItems="center"
+                  style={{ marginTop: "50px" }}
+                >
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleSubmit}
+                    >
+                      Submit
+                    </Button>
+                  </Grid>
                 </Grid>
-              </Grid>
-
+              </div>
             </div>
           </CardContent>
         </Card>

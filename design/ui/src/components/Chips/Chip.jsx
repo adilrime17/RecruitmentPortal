@@ -35,12 +35,6 @@ export default function ChipsArray(props) {
   return (
     <Paper component="ul" className={classes.root}>
       {chipData.map((data) => {
-        // let icon;
-
-        // if (data.label === 'React') {
-        //   icon = <TagFacesIcon />;
-        // }
-
         return (
           <li key={data.id}>
             <Chip

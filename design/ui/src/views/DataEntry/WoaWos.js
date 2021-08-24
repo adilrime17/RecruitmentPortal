@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import componentStyles from "assets/theme/views/admin/profile.js";
 import {
@@ -15,45 +15,99 @@ import {
   InputAdornment,
   FormHelperText,
   Button,
-	Checkbox
+  IconButton,
 } from "@material-ui/core";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import API from "../../utils/api";
+import CustomTextField from "components/CustomFields/CustomTextField";
+import CustomCheckboxField from "components/CustomFields/CustomCheckboxField";
 
 const useStyles = makeStyles(componentStyles);
-const cnicRegex = /^[0-9]{5}-[0-9]{7}-[0-9]$/g;
+const cnicRegex = /^(\d{13})$/gm;
 
 function WoaWos() {
-	const classes = useStyles();
-	const [woawos, setWoawos] = useState({
-		cnic: ""
-	})
+  const classes = useStyles();
+  const [cnic, setCnic] = useState("");
+  const [isCnicVerified, setIsCnicVerified] = useState(false);
+  const [checkCnicFormat, setCheckCnicFormat] = useState(false);
+  const [candidateWoaWosData, setCandidateWoaWosDataData] = useState({
+    registrationNo: "",
+    woa: false,
+    wos: false,
+    armyNo: "123",
+    name: "john",
+    fatherName: "doe",
+    unit: "1",
+    corps: "2",
+    contact: "123123123",
+    dod: "22",
+  });
 
-	const handleFieldsChange = (e) => {
-    console.log(e.target.value);
-    console.log(e.target.name);
-    setWoawos({
-      ...woawos,
-      [e.target.name]: e.target.value,
-    });
+  const handleCnicVerify = () => {
+    API.getCandidateWoaWosData(cnic)
+      .then((res) => {
+        setCandidateWoaWosDataData(res);
+        setIsCnicVerified(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("Some error in handleCnicVerify Promise WoaWos data");
+      });
   };
 
-	const handleCheckFieldsChange = (e) => {
-    console.log(e.target.value);
-    console.log(e.target.checked);
-    console.log(e.target.name);
-
-    setWoawos({
-      ...woawos,
-      [e.target.name]: e.target.checked,
-    });
+  const handleSubmit = () => {
+    console.log("Handle Submit: ", candidateWoaWosData);
+    API.updateCandidateWoaWosData(cnic, candidateWoaWosData)
+      .then((res) => {
+        alert(res.updated);
+      })
+      .catch((err) => {
+        alert(err);
+      });
   };
 
-	const handleSubmit = () => {
-    console.log("Handle Submit: ", woawos);
+  const handleFieldsChange = (e) => {
+    console.log(e.target.name + " = " + e.target.value);
+
+    if (e.target.name === "cnic") {
+      setCheckCnicFormat(cnicRegex.test(e.target.value));
+      setIsCnicVerified(false);
+      setCnic(e.target.value);
+    } else {
+      setCandidateWoaWosDataData({
+        ...candidateWoaWosData,
+        [e.target.name]: e.target.value,
+      });
+    }
   };
-    return (
-        <>
-            <Grid
+
+  const handleCheckFieldsChange = (e) => {
+    console.log(e.target.name + " = " + e.target.checked);
+
+    if (e.target.name === "woa" && e.target.checked === true) {
+      setCandidateWoaWosDataData({
+        ...candidateWoaWosData,
+        woa: true,
+        wos: false,
+      });
+    } else if (e.target.name === "wos" && e.target.checked === true) {
+      setCandidateWoaWosDataData({
+        ...candidateWoaWosData,
+        wos: true,
+        woa: false,
+      });
+    } else {
+      setCandidateWoaWosDataData({
+        ...candidateWoaWosData,
+        [e.target.name]: e.target.checked,
+      });
+    }
+  };
+
+  return (
+    <>
+      <Grid
         item
         xs={12}
         // xl={8}
@@ -61,12 +115,12 @@ function WoaWos() {
         marginBottom="3rem"
         classes={{ root: classes.gridItemRoot + " " + classes.order2 }}
       >
-				<Card
+        <Card
           classes={{
             root: classes.cardRoot + " " + classes.cardRootSecondary,
           }}
         >
-					<CardHeader
+          <CardHeader
             subheader={
               <Grid
                 container
@@ -87,43 +141,18 @@ function WoaWos() {
             }
             classes={{ root: classes.cardHeaderRoot }}
           ></CardHeader>
-					<CardContent>
-					<div className={classes.plLg4}>
-					<Grid container>
-                <Grid item xs={12} lg={6}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Registration #:</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="registration"
-                        placeholder="Registration No"
-                        value={woawos.registration}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-                <Grid item xs={12} lg={6}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>CNIC (Format: xxxxx-xxxxxxx-x)</FormLabel>
+          <CardContent>
+            <div className={classes.plLg4}>
+              <Grid container>
+                <Grid item xs={12} lg={4}>
+                  <FormGroup style={{ marginBottom: "1.5rem" }}>
+                    <FormLabel>CNIC (Format: 1234512345671)</FormLabel>
                     <FormControl
                       variant="filled"
                       component={Box}
                       width="100%"
                       marginBottom={
-                        cnicRegex.test(woawos.cnic)
-                          ? "1rem!important"
-                          : "5px"
+                        cnicRegex.test(cnic) ? "1rem!important" : "5px"
                       }
                     >
                       <Box
@@ -134,272 +163,180 @@ function WoaWos() {
                         autoComplete="off"
                         type="text"
                         name="cnic"
-                        placeholder="xxxxx-xxxxxxx-x"
-                        value={woawos.cnic}
+                        placeholder="Provide only numbers without dashes"
+                        value={cnic}
                         endAdornment={
                           <InputAdornment position="end">
-                            <CheckCircleIcon
-                              classes={{ root: classes.iconCnic }}
-                            />
+                            {isCnicVerified ? (
+                              <IconButton disabled>
+                                <CheckCircleIcon
+                                  classes={{ root: classes.iconCnic }}
+                                />
+                              </IconButton>
+                            ) : checkCnicFormat ? (
+                              <IconButton
+                                onClick={handleCnicVerify}
+                                disabled={!checkCnicFormat}
+                              >
+                                <HelpOutlineIcon
+                                  classes={{ root: classes.iconCnic }}
+                                />
+                              </IconButton>
+                            ) : null}
                           </InputAdornment>
                         }
                         onChange={handleFieldsChange}
                       />
                     </FormControl>
-                    {!cnicRegex.test(woawos.cnic) &&
-                      woawos.cnic.length > 0 && (
-                        <FormHelperText
-                          error
-                          id="standard-weight-helper-text"
-                          color="error"
-                        >
-                          Please follow CNIC format!
-                        </FormHelperText>
-                      )}
+                    {!checkCnicFormat && cnic.length > 0 && (
+                      <FormHelperText
+                        error
+                        id="standard-weight-helper-text"
+                        color="error"
+                      >
+                        Please follow CNIC format!
+                      </FormHelperText>
+                    )}
                   </FormGroup>
                 </Grid>
-              </Grid>
-
-							<Grid container
-                alignItems="center"
-                // justifyContent="space-between"
-                justify="center">
-                <Grid item xs={12} lg={2}>
-                  <FormLabel>WOS</FormLabel>
-                  <Checkbox
-                    name="wos"
-                    color="primary"
-                    checked={woawos.wos}
-                    onChange={handleCheckFieldsChange}
+                <Grid
+                  item
+                  xs={12}
+                  lg={4}
+                  style={isCnicVerified ? {} : { display: "none" }}
+                >
+                  <CustomTextField
+                    label="Registration #:"
+                    type="text"
+                    name="registrationNo"
+                    placeholder="Registration No"
+                    value={candidateWoaWosData.registrationNo}
+                    // onChange={handleFieldsChange}
                   />
                 </Grid>
-                <Grid item xs={12} lg={2}>
-                  <FormLabel>WOA</FormLabel>
-                  <Checkbox
+                <Grid
+                  item
+                  xs={12}
+                  lg={4}
+                  style={isCnicVerified ? {} : { display: "none" }}
+                >
+                  <FormLabel style={{ display: "block" }}>
+                    Additional Info
+                  </FormLabel>
+                  <CustomCheckboxField
+                    label="WOA"
                     name="woa"
-                    color="primary"
-                    checked={woawos.woa}
+                    checked={candidateWoaWosData.woa}
+                    onChange={handleCheckFieldsChange}
+                  />
+                  <CustomCheckboxField
+                    label="WOS"
+                    name="wos"
+                    checked={candidateWoaWosData.wos}
                     onChange={handleCheckFieldsChange}
                   />
                 </Grid>
-								<Grid item xs={12} lg={4}>
-								<FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Army No</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="armyNo"
-                        placeholder="Army No"
-                        value={woawos.armyNo}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-								<Grid item xs={12} lg={4}>
-								<FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Name</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="name"
-                        placeholder="Name"
-                        value={woawos.name}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
               </Grid>
+              <div style={isCnicVerified ? {} : { display: "none" }}>
+                <Grid container>
+                  <Grid item xs={12} lg={4}>
+                    <CustomTextField
+                      label="Army No"
+                      type="text"
+                      name="armyNo"
+                      placeholder="Provide Army No"
+                      value={candidateWoaWosData.armyNo}
+                      onChange={handleFieldsChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} lg={4}>
+                    <CustomTextField
+                      label="Name"
+                      type="text"
+                      name="name"
+                      placeholder="Provide Name"
+                      value={candidateWoaWosData.name}
+                      onChange={handleFieldsChange}
+                    />{" "}
+                  </Grid>
+                  <Grid item xs={12} lg={4}>
+                    <CustomTextField
+                      label="Father's Name"
+                      type="text"
+                      name="fatherName"
+                      placeholder="Provide Father's Name"
+                      value={candidateWoaWosData.fatherName}
+                      onChange={handleFieldsChange}
+                    />
+                  </Grid>
+                </Grid>
 
+                <Grid container>
+                  <Grid item xs={12} lg={2}>
+                    <CustomTextField
+                      label="Unit"
+                      type="text"
+                      name="unit"
+                      placeholder="Provide Unit"
+                      value={candidateWoaWosData.unit}
+                      onChange={handleFieldsChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} lg={2}>
+                    <CustomTextField
+                      label="Corps"
+                      type="text"
+                      name="corps"
+                      placeholder="Provide Corps"
+                      value={candidateWoaWosData.corps}
+                      onChange={handleFieldsChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} lg={4}>
+                    <CustomTextField
+                      label="Contact"
+                      type="text"
+                      name="contact"
+                      placeholder="Provide Contact"
+                      value={candidateWoaWosData.contact}
+                      onChange={handleFieldsChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} lg={4}>
+                    <CustomTextField
+                      label="DOD"
+                      type="text"
+                      name="dod"
+                      placeholder="Provide DOD"
+                      value={candidateWoaWosData.dod}
+                      onChange={handleFieldsChange}
+                    />
+                  </Grid>
+                </Grid>
 
-
-
-
-
-
-
-
-
-							<Grid container>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Father's Name</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
+                <Grid
+                  container
+                  justify="center"
+                  alignItems="center"
+                  style={{ marginTop: "50px" }}
+                >
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleSubmit}
                     >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="fatherName"
-                        placeholder="Provide Father Name"
-                        value={woawos.fatherName}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
+                      Submit
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} lg={2}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Unit</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="unit"
-                        placeholder="Provide Unit"
-                        value={woawos.unit}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-                <Grid item xs={12} lg={2}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Corps</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="corps"
-                        placeholder="Provide Corps"
-                        value={woawos.corps}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-								<Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Contact</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="contact"
-                        placeholder="Provide Contact"
-                        value={woawos.contact}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-              </Grid>
-
-
-
-							<Grid container>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>DOD</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="dod"
-                        placeholder="Provide DOD"
-                        value={woawos.dod}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-							</Grid>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-							<Grid container justify="center" alignItems="center" style={{marginTop: '50px'}}>
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSubmit}
-                  >
-                    Submit
-                  </Button>
-                </Grid>
-              </Grid>
-
-					</div>
-					</CardContent>
-				</Card>
-			</Grid>
-        </>
-    )
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      </Grid>
+    </>
+  );
 }
 
-export default WoaWos
+export default WoaWos;

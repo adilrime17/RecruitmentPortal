@@ -1,90 +1,185 @@
 import React, { useState } from "react";
-// @material-ui/core components
 import { makeStyles } from "@material-ui/core/styles";
-import { useTheme } from "@material-ui/core/styles";
-import Box from "@material-ui/core/Box";
-// import Button from "@material-ui/core/Button";
-import Card from "@material-ui/core/Card";
-import CardContent from "@material-ui/core/CardContent";
-import CardHeader from "@material-ui/core/CardHeader";
-// import Container from "@material-ui/core/Container";
-// import Divider from "@material-ui/core/Divider";
-import FilledInput from "@material-ui/core/FilledInput";
-import FormControl from "@material-ui/core/FormControl";
-import FormGroup from "@material-ui/core/FormGroup";
-import FormLabel from "@material-ui/core/FormLabel";
-import Grid from "@material-ui/core/Grid";
-import InputAdornment from "@material-ui/core/InputAdornment";
-import Typography from "@material-ui/core/Typography";
+// import { useTheme } from "@material-ui/core/styles";
 import componentStyles from "assets/theme/views/admin/profile.js";
-import { Checkbox, Button } from "@material-ui/core";
-// import boxShadows from "assets/theme/box-shadow.js";
 import ConfirmationDialog from "../../components/Dialogs/ConfirmationDialog";
-import FormHelperText from "@material-ui/core/FormHelperText";
 import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import Select from "@material-ui/core/Select";
-import MenuItem from "@material-ui/core/MenuItem";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import {
+  Box,
+  Card,
+  CardContent,
+  CardHeader,
+  FilledInput,
+  FormControl,
+  FormGroup,
+  FormLabel,
+  Grid,
+  InputAdornment,
+  IconButton,
+  Typography,
+  Button,
+  FormHelperText,
+} from "@material-ui/core";
+import API from "../../utils/api";
+import CustomTextField from "components/CustomFields/CustomTextField";
+import CustomCheckboxField from "components/CustomFields/CustomCheckboxField";
+import CustomSelectField from "components/CustomFields/CustomSelectField";
+import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles(componentStyles);
-
-const cnicRegex = /^[0-9]{5}-[0-9]{7}-[0-9]$/g;
+const cnicRegex = /^(\d{13})$/gm;
 
 function Form() {
   const classes = useStyles();
-  const theme = useTheme();
+  const history = useHistory();
+  // const theme = useTheme();
   const [openConfirmationDialog, setOpenConfirmationDialog] = useState(false);
-  const [medicalEligibilityData, setMedicalEligibilityData] = useState({
+  const [dialogMessage, setDialogMessage] = useState("");
+  const [cnic, setCnic] = useState("");
+  const [isCnicVerified, setIsCnicVerified] = useState(false);
+  const [checkCnicFormat, setCheckCnicFormat] = useState(false);
+  const [candidateData, setCandidateData] = useState({
+    svasXmatch: false,
     ncse: false,
     firstName: "",
     middleName: "",
     lastName: "",
     fatherName: "",
     district: "",
-    class: "",
-    civilQualification: "",
-    cnic: "",
-    dob: "",
-    height: "",
-    chest: "",
-    weight: "",
-    deformity: false,
+    locationClass: "",
+    dateOfBirth: "",
+    maxQualification: "",
+    woa: false,
+    wos: false,
+    dlh: false,
+    height: null,
+    chest: {
+      chest0: null,
+      chest1: null,
+    },
+    weight: null
   });
-  const [dialogMessage, setDialogMessage] = useState("");
+  const [districtList, setDistrictList] = useState([]);
+  const [locationClasses, setLocationClasses] = useState([]);
+  const [qualifications, setQualifications] = useState([]);
+
+  const handleCnicVerify = () => {
+    Promise.all([
+      API.getAllDistricts(),
+      API.getAllLocationClasses(),
+      API.getAllQualifications(),
+      API.getCandidateDetails(cnic)
+    ])
+      .then((res) => {
+        console.log(res);
+        setDistrictList(res[0].data);
+        setLocationClasses(res[1].data);
+        setQualifications(res[2].data);
+        setCandidateData(res[3].data ? res[3].data : {
+          svasXmatch: false,
+          ncse: false,
+          firstName: "",
+          middleName: "",
+          lastName: "",
+          fatherName: "",
+          district: "",
+          locationClass: "",
+          dateOfBirth: "",
+          maxQualification: "",
+          woa: false,
+          wos: false,
+          dlh: false,
+          height: null,
+          chest: {
+            chest0: null,
+            chest1: null,
+          },
+          weight: null
+        })
+        setIsCnicVerified(true);
+      })
+      .catch((err) => {
+        console.log(err);
+        alert("Some error in handleCnicVerify Promise Medical Eligibility")
+      });
+  };
 
   const handleSubmit = () => {
-    console.log("Handle Submit: ", medicalEligibilityData);
-    setDialogMessage("Eligible/Not Eligible");
-    setOpenConfirmationDialog(true);
+    console.log("Handle Submit: ", candidateData);
+    API.checkCandidateEligibility({...candidateData, cnic})
+    .then(res => {
+      setDialogMessage(res.candidateEligible ? "Eligible": "Not Eligible");
+      setOpenConfirmationDialog(true);
+    }).catch(err => {
+      alert(err)
+    })
   };
 
   const handleFieldsChange = (e) => {
-    console.log(e.target.value);
-    console.log(e.target.checked);
-    console.log(e.target.name);
+    if (e.target.name === "cnic") {
+      setCheckCnicFormat(cnicRegex.test(e.target.value));
+      setIsCnicVerified(false);
+      setCnic(e.target.value);
+    } else if (e.target.name === 'chest0' || e.target.name === 'chest1') {
+      setCandidateData({
+        ...candidateData,
+        chest: {
+          ...candidateData.chest,
+          [e.target.name]: parseInt(e.target.value)
+        }
+      });
+    } else if (e.target.name === 'height' || e.target.name === 'weight') {
+      setCandidateData({
+        ...candidateData,
+        [e.target.name]: parseInt(e.target.value)
 
-    setMedicalEligibilityData({
-      ...medicalEligibilityData,
-      [e.target.name]: e.target.value,
-    });
+      });
+    } else {
+      setCandidateData({
+        ...candidateData,
+        [e.target.name]: e.target.value,
+      });
+    }
   };
 
   const handleCheckFieldsChange = (e) => {
-    console.log(e.target.value);
-    console.log(e.target.checked);
-    console.log(e.target.name);
+    console.log(e.target.name + " = " + e.target.checked);
 
-    setMedicalEligibilityData({
-      ...medicalEligibilityData,
-      [e.target.name]: e.target.checked,
-    });
+    if(e.target.name === 'woa' && e.target.checked === true) {
+      setCandidateData({
+        ...candidateData,
+        woa: true,
+        wos: false
+      });
+    } else if(e.target.name === 'wos' && e.target.checked === true) {
+      setCandidateData({
+        ...candidateData,
+        wos: true,
+        woa: false
+      });
+    } else {
+      setCandidateData({
+        ...candidateData,
+        [e.target.name]: e.target.checked,
+      });
+    }
   };
+
+  const handleDialogClose = () => {
+    if (dialogMessage === 'Eligible') {
+      setOpenConfirmationDialog(false);
+      history.push('/admin/personal-information')
+    } else {
+      setOpenConfirmationDialog(false);
+    }
+  }
 
   return (
     <>
       <Grid
         item
         xs={12}
-        // xl={8}
         component={Box}
         marginBottom="3rem"
         classes={{ root: classes.gridItemRoot + " " + classes.order2 }}
@@ -100,7 +195,6 @@ function Form() {
                 container
                 component={Box}
                 alignItems="center"
-                // justifyContent="space-between"
                 justifyContent="center"
               >
                 <Grid item xs="auto">
@@ -109,592 +203,305 @@ function Form() {
                     variant="h3"
                     marginBottom="0!important"
                   >
-                    Check Medical Eligibility
+                    Eligibility Check
                   </Box>
                 </Grid>
-                {/* <Grid item xs="auto">
-                  <Box justifyContent="flex-end" display="flex" flexWrap="wrap">
-                    <Button variant="contained" color="primary" size="small">
-                      Settings
-                    </Button>
-                  </Box>
-                </Grid> */}
               </Grid>
             }
             classes={{ root: classes.cardHeaderRoot }}
           ></CardHeader>
           <CardContent>
-            {/* <Box
-              component={Typography}
-              variant="h6"
-              color={theme.palette.gray[600] + "!important"}
-              paddingTop=".25rem"
-              paddingBottom=".25rem"
-              fontSize=".75rem!important"
-              letterSpacing=".04em"
-              marginBottom="1.5rem!important"
-              classes={{ root: classes.typographyRootH6 }}
-            >
-              User Information
-            </Box> */}
             <div className={classes.plLg4}>
-              <Grid container justify="flex-end" alignItems="center">
-                <Grid item>
-                  <FormLabel>Applying as NCsE</FormLabel>
-                  <Checkbox
-                    name="ncse"
-                    color="primary"
-                    checked={medicalEligibilityData.ncse}
-                    onChange={handleCheckFieldsChange}
-                  />
-                </Grid>
-              </Grid>
-              <Grid container>
+              <Grid container justify="space-between">
                 <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>First Name</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="firstName"
-                        placeholder="Provide First Name"
-                        value={medicalEligibilityData.firstName}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Middle Name</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="middleName"
-                        placeholder="Provide Middle Name"
-                        value={medicalEligibilityData.middleName}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Last Name</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="lastName"
-                        placeholder="Provide Last Name"
-                        value={medicalEligibilityData.lastName}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-              </Grid>
-              <Grid container>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Father's Name</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        name="fatherName"
-                        placeholder="Provide Father's Name"
-                        value={medicalEligibilityData.fatherName}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>District</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={Select}
-                        autoComplete="off"
-                        type="text"
-                        name="district"
-                        displayEmpty
-                        placeholder="Select District"
-                        value={medicalEligibilityData.district}
-                        onChange={handleFieldsChange}
-                      >
-                        {["Multan", "ISB", "Lahore", "Karachi"].map(
-                          (option) => (
-                            <MenuItem key={option} value={option}>
-                              {option}
-                            </MenuItem>
-                          )
-                        )}
-                      </Box>
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Class</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={Select}
-                        autoComplete="off"
-                        type="text"
-                        name="class"
-                        displayEmpty
-                        placeholder="Select Class"
-                        value={medicalEligibilityData.class}
-                        onChange={handleFieldsChange}
-                      >
-                        {["class1", "class2", "class3", "class4"].map(
-                          (option) => (
-                            <MenuItem key={option} value={option}>
-                              {option}
-                            </MenuItem>
-                          )
-                        )}
-                      </Box>
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-              </Grid>
-              <Grid container>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>CNIC (Format: xxxxx-xxxxxxx-x)</FormLabel>
+                  <FormGroup style={{ marginBottom: "1.5rem" }}>
+                    <FormLabel>CNIC (Format: 1234512345671)</FormLabel>
                     <FormControl
                       variant="filled"
                       component={Box}
                       width="100%"
                       marginBottom={
-                        cnicRegex.test(medicalEligibilityData.cnic)
-                          ? "1rem!important"
-                          : "5px"
+                        cnicRegex.test(cnic) ? "1rem!important" : "5px"
                       }
                     >
                       <Box
                         paddingLeft="0.75rem"
                         paddingRight="0.75rem"
-                        // error={!cnicRegex.test(medicalEligibilityData.cnic)}
                         component={FilledInput}
                         autoComplete="off"
                         type="text"
                         name="cnic"
-                        placeholder="xxxxx-xxxxxxx-x"
-                        value={medicalEligibilityData.cnic}
+                        placeholder="Provide only numbers without dashes"
+                        value={cnic}
                         endAdornment={
                           <InputAdornment position="end">
-                            <CheckCircleIcon
-                              classes={{ root: classes.iconCnic }}
-                            />
+                            {isCnicVerified ? (
+                              <IconButton disabled>
+                                <CheckCircleIcon
+                                  classes={{ root: classes.iconCnic }}
+                                />
+                              </IconButton>
+                            ) : checkCnicFormat ? (
+                              <IconButton
+                                onClick={handleCnicVerify}
+                                disabled={!checkCnicFormat}
+                              >
+                                <HelpOutlineIcon
+                                  classes={{ root: classes.iconCnic }}
+                                />
+                              </IconButton>
+                            ) : null}
                           </InputAdornment>
                         }
                         onChange={handleFieldsChange}
                       />
                     </FormControl>
-                    {!cnicRegex.test(medicalEligibilityData.cnic) &&
-                      medicalEligibilityData.cnic.length > 0 && (
-                        <FormHelperText
-                          error
-                          id="standard-weight-helper-text"
-                          color="error"
-                        >
-                          Please follow CNIC format!
-                        </FormHelperText>
-                      )}
-                  </FormGroup>
-                </Grid>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Date of Birth</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="date"
-                        name="dob"
-                        value={medicalEligibilityData.dob}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-              </Grid>
-              <Grid container>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Max Qualification</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={Select}
-                        autoComplete="off"
-                        type="text"
-                        name="maxQualification"
-                        displayEmpty
-                        placeholder="Select Max Qualification"
-                        value={medicalEligibilityData.maxQualification}
-                        onChange={handleFieldsChange}
+                    {!checkCnicFormat && cnic.length > 0 && (
+                      <FormHelperText
+                        error
+                        id="standard-weight-helper-text"
+                        color="error"
                       >
-                        {[
-                          "Under Matric",
-                          "Matric",
-                          "FSc",
-                          "Diploma",
-                          "Bachelor",
-                          "Masters",
-                        ].map((option) => (
-                          <MenuItem key={option} value={option}>
-                            {option}
-                          </MenuItem>
-                        ))}
-                      </Box>
-                    </FormControl>
+                        Please follow CNIC format!
+                      </FormHelperText>
+                    )}
                   </FormGroup>
                 </Grid>
-                <Grid item xs={12} lg={2} className={classes.selectBoxes}>
-                  <FormLabel>WOS</FormLabel>
-                  <Checkbox
-                    name="wos"
-                    color="primary"
-                    checked={medicalEligibilityData.wos}
+                <Grid
+                  item
+                  xs={12}
+                  lg={4}
+                  style={
+                    isCnicVerified ? { direction: "rtl", paddingTop: '20px' } : { display: "none" }
+                  }
+                >
+                  <CustomCheckboxField
+                    label="SVAS/XMatch"
+                    name="svasXmatch"
+                    checked={candidateData.svasXmatch}
                     onChange={handleCheckFieldsChange}
                   />
                 </Grid>
-                <Grid item xs={12} lg={2} className={classes.selectBoxes}>
-                  <FormLabel>WOA</FormLabel>
-                  <Checkbox
-                    name="woa"
-                    color="primary"
-                    checked={medicalEligibilityData.woa}
-                    onChange={handleCheckFieldsChange}
-                  />
-                </Grid>
-                <Grid item xs={12} lg={2} className={classes.selectBoxes}>
-                  <FormLabel>DLH</FormLabel>
-                  <Checkbox
-                    name="dlh"
-                    color="primary"
-                    checked={medicalEligibilityData.dlh}
+                <Grid
+                  item
+                  xs={12}
+                  lg={4}
+                  style={
+                    isCnicVerified ? { direction: "rtl", paddingTop: '20px' } : { display: "none" }
+                  }
+                >
+                  <CustomCheckboxField
+                    label="Applying as NCsE"
+                    name="ncse"
+                    checked={candidateData.ncse}
                     onChange={handleCheckFieldsChange}
                   />
                 </Grid>
               </Grid>
-              <Grid container>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Height (Inches)</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
+
+              <div style={isCnicVerified ? {} : { display: "none" }}>
+                <Grid container>
+                  <Grid item xs={12} lg={4}>
+                    <CustomTextField
+                      label="First Name"
+                      type="text"
+                      name="firstName"
+                      placeholder="Provide First Name"
+                      value={candidateData.firstName}
+                      onChange={handleFieldsChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} lg={4}>
+                    <CustomTextField
+                      label="Middle Name"
+                      type="text"
+                      name="middleName"
+                      placeholder="Provide Middle Name"
+                      value={candidateData.middleName}
+                      onChange={handleFieldsChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} lg={4}>
+                    <CustomTextField
+                      label="Last Name"
+                      type="text"
+                      name="lastName"
+                      placeholder="Provide Last Name"
+                      value={candidateData.lastName}
+                      onChange={handleFieldsChange}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid container>
+                  <Grid item xs={12} lg={4}>
+                    <CustomTextField
+                      label="Father's Name"
+                      type="text"
+                      name="fatherName"
+                      placeholder="Provide Father's Name"
+                      value={candidateData.fatherName}
+                      onChange={handleFieldsChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} lg={4}>
+                    <CustomSelectField
+                      label="District"
+                      type="text"
+                      name="district"
+                      placeholder="Select District"
+                      menuList={districtList}
+                      value={candidateData.district}
+                      onChange={handleFieldsChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} lg={4}>
+                    <CustomSelectField
+                      label="Class"
+                      type="text"
+                      name="locationClass"
+                      placeholder="Select Class"
+                      menuList={locationClasses}
+                      value={candidateData.locationClass}
+                      onChange={handleFieldsChange}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid container>
+                  <Grid item xs={12} lg={4}>
+                    <CustomTextField
+                      label="Date of Birth"
+                      type="date"
+                      name="dateOfBirth"
+                      placeholder="Provide Date of Birth"
+                      value={candidateData.dateOfBirth}
+                      onChange={handleFieldsChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} lg={4}>
+                    <CustomSelectField
+                      label="Max Qualification"
+                      type="text"
+                      name="maxQualification"
+                      placeholder="Select Max Qualification"
+                      menuList={qualifications}
+                      value={candidateData.maxQualification}
+                      onChange={handleFieldsChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} lg={3}>
+                    <FormLabel style={{display: 'block'}}>Additional Info</FormLabel>
+                    <CustomCheckboxField
+                      label="WOA"
+                      name="woa"
+                      checked={candidateData.woa}
+                      onChange={handleCheckFieldsChange}
+                    />
+                    <CustomCheckboxField
+                      label="WOS"
+                      name="wos"
+                      checked={candidateData.wos}
+                      onChange={handleCheckFieldsChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} lg={1} style={{ paddingTop: "20px" }}>
+                    <CustomCheckboxField
+                      label="DLH"
+                      name="dlh"
+                      checked={candidateData.dlh}
+                      onChange={handleCheckFieldsChange}
+                    />
+                  </Grid>
+                </Grid>
+                <Grid container>
+                  <Grid item xs={12} lg={4}>
+                    <CustomTextField
+                      label="Height (Inches)"
+                      type="number"
+                      name="height"
+                      placeholder="Height in Inches"
+                      value={candidateData.height}
+                      onChange={handleFieldsChange}
+                    />
+                  </Grid>
+                  <Grid item xs={12} lg={4}>
+                    <FormGroup style={{ marginBottom: "0.5rem" }}>
+                      <FormLabel>Chest (Inches): </FormLabel>
+                      <FormControl
+                        variant="filled"
+                        component={Box}
+                        width="100%"
+                        marginBottom="1rem!important"
+                        style={{ flexDirection: "row" }}
+                      >
+                        <Box
+                          paddingLeft="0.75rem"
+                          paddingRight="0.75rem"
+                          component={FilledInput}
+                          autoComplete="off"
+                          type="number"
+                          name="chest0"
+                          placeholder=""
+                          value={candidateData.chest.chest0}
+                          onChange={handleFieldsChange}
+                          style={{ width: "50%" }}
+                        />
+                        <Box
+                          paddingLeft="0.75rem"
+                          paddingRight="0.75rem"
+                          marginTop="0.75rem"
+                        >
+                          {" / "}
+                        </Box>
+                        <Box
+                          paddingLeft="0.75rem"
+                          paddingRight="0.75rem"
+                          component={FilledInput}
+                          autoComplete="off"
+                          type="number"
+                          name="chest1"
+                          placeholder=""
+                          value={candidateData.chest.chest1}
+                          onChange={handleFieldsChange}
+                          style={{ width: "50%" }}
+                        />
+                      </FormControl>
+                    </FormGroup>
+                  </Grid>
+                  <Grid item xs={12} lg={4}>
+                    <CustomTextField
+                      label="Weight (Kg)"
+                      type="number"
+                      name="weight"
+                      placeholder="Weight in Kg"
+                      value={candidateData.weight}
+                      onChange={handleFieldsChange}
+                    />
+                  </Grid>
+                </Grid>
+
+                <Grid
+                  container
+                  justify="center"
+                  alignItems="center"
+                  style={{ marginTop: "40px" }}
+                >
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      onClick={handleSubmit}
                     >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="number"
-                        name="height"
-                        placeholder="Height in Inches"
-                        value={medicalEligibilityData.height}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
+                      Submit
+                    </Button>
+                  </Grid>
                 </Grid>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Chest (Inches)</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="number"
-                        name="chest"
-                        placeholder="Chest in Inches"
-                        value={medicalEligibilityData.chest}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{ marginBottom: "0.5rem" }}>
-                    <FormLabel>Weight (Kg)</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="number"
-                        name="weight"
-                        placeholder="Weight in Kg"
-                        value={medicalEligibilityData.weight}
-                        onChange={handleFieldsChange}
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-              </Grid>
-              <Grid
-                container
-                justify="center"
-                alignItems="center"
-                style={{ marginBottom: "30px" }}
-              >
-                <Grid item>
-                  <FormLabel>Some Visible Deformity? </FormLabel>
-                  <Checkbox
-                    name="deformity"
-                    color="primary"
-                    checked={medicalEligibilityData.deformity}
-                    onChange={handleCheckFieldsChange}
-                  />
-                </Grid>
-              </Grid>
-              <Grid container justify="center" alignItems="center">
-                <Grid item>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    onClick={handleSubmit}
-                  >
-                    Submit
-                  </Button>
-                </Grid>
-              </Grid>
+              </div>
             </div>
-            {/* <Box
-              component={Divider}
-              marginBottom="1.5rem!important"
-              marginTop="1.5rem!important"
-            />
-            <Box
-              component={Typography}
-              variant="h6"
-              color={theme.palette.gray[600] + "!important"}
-              paddingTop=".25rem"
-              paddingBottom=".25rem"
-              fontSize=".75rem!important"
-              letterSpacing=".04em"
-              marginBottom="1.5rem!important"
-              classes={{ root: classes.typographyRootH6 }}
-            >
-              Contact Information
-            </Box>
-            <div className={classes.plLg4}>
-              <Grid container>
-                <Grid item xs={12}>
-                  <FormGroup style={{marginBottom: '0.5rem'}}>
-                    <FormLabel>Address</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        defaultValue="Bld Mihail Kogalniceanu, nr. 8 Bl 1, Sc 1, Ap 09"
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-              </Grid>
-              <Grid container>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{marginBottom: '0.5rem'}}>
-                    <FormLabel>City</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        defaultValue="New York"
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{marginBottom: '0.5rem'}}>
-                    <FormLabel>Country</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        defaultValue="United States"
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-                <Grid item xs={12} lg={4}>
-                  <FormGroup style={{marginBottom: '0.5rem'}}>
-                    <FormLabel>Postal code</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        type="text"
-                        placeholder="Postal code"
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-              </Grid>
-            </div>
-            <Box
-              component={Divider}
-              marginBottom="1.5rem!important"
-              marginTop="1.5rem!important"
-            />
-            <Box
-              component={Typography}
-              variant="h6"
-              color={theme.palette.gray[600] + "!important"}
-              paddingTop=".25rem"
-              paddingBottom=".25rem"
-              fontSize=".75rem!important"
-              letterSpacing=".04em"
-              marginBottom="1.5rem!important"
-              classes={{ root: classes.typographyRootH6 }}
-            >
-              About me
-            </Box>
-            <div className={classes.plLg4}>
-              <Grid container>
-                <Grid item xs={12}>
-                  <FormGroup style={{marginBottom: '0.5rem'}}>
-                    <FormLabel>About me</FormLabel>
-                    <FormControl
-                      variant="filled"
-                      component={Box}
-                      width="100%"
-                      marginBottom="1rem!important"
-                    >
-                      <Box
-                        paddingLeft="0.75rem"
-                        paddingRight="0.75rem"
-                        component={FilledInput}
-                        autoComplete="off"
-                        multiline
-                        defaultValue="A beautiful Dashboard for Bootstrap 4. It is Free and Open Source."
-                        rows="4"
-                      />
-                    </FormControl>
-                  </FormGroup>
-                </Grid>
-              </Grid>
-            </div> */}
           </CardContent>
         </Card>
         <ConfirmationDialog
           open={openConfirmationDialog}
-          handleClose={setOpenConfirmationDialog}
+          handleClose={handleDialogClose}
           message={dialogMessage}
         />
       </Grid>

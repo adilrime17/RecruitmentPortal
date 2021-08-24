@@ -1,7 +1,5 @@
 import React, { useState } from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import CheckCircleIcon from "@material-ui/icons/CheckCircle";
-import componentStyles from "assets/theme/views/admin/profile.js";
 import {
   Box,
   Grid,
@@ -18,49 +16,47 @@ import {
   Button,
   IconButton,
 } from "@material-ui/core";
-import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
+import CheckCircleIcon from "@material-ui/icons/CheckCircle";
+import componentStyles from "assets/theme/views/admin/profile.js";
 import API from "../../utils/api";
+import HelpOutlineIcon from "@material-ui/icons/HelpOutline";
 import CustomTextField from "components/CustomFields/CustomTextField";
-import CustomCheckboxField from "components/CustomFields/CustomCheckboxField";
+import CustomSelectField from "components/CustomFields/CustomSelectField";
 
 const useStyles = makeStyles(componentStyles);
 const cnicRegex = /^(\d{13})$/gm;
 
-function TestsToAppear() {
+function TestMarks({ type, testName, testLabel }) {
   const classes = useStyles();
   const [cnic, setCnic] = useState("");
   const [isCnicVerified, setIsCnicVerified] = useState(false);
   const [checkCnicFormat, setCheckCnicFormat] = useState(false);
-  const [testToAppear, setTestToAppear] = useState({
-    personality: false,
-    intelligence: false,
-    writtenMatric: false,
-    writtenUnderMatric: false,
-    clerk: false,
-    tech: false,
-    dit: false,
-    dlh: false,
-    hafiz: false,
-    pet: false,
+  const [marksData, setMarksData] = useState({
+    registrationNo: "123",
+    name: "john",
+    result: "40",
+    todayFail: "2",
+    totalFail: "100",
+    todayPass: "5",
+    totalPass: "100",
   });
-  const [chargesPaid, setChargesPaid] = useState(false);
 
   const handleCnicVerify = () => {
-    API.getCandidateTestsToAppear(cnic)
+    API.getCandidateTestDetail(cnic, testName)
       .then((res) => {
-        setTestToAppear(res.testsToAppear);
-        setChargesPaid(res.chargesPaid);
+        console.log(res);
+        setMarksData(res.candidateTestDetail);
         setIsCnicVerified(true);
       })
       .catch((err) => {
         console.log(err);
-        alert("Some error in handleCnicVerify Promise WoaWos data");
+        alert("Some error in handleCnicVerify Promise intelligence test");
       });
   };
 
   const handleSubmit = () => {
-    console.log("Handle Submit: ", testToAppear);
-    API.updateCandidateTestsToAppear(cnic, testToAppear, chargesPaid)
+    console.log("Handle Submit: ", marksData);
+    API.updateCandidateTestMarks(cnic, marksData.result, testName)
       .then((res) => {
         alert(res.updated);
       })
@@ -77,20 +73,11 @@ function TestsToAppear() {
       setIsCnicVerified(false);
       setCnic(e.target.value);
     } else {
-      setTestToAppear({
-        ...testToAppear,
+      setMarksData({
+        ...marksData,
         [e.target.name]: e.target.value,
       });
     }
-  };
-
-  const handleCheckFieldsChange = (e) => {
-    console.log(e.target.name + " = " + e.target.checked);
-
-    setTestToAppear({
-      ...testToAppear,
-      [e.target.name]: e.target.checked,
-    });
   };
 
   return (
@@ -122,7 +109,7 @@ function TestsToAppear() {
                     variant="h3"
                     marginBottom="0!important"
                   >
-                    Tests to Appear
+                    {testLabel}
                   </Box>
                 </Grid>
               </Grid>
@@ -132,7 +119,7 @@ function TestsToAppear() {
           <CardContent>
             <div className={classes.plLg4}>
               <Grid container>
-                <Grid item xs={12} lg={6}>
+                <Grid item xs={12} lg={4}>
                   <FormGroup style={{ marginBottom: "1.5rem" }}>
                     <FormLabel>CNIC (Format: 1234512345671)</FormLabel>
                     <FormControl
@@ -170,7 +157,7 @@ function TestsToAppear() {
                                   classes={{ root: classes.iconCnic }}
                                 />
                               </IconButton>
-                            ) : null}
+                            ) : <span />}
                           </InputAdornment>
                         }
                         onChange={handleFieldsChange}
@@ -190,7 +177,7 @@ function TestsToAppear() {
                 <Grid
                   item
                   xs={12}
-                  lg={6}
+                  lg={4}
                   style={isCnicVerified ? {} : { display: "none" }}
                 >
                   <CustomTextField
@@ -198,105 +185,100 @@ function TestsToAppear() {
                     type="text"
                     name="registrationNo"
                     placeholder="Registration No"
-                    value={testToAppear.registrationNo}
+                    value={marksData.registrationNo}
+                    // onChange={handleFieldsChange}
+                  />
+                </Grid>
+                <Grid
+                  item
+                  xs={12}
+                  lg={4}
+                  style={isCnicVerified ? {} : { display: "none" }}
+                >
+                  <CustomTextField
+                    label="Name: "
+                    type="text"
+                    name="name"
+                    placeholder="Name"
+                    value={marksData.name}
                     // onChange={handleFieldsChange}
                   />
                 </Grid>
               </Grid>
               <div style={isCnicVerified ? {} : { display: "none" }}>
-                <Grid container>
+                <Grid
+                  container
+                  direction="row"
+                  justifyContent="center"
+                  alignItems="flex-start"
+                >
                   <Grid item xs={12} lg={6}>
-                    <Grid
-                      container
-                      direction="column"
-                      style={{ marginLeft: "40px" }}
-                    >
-                      <Grid item xs={12}>
-                        <CustomCheckboxField
-                          label="Personality Test"
-                          name="personality"
-                          checked={testToAppear.personality}
-                          onChange={handleCheckFieldsChange}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <CustomCheckboxField
-                          label="Intelligence Test"
-                          name="intelligence"
-                          checked={testToAppear.intelligence}
-                          onChange={handleCheckFieldsChange}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <CustomCheckboxField
-                          label="Written (Matric)"
-                          name="writtenMatric"
-                          checked={testToAppear.writtenMatric}
-                          onChange={handleCheckFieldsChange}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <CustomCheckboxField
-                          label="Written (U/Matric)"
-                          name="writtenUnderMatric"
-                          checked={testToAppear.writtenUnderMatric}
-                          onChange={handleCheckFieldsChange}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <CustomCheckboxField
-                          label="Clk Test"
-                          name="clerk"
-                          checked={testToAppear.clerk}
-                          onChange={handleCheckFieldsChange}
-                        />
-                      </Grid>
-                    </Grid>
+                    {type === "text" ? (
+                      <CustomTextField
+                        label="Result"
+                        type="text"
+                        name="result"
+                        placeholder="Results"
+                        value={marksData.result}
+                        onChange={handleFieldsChange}
+                      />
+                    ) : (
+                      <CustomSelectField
+                        label="Hafiz Test"
+                        type="text"
+                        name="result"
+                        placeholder="Results"
+                        menuList={[{id: 0, label: 'Pass'}, {id: 1, label: 'Fail'}]}
+                        value={marksData.result}
+                        onChange={handleFieldsChange}
+                      />
+                    )}
                   </Grid>
                   <Grid item xs={12} lg={6}>
                     <Grid
                       container
                       direction="column"
-                      style={{ marginLeft: "40px" }}
+                      justifyContent="center"
+                      alignItems="flex-end"
                     >
-                      <Grid item xs={12}>
-                        <CustomCheckboxField
-                          label="Tech Test"
-                          name="tech"
-                          checked={testToAppear.tech}
-                          onChange={handleCheckFieldsChange}
+                      <Grid item>
+                        <CustomTextField
+                          label="Today Fail"
+                          type="text"
+                          name="todayFail"
+                          placeholder="Today Fail"
+                          value={marksData.todayFail}
+                          // onChange={handleFieldsChange}
                         />
                       </Grid>
-                      <Grid item xs={12}>
-                        <CustomCheckboxField
-                          label="DIT"
-                          name="dit"
-                          checked={testToAppear.dit}
-                          onChange={handleCheckFieldsChange}
+                      <Grid item>
+                        <CustomTextField
+                          label="Total Fail"
+                          type="text"
+                          name="totalFail"
+                          placeholder="Total Fail"
+                          value={marksData.totalFail}
+                          // onChange={handleFieldsChange}
                         />
                       </Grid>
-                      <Grid item xs={12}>
-                        <CustomCheckboxField
-                          label="Driving Aptitude Test"
-                          name="dlh"
-                          checked={testToAppear.dlh}
-                          onChange={handleCheckFieldsChange}
+                      <Grid item>
+                        <CustomTextField
+                          label="Today Pass"
+                          type="text"
+                          name="todayPass"
+                          placeholder="Today Pass"
+                          value={marksData.todayPass}
+                          // onChange={handleFieldsChange}
                         />
                       </Grid>
-                      <Grid item xs={12}>
-                        <CustomCheckboxField
-                          label="Hafiz"
-                          name="hafiz"
-                          checked={testToAppear.hafiz}
-                          onChange={handleCheckFieldsChange}
-                        />
-                      </Grid>
-                      <Grid item xs={12}>
-                        <CustomCheckboxField
-                          label="PET"
-                          name="pet"
-                          checked={testToAppear.pet}
-                          onChange={handleCheckFieldsChange}
+                      <Grid item>
+                        <CustomTextField
+                          label="Total Pass"
+                          type="text"
+                          name="totalPass"
+                          placeholder="Total Pass"
+                          value={marksData.totalPass}
+                          // onChange={handleFieldsChange}
                         />
                       </Grid>
                     </Grid>
@@ -310,18 +292,9 @@ function TestsToAppear() {
                   style={{ marginTop: "50px" }}
                 >
                   <Grid item>
-                    <CustomCheckboxField
-                      label="Charges Paid"
-                      name="chargesPaid"
-                      checked={chargesPaid}
-                      onChange={(e) => setChargesPaid(e.target.checked)}
-                    />
-                  </Grid>
-                  <Grid item>
                     <Button
                       variant="contained"
                       color="primary"
-                      disabled={!chargesPaid}
                       onClick={handleSubmit}
                     >
                       Submit
@@ -337,4 +310,4 @@ function TestsToAppear() {
   );
 }
 
-export default TestsToAppear;
+export default TestMarks;

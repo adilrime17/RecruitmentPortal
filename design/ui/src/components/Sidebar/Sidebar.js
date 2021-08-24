@@ -58,22 +58,6 @@ export default function Sidebar({ routes, logo, dropdown, input }) {
       }
       let textContent = (
         <>
-          {/* <Box minWidth="2.25rem" display="flex" alignItems="center">
-            {typeof prop.icon === "string" ? (
-              <Box
-                component="i"
-                className={prop.icon + " " + classes["text" + prop.iconColor]}
-              />
-            ) : null}
-            {typeof prop.icon === "object" ? (
-              <Box
-                component={prop.icon}
-                width="1.25rem!important"
-                height="1.25rem!important"
-                className={classes["text" + prop.iconColor]}
-              />
-            ) : null}
-          </Box> */}
           {prop.name}
         </>
       );

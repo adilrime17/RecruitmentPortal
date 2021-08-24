@@ -20,7 +20,7 @@ function AlertDialog({open, handleClose, message}) {
       <Dialog
         open={open}
         classes={{ paper: classes.dialogRoot }}
-        onClose={() => handleClose(false)}
+        onClose={() => handleClose()}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
@@ -36,7 +36,7 @@ function AlertDialog({open, handleClose, message}) {
           {/* <Button onClick={() => handleClose(false)} color="primary">
             Disagree
           </Button> */}
-          <Button onClick={() => handleClose(false)} color="primary" variant='contained' autoFocus>
+          <Button onClick={() => handleClose()} color="primary" variant='contained' autoFocus>
             Continue
           </Button>
         </DialogActions>
