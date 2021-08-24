@@ -21,36 +21,14 @@ namespace STC.Web.API.Controllers
             _store = store;
         }
 
-        // GET: api/<LocationClassController>
+        /// <summary>
+        /// Get All Classes
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public IEnumerable<SelectResponse> Get()
         {
             return _store.GetAll();
-        }
-
-        // GET api/<LocationClassController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<LocationClassController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<LocationClassController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<LocationClassController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

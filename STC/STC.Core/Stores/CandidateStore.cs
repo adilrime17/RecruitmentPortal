@@ -48,25 +48,45 @@ namespace STC.Core.Stores
                     Dlh = x.DLH,
                     Dit = x.DIT,
                     Hafiz = x.Hafiz,
-                    Height = x.CandidateMedicalInfos.LastOrDefault().Height,
+                    Height = x.CandidateMedicalInfos.OrderBy(y => y.Id).LastOrDefault().Height,
                     Chest = new ChestSize()
                     {
-                        Chest0 = x.CandidateMedicalInfos.LastOrDefault().ChestIn,
-                        Chest1 = x.CandidateMedicalInfos.LastOrDefault().ChestOut
+                        Chest0 = x.CandidateMedicalInfos.OrderBy(y => y.Id).LastOrDefault().ChestIn,
+                        Chest1 = x.CandidateMedicalInfos.OrderBy(y => y.Id).LastOrDefault().ChestOut
                     },
-                    Weight = x.CandidateMedicalInfos.LastOrDefault().Weight
+                    Weight = x.CandidateMedicalInfos.OrderBy(y => y.Id).LastOrDefault().Weight
                 })
                 .FirstOrDefault();
         }
 
         public CheckEligibilityResponse CheckEligibility(CandidateCreateRequest request)
         {
-            Candidate candidate = _dbContext.Candidates.FirstOrDefault(x => x.Cnic == request.Cnic);
+            Candidate candidate = _dbContext.Candidates.Include(x => x.CandidateMedicalInfos).FirstOrDefault(x => x.Cnic == request.Cnic);
             if (candidate == null)
             {
                 candidate = new Candidate();
-                candidate.MiddleName = "";
-                ((object)request).CopyProperties(candidate);
+                candidate.Cnic = request.Cnic;
+                candidate.DistrictId = _dbContext.Districts.First(x => x.Name == request.District).Id;
+                candidate.LocationClassId = _dbContext.LocationClasses.First(x => x.Name == request.LocationClass).Id;
+                candidate.MaxQualificationId = _dbContext.Qualifications.First(x => x.Name == request.MaxQualification).Id;
+                candidate.NCSE = request.Ncse;
+                candidate.FirstName = request.FirstName;
+                candidate.MiddleName = request.MiddleName;
+                candidate.LastName = request.LastName;
+                candidate.FatherName = request.FatherName;
+                candidate.DateOfBirth = request.DateOfBirth;
+                candidate.WOS = request.Wos;
+                candidate.WOA = request.Woa;
+                candidate.DLH = request.Dlh;
+                candidate.DIT = request.Dit;
+                candidate.Hafiz = request.Hafiz;
+                CandidateMedicalInfo candidateMedicalInfo = new CandidateMedicalInfo();
+                candidateMedicalInfo.CourseId = 1;
+                candidateMedicalInfo.ChestIn = request.Chest.Chest0;
+                candidateMedicalInfo.ChestOut = request.Chest.Chest1;
+                candidateMedicalInfo.Weight = request.Weight;
+                candidateMedicalInfo.Height = request.Height;
+                candidate.CandidateMedicalInfos.Add(candidateMedicalInfo);
                 _dbContext.Candidates.Add(candidate);
                 _dbContext.SaveChanges();
             }
@@ -79,6 +99,7 @@ namespace STC.Core.Stores
                 {
                     CandidateCnic = candidate.Cnic,
                     CourseId = 1,
+                    RegistrationNumber = _dbContext.Courses.First(x => x.Id == 1).Name + "-" + candidate.Cnic + "-" + 1,
                     Status = _dbContext.Statuses.First(x => x.Id == (check ? "eligible" : "non-eligible"))
                 };
                 _dbContext.CandidateHasCourses.Add(candidateHasCourse);

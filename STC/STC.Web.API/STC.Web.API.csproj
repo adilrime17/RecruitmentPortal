@@ -10,6 +10,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="NSwag.AspNetCore" Version="13.13.2" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="5.0.1" />
   </ItemGroup>
 
@@ -17,6 +18,11 @@
     <ProjectReference Include="..\STC.Core\STC.Core.csproj" />
     <ProjectReference Include="..\STC.Data\STC.Data.csproj" />
   </ItemGroup>
+
+    <PropertyGroup>
+	    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+	    <NoWarn>$(NoWarn);1591</NoWarn>
+    </PropertyGroup>
 
 
 </Project>

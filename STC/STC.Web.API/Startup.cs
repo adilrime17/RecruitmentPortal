@@ -6,6 +6,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using NSwag;
 using STC.Core.EligibilityCheck;
 using STC.Core.Stores;
 using STC.Data;
@@ -39,6 +40,17 @@ namespace STC.Web.API
                     .EnableDetailedErrors()       // <-- with debugging (remove for production).
             );
 
+            // Register the Swagger services
+            services.AddSwaggerDocument(config =>
+            {
+                config.PostProcess = document =>
+                {
+                    document.Info.Version = "v1";
+                    document.Info.Title = "STC";
+                    document.Info.Description = "STC Web API";
+                };
+            });
+
             services.AddScoped<IEligibilityCheckService, EligibilityCheckService>();
             services.AddScoped<DistrictStore>();
             services.AddScoped<LocationClassStore>();
@@ -56,6 +68,12 @@ namespace STC.Web.API
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseCors(x =>
+            {
+                x.AllowAnyOrigin();
+                x.AllowAnyHeader();
+                x.AllowAnyMethod();
+            });
             app.UseRouting();
 
             app.UseAuthorization();
@@ -64,6 +82,10 @@ namespace STC.Web.API
             {
                 endpoints.MapControllers();
             });
+
+            // Register the Swagger generator and the Swagger UI middlewares
+            app.UseOpenApi();
+            app.UseSwaggerUi3();
         }
     }
 }

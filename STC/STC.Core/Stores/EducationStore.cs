@@ -36,6 +36,17 @@ namespace STC.Core.Stores
             }).ToList();
         }
 
+        public IList<SelectResponse> GetAllDegrees(int levelId)
+        {
+            return _dbContext.EducationDegrees
+                .Where(x => x.EducationLevelId == levelId)
+                .Select(x => new SelectResponse()
+            {
+                Id = x.Id.ToString(),
+                Label = x.Name
+            }).ToList();
+        }
+
         public IList<SelectResponse> GetAllMajors(int levelId)
         {
             return _dbContext.EducationMajors
@@ -60,7 +71,11 @@ namespace STC.Core.Stores
 
         public EducationalDataResponse GetEducationalData(string cnic)
         {
-            Candidate candidate = _dbContext.Candidates.First(x => x.Cnic == cnic);
+            Candidate candidate = _dbContext.Candidates.FirstOrDefault(x => x.Cnic == cnic);
+            if(candidate == null)
+            {
+                return null;
+            }
             CandidateHasCourse candidateHasCourse = _dbContext.CandidateHasCourses.First(x => x.CourseId == 1 && x.CandidateCnic == cnic);
             return new EducationalDataResponse()
             {
@@ -70,7 +85,7 @@ namespace STC.Core.Stores
                 CandidateEducationalData = _dbContext.CandidateHasEducations.Where(x => x.CandidateCnic == cnic)
                 .Select(x => new EducationalData()
                 {
-                    Qualification = x.EducationLevel.Name,
+                    Level = x.EducationLevel.Name,
                     Major = x.EducationMajor.Name,
                     Subject = x.EducationSubject.Name,
                     Obtained = x.ObtainedMarks,
@@ -85,11 +100,12 @@ namespace STC.Core.Stores
             IList<CandidateHasEducation> candidateHasEducations = _dbContext.CandidateHasEducations.Where(x => x.CandidateCnic == cnic).ToList();
             foreach(EducationalData data in request.CandidateEducationalData)
             {
-                CandidateHasEducation candidateHasEducation = _dbContext.CandidateHasEducations.FirstOrDefault(x => x.CandidateCnic == cnic && x.EducationLevel.Name == data.Qualification);
+                CandidateHasEducation candidateHasEducation = _dbContext.CandidateHasEducations.FirstOrDefault(x => x.CandidateCnic == cnic && x.EducationLevel.Name == data.Level);
                 if(candidateHasEducation == null)
                 {
                     candidateHasEducation = new CandidateHasEducation();
-                    candidateHasEducation.EducationLevelId = _dbContext.EducationLevels.First(x => x.Name == data.Qualification).Id;
+                    candidateHasEducation.EducationLevelId = _dbContext.EducationLevels.First(x => x.Name == data.Level).Id;
+                    candidateHasEducation.EducationDegreeId = _dbContext.EducationDegrees.First(x => x.Name == data.Degree).Id;
                     candidateHasEducation.EducationMajorId = _dbContext.EducationMajors.First(x => x.Name == data.Major).Id;
                     candidateHasEducation.EducationSubjectId = _dbContext.EducationSubjects.First(x => x.Name == data.Subject).Id;
                     candidateHasEducation.ObtainedMarks = data.Obtained;

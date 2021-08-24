@@ -22,7 +22,10 @@ namespace STC.Web.API.Controllers
             _store = store;
         }
 
-        // GET: api/<EducationController>/max_qualification
+        /// <summary>
+        /// Get All Max Qualifications
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("max_qualification")]
         public IEnumerable<SelectResponse> GetMaxQualifications()
@@ -30,7 +33,10 @@ namespace STC.Web.API.Controllers
             return _store.GetAllMaxQualifications();
         }
 
-        // GET: api/<EducationController>/level
+        /// <summary>
+        /// Get All Education Levels
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         [Route("level")]
         public IEnumerable<SelectResponse> GetLevels()
@@ -38,7 +44,23 @@ namespace STC.Web.API.Controllers
             return _store.GetAllLevels();
         }
 
-        // GET: api/<EducationController>/level/{id}/major
+        /// <summary>
+        /// Get All Education Degrees
+        /// </summary>
+        /// <param name="id">level ID</param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("level/{id}/degree")]
+        public IEnumerable<SelectResponse> GetDegrees(int id)
+        {
+            return _store.GetAllDegrees(id);
+        }
+
+        /// <summary>
+        /// Get All Education Majors
+        /// </summary>
+        /// <param name="id">level ID</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("level/{id}/major")]
         public IEnumerable<SelectResponse> GetMajors(int id)
@@ -46,7 +68,11 @@ namespace STC.Web.API.Controllers
             return _store.GetAllMajors(id);
         }
 
-        // GET: api/<EducationController>/major/{id}/subject
+        /// <summary>
+        /// Get All Education Subjects
+        /// </summary>
+        /// <param name="id">Major ID</param>
+        /// <returns></returns>
         [HttpGet]
         [Route("major/{id}/subject")]
         public IEnumerable<SelectResponse> GetSubjects(int id)
@@ -54,43 +80,27 @@ namespace STC.Web.API.Controllers
             return _store.GetAllSubjects(id);
         }
 
-        // GET api/<EducationController>/candidate/12345-1234567-1
+        /// <summary>
+        /// Get educational data of candidate
+        /// </summary>
+        /// <param name="cnic"></param>
+        /// <returns></returns>
         [HttpGet("candidate/{cnic}")]
         public EducationalDataResponse GetCandidateEducationalData(string cnic)
         {
             return _store.GetEducationalData(cnic);
         }
 
-        // PUT api/<EducationController>/candidate/12345-1234567-1
+        /// <summary>
+        /// update educational data of candidate
+        /// </summary>
+        /// <param name="cnic"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPut("candidate/{cnic}")]
         public bool Put(string cnic, [FromBody] EducationalDataRequest request)
         {
             return _store.UpdateEducationalData(cnic, request);
-        }
-
-        // GET api/<EducationController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<EducationController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
-        // PUT api/<EducationController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<EducationController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

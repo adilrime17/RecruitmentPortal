@@ -22,13 +22,6 @@ namespace STC.Web.API.Controllers
             _store = store;
         }
 
-        // GET: api/<TestsController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         // GET api/<TestsController>/12345-1234567-1
         [HttpGet("{cnic}")]
         public TestsResponse GetTestsToAppear(string cnic)
@@ -57,12 +50,6 @@ namespace STC.Web.API.Controllers
             return _store.GetCandidateTestDetail(cnic, testName);
         }
 
-        // POST api/<TestsController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
         // PUT api/<TestsController>/12345-1234567-1
         [HttpPut("{cnic}")]
         public bool UpdateTestsToAppear(string cnic, [FromBody] TestsRequest request)
@@ -82,18 +69,6 @@ namespace STC.Web.API.Controllers
         public bool UpdateCandidateTestDetails(string cnic, string testName, [FromBody] CandidateTestDetailRequest request)
         {
             return _store.UpdateCandidateTestDetail(cnic, testName, request);
-        }
-
-        // PUT api/<TestsController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<TestsController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

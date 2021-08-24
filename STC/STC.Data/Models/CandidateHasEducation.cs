@@ -24,11 +24,11 @@ namespace STC.Data.Models
         [Column("education_level_id")]
         public int EducationLevelId { get; set; }
         [Column("education_degree_id")]
-        public int EducationDegreeId { get; set; }
+        public int? EducationDegreeId { get; set; }
         [Column("education_major_id")]
-        public int EducationMajorId { get; set; }
+        public int? EducationMajorId { get; set; }
         [Column("education_subject_id")]
-        public int EducationSubjectId { get; set; }
+        public int? EducationSubjectId { get; set; }
         [Column("total_marks")]
         public float TotalMarks { get; set; }
         [Column("obtained_marks")]

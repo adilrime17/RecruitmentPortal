@@ -11,7 +11,8 @@ namespace STC.Common.Requests
 
     public class EducationalData
     {
-        public string Qualification { get; set; }
+        public string Level { get; set; }
+        public string Degree { get; set; }
         public string Major { get; set; }
         public string Subject { get; set; }
         public float Obtained { get; set; }

@@ -158,7 +158,6 @@ namespace STC.Data
                 entity.HasOne(d => d.EducationDegree)
                     .WithMany(p => p.CandidateHasEducations)
                     .HasForeignKey(d => d.EducationDegreeId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_candidate_has_education_education_degree1");
 
                 entity.HasOne(d => d.EducationLevel)
@@ -170,13 +169,11 @@ namespace STC.Data
                 entity.HasOne(d => d.EducationMajor)
                     .WithMany(p => p.CandidateHasEducations)
                     .HasForeignKey(d => d.EducationMajorId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_candidate_has_education_education_major1");
 
                 entity.HasOne(d => d.EducationSubject)
                     .WithMany(p => p.CandidateHasEducations)
                     .HasForeignKey(d => d.EducationSubjectId)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("fk_candidate_has_education_education_subject1");
             });
 

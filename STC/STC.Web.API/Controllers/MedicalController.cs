@@ -21,13 +21,6 @@ namespace STC.Web.API.Controllers
             _store = store;
         }
 
-        // GET: api/<MedicalController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
         // GET: api/<MedicalController>/status
         [HttpGet]
         [Route("status")]
@@ -42,36 +35,11 @@ namespace STC.Web.API.Controllers
             };
         }
 
-        // GET api/<MedicalController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<MedicalController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
         // PUT api/<MedicalController>/5
         [HttpPut("{cnic}")]
         public bool UpdateCandidateMedicalData(string cnic, [FromBody] UpdateCandidateMedicalDataRequest request)
         {
             return _store.UpdateCandidateMedicalData(cnic, request);
-        }
-
-        // PUT api/<MedicalController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<MedicalController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }

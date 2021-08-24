@@ -22,14 +22,11 @@ namespace STC.Web.API.Controllers
             _store = store;
         }
 
-        // GET: api/<CandidateController>
-        [HttpGet]
-        public IEnumerable<string> Get()
-        {
-            return new string[] { "value1", "value2" };
-        }
-
-        // GET api/<CandidateController>/5
+        /// <summary>
+        /// Get Candidate Details
+        /// </summary>
+        /// <param name="cnic">Candidate CNIC</param>
+        /// <returns></returns>
         [HttpGet("{cnic}")]
         public CandidateResponse Get(string cnic)
         {
@@ -58,12 +55,6 @@ namespace STC.Web.API.Controllers
             return _store.CheckEligibility(request);
         }
 
-        // POST api/<CandidateController>
-        [HttpPost]
-        public void Post([FromBody] string value)
-        {
-        }
-
         // PUT api/<CandidateController>/12345-1234567-8
         [HttpPut("{cnic}")]
         public bool UpdateData(string cnic, [FromBody] CandidateCreateRequest request)
@@ -76,12 +67,6 @@ namespace STC.Web.API.Controllers
         public bool UpdateArmyData(string cnic, [FromBody] CandidateArmyDataRequest request)
         {
             return _store.UpdateArmyData(cnic, request);
-        }
-
-        // DELETE api/<CandidateController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
         }
     }
 }
