@@ -47,7 +47,7 @@ function WoaWos() {
   const handleCnicVerify = () => {
     API.getCandidateWoaWosData(cnic)
       .then((res) => {
-        setCandidateWoaWosDataData(res);
+        setCandidateWoaWosDataData(res.data);
         setIsCnicVerified(true);
       })
       .catch((err) => {
@@ -60,7 +60,8 @@ function WoaWos() {
     console.log("Handle Submit: ", candidateWoaWosData);
     API.updateCandidateWoaWosData(cnic, candidateWoaWosData)
       .then((res) => {
-        alert(res.updated);
+        console.log(res);
+        alert(res);
       })
       .catch((err) => {
         alert(err);

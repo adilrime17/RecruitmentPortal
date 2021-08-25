@@ -34,7 +34,7 @@ function TestMarks({ type, testName, testLabel }) {
   const [marksData, setMarksData] = useState({
     registrationNo: "123",
     name: "john",
-    result: "40",
+    marksObtained: "40",
     todayFail: "2",
     totalFail: "100",
     todayPass: "5",
@@ -45,7 +45,7 @@ function TestMarks({ type, testName, testLabel }) {
     API.getCandidateTestDetail(cnic, testName)
       .then((res) => {
         console.log(res);
-        setMarksData(res.candidateTestDetail);
+        setMarksData(res.data);
         setIsCnicVerified(true);
       })
       .catch((err) => {
@@ -56,9 +56,9 @@ function TestMarks({ type, testName, testLabel }) {
 
   const handleSubmit = () => {
     console.log("Handle Submit: ", marksData);
-    API.updateCandidateTestMarks(cnic, marksData.result, testName)
+    API.updateCandidateTestMarks(cnic, {testResults: marksData.marksObtained}, testName)
       .then((res) => {
-        alert(res.updated);
+        alert(res);
       })
       .catch((err) => {
         alert(err);
@@ -217,19 +217,19 @@ function TestMarks({ type, testName, testLabel }) {
                       <CustomTextField
                         label="Result"
                         type="text"
-                        name="result"
+                        name="marksObtained"
                         placeholder="Results"
-                        value={marksData.result}
+                        value={marksData.marksObtained}
                         onChange={handleFieldsChange}
                       />
                     ) : (
                       <CustomSelectField
                         label="Hafiz Test"
                         type="text"
-                        name="result"
+                        name="marksObtained"
                         placeholder="Results"
                         menuList={[{id: 0, label: 'Pass'}, {id: 1, label: 'Fail'}]}
-                        value={marksData.result}
+                        value={marksData.marksObtained}
                         onChange={handleFieldsChange}
                       />
                     )}

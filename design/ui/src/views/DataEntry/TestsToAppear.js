@@ -32,6 +32,7 @@ function TestsToAppear() {
   const [isCnicVerified, setIsCnicVerified] = useState(false);
   const [checkCnicFormat, setCheckCnicFormat] = useState(false);
   const [testToAppear, setTestToAppear] = useState({
+    registrationNo: "sp121212-12",
     personality: false,
     intelligence: false,
     writtenMatric: false,
@@ -48,21 +49,22 @@ function TestsToAppear() {
   const handleCnicVerify = () => {
     API.getCandidateTestsToAppear(cnic)
       .then((res) => {
-        setTestToAppear(res.testsToAppear);
-        setChargesPaid(res.chargesPaid);
+        setTestToAppear(res.data.testsToAppear);
+        setChargesPaid(res.data.chargesPaid);
         setIsCnicVerified(true);
       })
       .catch((err) => {
         console.log(err);
-        alert("Some error in handleCnicVerify Promise WoaWos data");
+        alert("Some error in handleCnicVerify Promise test to appear data");
       });
   };
 
   const handleSubmit = () => {
-    console.log("Handle Submit: ", testToAppear);
-    API.updateCandidateTestsToAppear(cnic, testToAppear, chargesPaid)
+    console.log("Handle Submit: ", {testToAppear, chargesPaid});
+    API.updateCandidateTestsToAppear(cnic, {testToAppear, chargesPaid})
       .then((res) => {
-        alert(res.updated);
+        console.log(res);
+        alert(res);
       })
       .catch((err) => {
         alert(err);

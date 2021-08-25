@@ -58,19 +58,19 @@ function PrintSlip() {
     slipDetails: []
   });
 
-  const rows = [
-    createData("Initial Test", "Monday, June 15, 2009 1:45 PM", "Pending"),
-    createData("Personality Test", "Monday, June 15, 2009 1:45 PM", "Pending"),
-    createData("Hafiz Test", "Monday, June 15, 2009 1:45 PM", "Pending"),
-    createData("Medical By RMO", "Monday, June 15, 2009 1:45 PM", "Pending"),
-    createData("Physical Test", "Monday, June 15, 2009 1:45 PM", "Pending"),
-  ];
+  // const rows = [
+  //   createData("Initial Test", "Monday, June 15, 2009 1:45 PM", "Pending"),
+  //   createData("Personality Test", "Monday, June 15, 2009 1:45 PM", "Pending"),
+  //   createData("Hafiz Test", "Monday, June 15, 2009 1:45 PM", "Pending"),
+  //   createData("Medical By RMO", "Monday, June 15, 2009 1:45 PM", "Pending"),
+  //   createData("Physical Test", "Monday, June 15, 2009 1:45 PM", "Pending"),
+  // ];
 
   const handleCnicVerify = () => {
       API.getCandidatePrintTestSlip(cnic)
       .then((res) => {
         console.log(res);
-        setPrintSlipData(res)
+        setPrintSlipData(res.data)
         setIsCnicVerified(true);
       })
       .catch((err) => {

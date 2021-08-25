@@ -63,11 +63,11 @@ function Education() {
     maxQualification: "",
     candidateEducationalData: [],
   });
-  const [qualifications, setQualifications] = useState([]);
-  const [qualificationMajors, setQualificationMajors] = useState([]);
-  const [qualificationMajorsSubjects, setQualificationMajorsSubjects] =
-    useState([]);
+  const [qualificationLevel, setQualificationLevel] = useState([]);
   const [qualificationDegree, setQualificationDegree] = useState([])
+  const [qualificationMajors, setQualificationMajors] = useState([]);
+  const [qualificationMajorsSubjects, setQualificationMajorsSubjects] = useState([]);
+  
 
   // const [rows, setRows] = useState([])
 
@@ -80,25 +80,31 @@ function Education() {
 
   const handleCnicVerify = () => {
     Promise.all([
-      API.getQualificationLevel(),
+      
       API.getCandidateEducationalData(cnic),
-      API.getQualificationMajorList(),
-      API.getQualificationMajorSubjectList(),
-      API.getQualificationDegree()
+      API.getQualificationLevel(),
+      // API.getQualificationDegree(),
+      // API.getQualificationMajorList(),
+      // API.getQualificationMajorSubjectList()
+      
     ])
       .then((res) => {
         console.log(res);
-        setQualifications(res[0].data);
-        setCandidateEducationData(res[1]);
-        // handleTableData(res[1].candidateEducationalData)
-        setQualificationMajors(res[2].majorsList);
-        setQualificationMajorsSubjects(res[3].majorSubjectsList);
-        setQualificationDegree(res[4].data)
+        setCandidateEducationData(res[0].data ? res[0].data : {
+          registrationNo: "",
+          ncse: false,
+          maxQualification: "",
+          candidateEducationalData: []
+        });
+        setQualificationLevel(res[1].data);
+        // setQualificationDegree(res[2].data);
+        // setQualificationMajors(res[3].data);
+        // setQualificationMajorsSubjects(res[4].data);
         setIsCnicVerified(true);
       })
       .catch((err) => {
         console.log(err);
-        alert("Some error in handleCnicVerify Promise Personal Info");
+        alert("Some error in handleCnicVerify Promise Educational Info");
       });
   };
 
@@ -106,9 +112,10 @@ function Education() {
 
   const handleSubmit = () => {
     console.log("Handle Submit: ", candidateEducationData);
-    API.updateCandidateEducationalData(cnic, candidateEducationData)
+    API.updateCandidateEducationalData(cnic, candidateEducationData.candidateEducationalData)
       .then((res) => {
-        alert(res.updated);
+        console.log(res);
+        alert(res);
       })
       .catch((err) => {
         alert(err);
@@ -131,6 +138,41 @@ function Education() {
   };
 
   const handleTableEducationData = (index, key, value) => {
+
+    if(key === 'level') {
+      let id = qualificationLevel.find(x => x.label === value).id
+      console.log("Hello world: ", id);
+      API.getQualificationDegree(id)
+      .then(res => {
+        setQualificationDegree(res.data);
+      })
+      .catch(err => {
+        alert(err)
+      })
+    } else if(key === 'degree') {
+      let id = qualificationDegree.find(x => x.label === value).id
+      console.log("Hello world: ", id);
+      API.getQualificationMajorList(id)
+      .then(res => {
+        console.log(res);
+        setQualificationMajors(res.data);
+      })
+      .catch(err => {
+        alert(err)
+      })
+    } else if(key === 'major') {
+      let id = qualificationMajors.find(x => x.label === value).id
+      API.getQualificationMajorSubjectList(id)
+      .then(res => {
+        console.log(res);
+        setQualificationMajorsSubjects(res.data);
+      })
+      .catch(err => {
+        alert(err)
+      })
+    }
+
+
     let temp = candidateEducationData.candidateEducationalData;
     temp[index][key] = value;
     setCandidateEducationData({
@@ -357,7 +399,7 @@ function Education() {
                                   <FormControl
                                     variant="filled"
                                     component={Box}
-                                    width="60%"
+                                    width="70%"
                                     // marginBottom="1rem!important"
                                   >
                                     <Box
@@ -371,7 +413,7 @@ function Education() {
                                       value={row.level}
                                       onChange={(e) => handleTableEducationData(index, e.target.name, e.target.value)}
                                     >
-                                      {qualifications.map((option) => (
+                                      {qualificationLevel.map((option) => (
                                         <MenuItem
                                           key={option.id}
                                           value={option.label}
@@ -386,7 +428,7 @@ function Education() {
                                   <FormControl
                                     variant="filled"
                                     component={Box}
-                                    width="60%"
+                                    width="90%"
                                     // marginBottom="1rem!important"
                                   >
                                     <Box
@@ -415,7 +457,7 @@ function Education() {
                                   <FormControl
                                     variant="filled"
                                     component={Box}
-                                    width="60%"
+                                    width="70%"
                                     // marginBottom="1rem!important"
                                   >
                                     <Box
@@ -432,7 +474,7 @@ function Education() {
                                       {qualificationMajors.map((option) => (
                                         <MenuItem
                                           key={option.id}
-                                          value={option.id}
+                                          value={option.label}
                                         >
                                           {option.label}
                                         </MenuItem>
@@ -444,7 +486,7 @@ function Education() {
                                   <FormControl
                                     variant="filled"
                                     component={Box}
-                                    width="60%"
+                                    width="70%"
                                     // marginBottom="1rem!important"
                                   >
                                     <Box
@@ -462,7 +504,7 @@ function Education() {
                                         (option) => (
                                           <MenuItem
                                             key={option.id}
-                                            value={option.id}
+                                            value={option.label}
                                           >
                                             {option.label}
                                           </MenuItem>
@@ -474,7 +516,7 @@ function Education() {
                                 <TableCell align="center">
                                   <TextField
                                     id="obtained"
-                                    style={{ width: "60%" }}
+                                    style={{ width: "70%" }}
                                     name="obtained"
                                     value={row.obtained}
                                     onChange={(e) => handleTableEducationData(index, e.target.name, e.target.value)}
@@ -484,7 +526,7 @@ function Education() {
                                 <TableCell align="center">
                                   <TextField
                                     id="total"
-                                    style={{ width: "60%" }}
+                                    style={{ width: "70%" }}
                                     name="total"
                                     value={row.total}
                                     onChange={(e) => handleTableEducationData(index, e.target.name, e.target.value)}

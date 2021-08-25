@@ -100,9 +100,9 @@ function PersonalInformation() {
 
   const handleSubmit = () => {
     console.log("Handle Submit: ", candidateData);
-    API.updateCandidateData({...candidateData, cnic})
+    API.updateCandidateData(cnic, {...candidateData, cnic})
     .then(res => {
-      alert(res.updated)
+      alert(res)
     }).catch(err => {
       alert(err)
     })

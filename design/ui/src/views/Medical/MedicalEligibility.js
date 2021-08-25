@@ -109,7 +109,7 @@ function Form() {
     console.log("Handle Submit: ", candidateData);
     API.checkCandidateEligibility({...candidateData, cnic})
     .then(res => {
-      setDialogMessage(res.candidateEligible ? "Eligible": "Not Eligible");
+      setDialogMessage(res.data.candidateEligible ? "Eligible": "Not Eligible");
       setOpenConfirmationDialog(true);
     }).catch(err => {
       alert(err)
