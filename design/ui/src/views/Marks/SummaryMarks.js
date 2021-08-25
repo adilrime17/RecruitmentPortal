@@ -32,28 +32,28 @@ function SummaryMarks() {
   const [isCnicVerified, setIsCnicVerified] = useState(false);
   const [checkCnicFormat, setCheckCnicFormat] = useState(false);
   const [summaryMarks, setSummaryMarks] = useState({
-    registrationNo: "123",
-    name: "john",
-    district: "Rawalpindi",
-    personality: "Unsuitable",
-    initial: "20",
-    written: "30",
-    dlh: "Fail",
-    dit: "Fail",
-    pet: "Fail",
-    sponser: "Name here",
-    woswoa: "Verified",
-    clerk: "20",
-    tech: "30",
-    hafiz: "Fail",
-    medicalStatus: "FIT",
+    registrationNo: "",
+    name: "",
+    district: "",
+    personality: "",
+    initial: "",
+    written: "",
+    dlh: "",
+    dit: "",
+    pet: "",
+    sponser: "",
+    woswoa: "",
+    clerk: "",
+    tech: "",
+    hafiz: "",
+    medicalStatus: "",
   });
 
   const handleCnicVerify = () => {
     API.getCandidateMarksSummary(cnic)
       .then((res) => {
         console.log(res);
-        setSummaryMarks(res.candidateMarksSummary);
+        setSummaryMarks(res.data);
         setIsCnicVerified(true);
       })
       .catch((err) => {

@@ -50,7 +50,7 @@ function Pet() {
     API.getCandidateTestDetail(cnic, "pet")
       .then((res) => {
         console.log(res);
-        setMarksData(res.candidateTestDetail);
+        setMarksData(res.data);
         setIsCnicVerified(true);
       })
       .catch((err) => {
@@ -63,7 +63,7 @@ function Pet() {
     console.log("Handle Submit: ", marksData);
     API.updateCandidateTestMarks(cnic, marksData, "pet")
       .then((res) => {
-        alert(res.updated);
+        alert(res);
       })
       .catch((err) => {
         alert(err);
