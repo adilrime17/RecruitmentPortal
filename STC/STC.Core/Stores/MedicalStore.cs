@@ -23,7 +23,7 @@ namespace STC.Core.Stores
             CandidateMedicalDataResponse response = new CandidateMedicalDataResponse();
             Candidate candidate = _dbContext.Candidates.First(x => x.Cnic == cnic);
             CandidateHasCourse candidateHasCourse = _dbContext.CandidateHasCourses.First(x => x.CandidateCnic == cnic && x.CourseId == 1);
-            CandidateMedicalInfo candidateMedicalInfo = _dbContext.CandidateMedicalInfos.Last(x => x.CandidateCnic == cnic);
+            CandidateMedicalInfo candidateMedicalInfo = _dbContext.CandidateMedicalInfos.OrderBy(x => x.Id).Last(x => x.CandidateCnic == cnic);
             response.RegistrationNo = candidateHasCourse.RegistrationNumber;
             response.Name = candidate.FirstName + ' ' + candidate.MiddleName + ' ' + candidate.LastName;
             response.Height = candidateMedicalInfo.Height;

@@ -123,8 +123,12 @@ namespace STC.Core.Stores
         public CandidateArmyDataResponse GetArmyData(string cnic)
         {
             Candidate candidate = _dbContext.Candidates.Include(x => x.CandidateArmyInfo).First(x => x.Cnic == cnic);
+            CandidateHasCourse candidateHasCourse = _dbContext.CandidateHasCourses.First(x => x.CandidateCnic == cnic && x.CourseId == 1);
             return new CandidateArmyDataResponse()
             {
+                RegistrationNo = candidateHasCourse.RegistrationNumber,
+                Woa = candidate.WOA,
+                Wos = candidate.WOS,
                 ArmyNo = candidate.CandidateArmyInfo.ArmyNumber,
                 Name = candidate.FirstName + ' ' + candidate.MiddleName + ' ' + candidate.LastName,
                 FatherName = candidate.FatherName,

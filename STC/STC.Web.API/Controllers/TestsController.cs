@@ -43,7 +43,23 @@ namespace STC.Web.API.Controllers
             return _store.GetCandidateMarksSummary(cnic);
         }
 
-        // GET api/<TestsController>/12345-1234567-1/test_name
+        /// <summary>
+        /// Get candidate PET test details
+        /// </summary>
+        /// <param name="cnic"></param>
+        /// <returns></returns>
+        [HttpGet("{cnic}/pet")]
+        public CandidatePETTestDetailResponse GetCandidatePETTestDetails(string cnic)
+        {
+            return _store.GetCandidatePETTestDetail(cnic);
+        }
+
+        /// <summary>
+        /// Get candidate test details
+        /// </summary>
+        /// <param name="cnic"></param>
+        /// <param name="testName"></param>
+        /// <returns></returns>
         [HttpGet("{cnic}/{testName}")]
         public CandidateTestDetailResponse GetCandidateTestDetails(string cnic, string testName)
         {
@@ -62,6 +78,18 @@ namespace STC.Web.API.Controllers
         public bool UpdateCandidateMarksSummary(string cnic, string testName, [FromBody] CandidateMarksSummaryRequest request)
         {
             return _store.UpdateCandidateMarksSummary(cnic, request);
+        }
+
+        /// <summary>
+        /// Update candidate PET test details
+        /// </summary>
+        /// <param name="cnic"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
+        [HttpPut("{cnic}/pet")]
+        public bool UpdateCandidatePETTestDetails(string cnic, [FromBody] CandidatePETTestDetailRequest request)
+        {
+            return _store.UpdateCandidatePETTestDetail(cnic, request);
         }
 
         // GET api/<TestsController>/12345-1234567-1/test_name

@@ -210,6 +210,27 @@ namespace STC.Core.Stores
             return response;
         }
 
+        public CandidatePETTestDetailResponse GetCandidatePETTestDetail(string cnic)
+        {
+            CandidatePETTestDetailResponse response = new CandidatePETTestDetailResponse();
+            Candidate candidate = _dbContext.Candidates.Include(x => x.CandidateTestCharges).First(x => x.Cnic == cnic);
+            response.RegistrationNo = candidate.CandidateHasCourses.First(x => x.CourseId == 1).RegistrationNumber;
+            response.Name = candidate.FirstName + ' ' + candidate.MiddleName + ' ' + candidate.LastName;
+            PhysicalTestScore physicalTestScore = _dbContext.PhysicalTestScores.First(x => x.CandidateCnic == cnic && x.CourseId == 1);
+            response.PullUp = physicalTestScore.PullUp;
+            response.PushUp = physicalTestScore.PushUp;
+            response.Crunches = physicalTestScore.Crunches;
+            response.Ditch = physicalTestScore.Ditch;
+            response.OneMile = physicalTestScore.OneMile;
+            int testId = 10;
+            response.TestResults = _dbContext.CandidateTestScores.First(x => x.CandidateCnic == cnic && x.CourseId == 1 && x.TestId == testId).ObtainedMarks.Value;
+            response.TotalFail = _dbContext.CandidateTestScores.Count(x => x.ObtainedMarks < _dbContext.CourseHasTests.First(y => y.CourseId == 1 && y.TestId == testId).RequiredMarks);
+            response.TotalPass = _dbContext.CandidateTestScores.Count(x => x.ObtainedMarks >= _dbContext.CourseHasTests.First(y => y.CourseId == 1 && y.TestId == testId).RequiredMarks);
+            response.TodayFail = _dbContext.CandidateTestScores.Count(x => x.ObtainedMarks < _dbContext.CourseHasTests.First(y => y.CourseId == 1 && y.TestId == testId).RequiredMarks && (x.UpdateTime.HasValue ? x.UpdateTime.Value.Date == DateTime.Now.Date : false));
+            response.TodayPass = _dbContext.CandidateTestScores.Count(x => x.ObtainedMarks >= _dbContext.CourseHasTests.First(y => y.CourseId == 1 && y.TestId == testId).RequiredMarks && (x.UpdateTime.HasValue ? x.UpdateTime.Value.Date == DateTime.Now.Date : false));
+            return response;
+        }
+
         public bool UpdateCandidateTestDetail(string cnic, string testName, CandidateTestDetailRequest request)
         {
             int testId = 0;
@@ -295,6 +316,25 @@ namespace STC.Core.Stores
             candidateTestScore.First(x => x.TestId == 5).FinalStatus = request.Tech.ToString();
             candidateTestScore.First(x => x.TestId == 9).FinalStatus = request.Hafiz;
             candidate.CandidateMedicalInfos.Last().FinalStatus = request.MedicalStatus;
+            return _dbContext.SaveChanges() > 0;
+        }
+
+        public bool UpdateCandidatePETTestDetail(string cnic, CandidatePETTestDetailRequest request)
+        {
+            CandidateTestScore candidateTestScore = _dbContext.CandidateTestScores.First(x => x.CandidateCnic == cnic && x.CourseId == 1 && x.TestId == 10);
+            candidateTestScore.ObtainedMarks = request.TestResults;
+
+            PhysicalTestScore physicalTestScore = new PhysicalTestScore()
+            {
+                CandidateCnic = cnic,
+                CourseId = 1,
+                OneMile = request.OneMile,
+                PullUp = request.PullUp,
+                PushUp = request.PushUp,
+                Crunches = request.Crunches,
+                Ditch = request.Ditch
+            };
+            _dbContext.PhysicalTestScores.Add(physicalTestScore);
             return _dbContext.SaveChanges() > 0;
         }
     }

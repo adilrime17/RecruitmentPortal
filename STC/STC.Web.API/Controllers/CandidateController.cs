@@ -33,14 +33,22 @@ namespace STC.Web.API.Controllers
             return _store.GetDetails(cnic);
         }
 
-        // GET api/<CandidateController>/5/army_data
+        /// <summary>
+        /// Get candidate army data
+        /// </summary>
+        /// <param name="cnic"></param>
+        /// <returns></returns>
         [HttpGet("{cnic}/army_data")]
         public CandidateArmyDataResponse GetArmyData(string cnic)
         {
             return _store.GetArmyData(cnic);
         }
 
-        // GET api/<CandidateController>/5/army_data
+        /// <summary>
+        /// Get All Candidate summary
+        /// </summary>
+        /// <param name="cnic"></param>
+        /// <returns></returns>
         [HttpGet("summary")]
         public IEnumerable<CandidateSummaryResponse> GetSummary(string cnic)
         {

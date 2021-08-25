@@ -51,12 +51,19 @@ namespace STC.Web.API
                 };
             });
 
+            // In production, the React files will be served from this directory
+            services.AddSpaStaticFiles(configuration =>
+            {
+                configuration.RootPath = "wwwroot";
+            });
+
             services.AddScoped<IEligibilityCheckService, EligibilityCheckService>();
             services.AddScoped<DistrictStore>();
             services.AddScoped<LocationClassStore>();
             services.AddScoped<EducationStore>();
             services.AddScoped<CandidateStore>();
             services.AddScoped<TestsStore>();
+            services.AddScoped<MedicalStore>();
 
         }
 
@@ -66,6 +73,10 @@ namespace STC.Web.API
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+
+                // Register the Swagger generator and the Swagger UI middlewares
+                app.UseOpenApi();
+                app.UseSwaggerUi3();
             }
 
             app.UseCors(x =>
@@ -74,6 +85,13 @@ namespace STC.Web.API
                 x.AllowAnyHeader();
                 x.AllowAnyMethod();
             });
+            
+            if(env.IsProduction())
+            {
+                app.UseStaticFiles();
+                app.UseSpaStaticFiles();
+            }
+
             app.UseRouting();
 
             app.UseAuthorization();
@@ -83,9 +101,11 @@ namespace STC.Web.API
                 endpoints.MapControllers();
             });
 
-            // Register the Swagger generator and the Swagger UI middlewares
-            app.UseOpenApi();
-            app.UseSwaggerUi3();
+
+            app.UseSpa(spa =>
+            {
+                spa.Options.SourcePath = "wwwroot";
+            });
         }
     }
 }

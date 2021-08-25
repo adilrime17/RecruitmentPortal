@@ -6,6 +6,9 @@ namespace STC.Common.Requests
 {
     public class CandidateArmyDataRequest
     {
+        public string RegistrationNo { get; set; }
+        public bool Woa { get; set; }
+        public bool Wos { get; set; }
         public string ArmyNo { get; set; }
         public string Name { get; set; }
         public string FatherName { get; set; }

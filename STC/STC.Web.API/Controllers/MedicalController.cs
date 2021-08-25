@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using STC.Common.Requests;
+using STC.Common.Responses;
 using STC.Core.Stores;
 using System;
 using System.Collections.Generic;
@@ -35,7 +36,24 @@ namespace STC.Web.API.Controllers
             };
         }
 
-        // PUT api/<MedicalController>/5
+        /// <summary>
+        /// Get Candidate Medical Data
+        /// </summary>
+        /// <param name="cnic"></param>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("{cnic}")]
+        public CandidateMedicalDataResponse GetCandidateMedicalData(string cnic)
+        {
+            return _store.GetCandidateMedicalData(cnic);
+        }
+
+        /// <summary>
+        /// Update candidate medical data
+        /// </summary>
+        /// <param name="cnic"></param>
+        /// <param name="request"></param>
+        /// <returns></returns>
         [HttpPut("{cnic}")]
         public bool UpdateCandidateMedicalData(string cnic, [FromBody] UpdateCandidateMedicalDataRequest request)
         {

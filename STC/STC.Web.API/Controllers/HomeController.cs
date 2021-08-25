@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace STC.Web.API.Controllers
 {
-    [Route("/")]
+    [Route("/api")]
     [ApiController]
     public class HomeController : ControllerBase
     {
