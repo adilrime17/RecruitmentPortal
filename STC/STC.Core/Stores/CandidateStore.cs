@@ -115,8 +115,27 @@ namespace STC.Core.Stores
 
         public bool UpdateData(string cnic, CandidateUpdateRequest request)
         {
-            Candidate candidate = _dbContext.Candidates.FirstOrDefault(x => x.Cnic == cnic);
-            request.CopyProperties(candidate);
+            Candidate candidate = _dbContext.Candidates.Include(x => x.CandidateMedicalInfos).First(x => x.Cnic == cnic);
+            candidate.DistrictId = _dbContext.Districts.First(x => x.Name == request.District).Id;
+            candidate.LocationClassId = _dbContext.LocationClasses.First(x => x.Name == request.LocationClass).Id;
+            candidate.MaxQualificationId = _dbContext.Qualifications.First(x => x.Name == request.MaxQualification).Id;
+            candidate.NCSE = request.Ncse;
+            candidate.FirstName = request.FirstName;
+            candidate.MiddleName = request.MiddleName;
+            candidate.LastName = request.LastName;
+            candidate.FatherName = request.FatherName;
+            candidate.DateOfBirth = request.DateOfBirth;
+            candidate.WOS = request.Wos;
+            candidate.WOA = request.Woa;
+            candidate.DLH = request.Dlh;
+            candidate.DIT = request.Dit;
+            candidate.Hafiz = request.Hafiz;
+            CandidateMedicalInfo candidateMedicalInfo = candidate.CandidateMedicalInfos.Where(x => x.CourseId == 1).OrderBy(x => x.Id).Last();
+            candidateMedicalInfo.CourseId = 1;
+            candidateMedicalInfo.ChestIn = request.Chest.Chest0;
+            candidateMedicalInfo.ChestOut = request.Chest.Chest1;
+            candidateMedicalInfo.Weight = request.Weight;
+            candidateMedicalInfo.Height = request.Height;
             return _dbContext.SaveChanges() > 0;
         }
 
