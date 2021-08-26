@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using STC.Common.MiscUtil;
+using Microsoft.EntityFrameworkCore;
 
 namespace STC.Core.Stores
 {
@@ -71,7 +72,7 @@ namespace STC.Core.Stores
 
         public EducationalDataResponse GetEducationalData(string cnic)
         {
-            Candidate candidate = _dbContext.Candidates.FirstOrDefault(x => x.Cnic == cnic);
+            Candidate candidate = _dbContext.Candidates.Include(x => x.MaxQualification).FirstOrDefault(x => x.Cnic == cnic);
             if(candidate == null)
             {
                 return null;
@@ -86,6 +87,7 @@ namespace STC.Core.Stores
                 .Select(x => new EducationalData()
                 {
                     Level = x.EducationLevel.Name,
+                    Degree = x.EducationDegree.Name,
                     Major = x.EducationMajor.Name,
                     Subject = x.EducationSubject.Name,
                     Obtained = x.ObtainedMarks,
@@ -104,24 +106,44 @@ namespace STC.Core.Stores
                 if(candidateHasEducation == null)
                 {
                     candidateHasEducation = new CandidateHasEducation();
+                    candidateHasEducation.CandidateCnic = cnic;
                     candidateHasEducation.EducationLevelId = _dbContext.EducationLevels.First(x => x.Name == data.Level).Id;
-                    candidateHasEducation.EducationDegreeId = _dbContext.EducationDegrees.First(x => x.Name == data.Degree).Id;
-                    candidateHasEducation.EducationMajorId = _dbContext.EducationMajors.First(x => x.Name == data.Major).Id;
-                    candidateHasEducation.EducationSubjectId = _dbContext.EducationSubjects.First(x => x.Name == data.Subject).Id;
+                    if(!string.IsNullOrEmpty(data.Degree))
+                    {
+                        candidateHasEducation.EducationDegreeId = _dbContext.EducationDegrees.First(x => x.Name == data.Degree).Id;
+                    }
+                    if (!string.IsNullOrEmpty(data.Major))
+                    {
+                        candidateHasEducation.EducationMajorId = _dbContext.EducationMajors.First(x => x.Name == data.Major).Id;
+                    }
+                    if (!string.IsNullOrEmpty(data.Subject))
+                    {
+                        candidateHasEducation.EducationSubjectId = _dbContext.EducationSubjects.First(x => x.Name == data.Subject).Id;
+                    }
                     candidateHasEducation.ObtainedMarks = data.Obtained;
                     candidateHasEducation.TotalMarks = data.Total;
                     candidateHasEducation.Grade = data.Grade;
                     _dbContext.CandidateHasEducations.Add(candidateHasEducation);
                 } else {
-                    candidateHasEducation.EducationMajorId = _dbContext.EducationMajors.First(x => x.Name == data.Major).Id;
-                    candidateHasEducation.EducationSubjectId = _dbContext.EducationSubjects.First(x => x.Name == data.Subject).Id;
+                    candidateHasEducation.EducationLevelId = _dbContext.EducationLevels.First(x => x.Name == data.Level).Id;
+                    if (!string.IsNullOrEmpty(data.Degree))
+                    {
+                        candidateHasEducation.EducationDegreeId = _dbContext.EducationDegrees.First(x => x.Name == data.Degree).Id;
+                    }
+                    if (!string.IsNullOrEmpty(data.Major))
+                    {
+                        candidateHasEducation.EducationMajorId = _dbContext.EducationMajors.First(x => x.Name == data.Major).Id;
+                    }
+                    if (!string.IsNullOrEmpty(data.Subject))
+                    {
+                        candidateHasEducation.EducationSubjectId = _dbContext.EducationSubjects.First(x => x.Name == data.Subject).Id;
+                    }
                     candidateHasEducation.ObtainedMarks = data.Obtained;
                     candidateHasEducation.TotalMarks = data.Total;
                     candidateHasEducation.Grade = data.Grade;
                 }
-                _dbContext.SaveChanges();
             }
-            return true;
+            return _dbContext.SaveChanges() > 0;
         }
     }
 }
