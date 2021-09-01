@@ -101,11 +101,13 @@ namespace STC.Web.API
                 endpoints.MapControllers();
             });
 
-
-            app.UseSpa(spa =>
+            if(env.IsProduction())
             {
-                spa.Options.SourcePath = "wwwroot";
-            });
+                app.UseSpa(spa =>
+                {
+                    spa.Options.SourcePath = "wwwroot";
+                });
+            }
         }
     }
 }

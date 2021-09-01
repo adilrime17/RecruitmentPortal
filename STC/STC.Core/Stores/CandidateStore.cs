@@ -125,6 +125,8 @@ namespace STC.Core.Stores
             candidate.LastName = request.LastName;
             candidate.FatherName = request.FatherName;
             candidate.DateOfBirth = request.DateOfBirth;
+            candidate.ContactPhone = request.ContactNo;
+            candidate.GuardianPhone = request.GuardianContactNo;
             candidate.WOS = request.Wos;
             candidate.WOA = request.Woa;
             candidate.DLH = request.Dlh;
@@ -148,13 +150,13 @@ namespace STC.Core.Stores
                 RegistrationNo = candidateHasCourse.RegistrationNumber,
                 Woa = candidate.WOA,
                 Wos = candidate.WOS,
-                ArmyNo = candidate.CandidateArmyInfo.ArmyNumber,
+                ArmyNo = candidate.CandidateArmyInfo?.ArmyNumber,
                 Name = candidate.FirstName + ' ' + candidate.MiddleName + ' ' + candidate.LastName,
                 FatherName = candidate.FatherName,
-                Unit = candidate.CandidateArmyInfo.Unit,
-                Corps = candidate.CandidateArmyInfo.Corps,
+                Unit = candidate.CandidateArmyInfo?.Unit,
+                Corps = candidate.CandidateArmyInfo?.Corps,
                 Contact = candidate.GuardianPhone,
-                Dod = candidate.CandidateArmyInfo.DOD.ToString()
+                Dod = candidate.CandidateArmyInfo?.DOD.ToString()
             };           
         }
 
@@ -175,7 +177,6 @@ namespace STC.Core.Stores
                     armyInfo.DOD = DateTime.Parse(request.Dod);
                 }
                 _dbContext.CandidateArmyInfos.Add(armyInfo);
-                _dbContext.SaveChanges();
             }
             else
             {
@@ -186,9 +187,8 @@ namespace STC.Core.Stores
                 {
                     armyInfo.DOD = DateTime.Parse(request.Dod);
                 }
-                _dbContext.SaveChanges();
             }
-            return true;
+            return _dbContext.SaveChanges() > 0;
         }
 
         public IList<CandidateSummaryResponse> GetSummary()
