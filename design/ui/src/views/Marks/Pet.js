@@ -32,18 +32,18 @@ function Pet() {
   const [isCnicVerified, setIsCnicVerified] = useState(false);
   const [checkCnicFormat, setCheckCnicFormat] = useState(false);
   const [marksData, setMarksData] = useState({
-    registrationNo: "123",
-    name: "john",
-    totalPetObtained: "5",
-    oneMile: "1",
-    pullUp: "2",
-    pushUp: "2",
-    crunches: "3",
-    ditch: "clear",
-    todayFail: "2",
-    totalFail: "100",
-    todayPass: "5",
-    totalPass: "100",
+    registrationNo: "",
+    name: "",
+    totalPetObtained: "",
+    oneMile: "",
+    pullUp: "",
+    pushUp: "",
+    crunches: "",
+    ditch: "",
+    todayFail: "",
+    totalFail: "",
+    todayPass: "",
+    totalPass: "",
   });
 
   const handleCnicVerify = () => {
@@ -61,7 +61,9 @@ function Pet() {
 
   const handleSubmit = () => {
     console.log("Handle Submit: ", marksData);
-    API.updateCandidateTestMarks(cnic, marksData, "pet")
+    let data = marksData
+    data.ditch = data.ditch === 'Clear' ? true : false
+    API.updateCandidateTestMarks(cnic, data, "pet")
       .then((res) => {
         alert(res);
       })

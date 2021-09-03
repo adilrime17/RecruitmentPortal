@@ -102,7 +102,27 @@ function PersonalInformation() {
     console.log("Handle Submit: ", candidateData);
     API.updateCandidateData(cnic, {...candidateData, cnic})
     .then(res => {
-      alert(res)
+      alert(res.data ? "Updated Successfully" : "Nothing updated")
+      setCandidateData({
+        registrationNo: "",
+        svasXmatch: false,
+        ncse: false,
+        firstName: "",
+        middleName: "",
+        lastName: "",
+        fatherName: "",
+        district: "",
+        locationClass: "",
+        dateOfBirth: "",
+        contactNo: "",
+        guardianContactNo: "",
+        maxQualification: "",
+        woa: false,
+        wos: false,
+        dlh: false,
+        dit: false,
+        hafiz: false
+      })
     }).catch(err => {
       alert(err)
     })
@@ -366,7 +386,7 @@ function PersonalInformation() {
                       type="date"
                       name="dateOfBirth"
                       placeholder="Provide Date of Birth"
-                      value={candidateData.dateOfBirth}
+                      value={candidateData.dateOfBirth.split("T")[0]}
                       onChange={handleFieldsChange}
                     />
                   </Grid>

@@ -115,7 +115,13 @@ function Education() {
     API.updateCandidateEducationalData(cnic, candidateEducationData.candidateEducationalData)
       .then((res) => {
         console.log(res);
-        alert(res);
+        alert(res.data ? "Updated Successfully" : "Nothing updated")
+        // setCandidateEducationData({
+        //   registrationNo: "",
+        //   ncse: false,
+        //   maxQualification: "",
+        //   candidateEducationalData: []
+        // });
       })
       .catch((err) => {
         alert(err);
@@ -519,7 +525,7 @@ function Education() {
                                     style={{ width: "70%" }}
                                     name="obtained"
                                     value={row.obtained}
-                                    onChange={(e) => handleTableEducationData(index, e.target.name, e.target.value)}
+                                    onChange={(e) => handleTableEducationData(index, e.target.name, parseInt(e.target.value))}
                                     variant="outlined"
                                   />
                                 </TableCell>
@@ -529,7 +535,7 @@ function Education() {
                                     style={{ width: "70%" }}
                                     name="total"
                                     value={row.total}
-                                    onChange={(e) => handleTableEducationData(index, e.target.name, e.target.value)}
+                                    onChange={(e) => handleTableEducationData(index, e.target.name, parseInt(e.target.value))}
                                     variant="outlined"
                                   />
                                 </TableCell>
