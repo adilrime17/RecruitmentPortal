@@ -167,7 +167,7 @@ namespace STC.Test
                             Dlh = true,
                             Hafiz = false,
                             Pet = true,
-                            Apt = true,
+                            Dlh = true,
                             Dit = false
                         },
                         ChargesPaid = true

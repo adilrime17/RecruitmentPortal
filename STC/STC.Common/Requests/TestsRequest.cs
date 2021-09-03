@@ -6,7 +6,7 @@ namespace STC.Common.Requests
 {
     public class TestsRequest
     {
-        public TestsToAppear TestsToAppear { get; set; } = new TestsToAppear();
+        public TestsToAppear TestsToAppear { get; set; }
         public bool ChargesPaid { get; set; }
     }
     public class TestsToAppear
@@ -22,6 +22,5 @@ namespace STC.Common.Requests
         public bool Dlh { get; set; }
         public bool Hafiz { get; set; }
         public bool Pet { get; set; }
-        public bool Apt { get; set; }
     }
 }

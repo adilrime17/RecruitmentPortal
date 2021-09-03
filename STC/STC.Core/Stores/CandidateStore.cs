@@ -191,10 +191,10 @@ namespace STC.Core.Stores
             return _dbContext.SaveChanges() > 0;
         }
 
-        public IList<CandidateSummaryResponse> GetSummary()
+        public IList<CandidateSummaryResponse> GetSummary(DateTime date)
         {
             IList<CandidateSummaryResponse> candidateSummaryResponses = new List<CandidateSummaryResponse>();
-            candidateSummaryResponses = _dbContext.CandidateHasCourses.Where(x => x.CourseId == 1)
+            candidateSummaryResponses = _dbContext.CandidateHasCourses.Where(x => x.CourseId == 1 && x.CreateTime.Date == date.Date)
                 .Select(x => new CandidateSummaryResponse()
                 {
                     RegistrationNo = x.RegistrationNumber,
