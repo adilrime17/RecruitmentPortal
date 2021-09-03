@@ -1,6 +1,6 @@
 import axios from 'axios'
-const baseURL =  "http://192.168.15.77:5000/api"
-// const baseURL =  "http://localhost:5000/api"
+// const baseURL =  "http://192.168.15.77:5000/api"
+const baseURL =  "http://localhost:5000/api"
 
 export default class API {
   static getAllDistricts = () => {
