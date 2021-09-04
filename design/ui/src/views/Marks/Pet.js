@@ -65,7 +65,7 @@ function Pet() {
     data.ditch = data.ditch === 'Clear' ? true : false
     API.updateCandidateTestMarks(cnic, data, "pet")
       .then((res) => {
-        alert(res);
+        alert(res.data ? "Updated Successfully" : "Nothing updated")
       })
       .catch((err) => {
         alert(err);

@@ -56,10 +56,9 @@ function TestMarks({ type, testName, testLabel }) {
 
   const handleSubmit = () => {
     console.log("Handle Submit: ", marksData);
-    let marks
     API.updateCandidateTestMarks(cnic, {testResults: parseInt(marksData.marksObtained === 'Pass' ? '1' : marksData.marksObtained === 'Fail' ? '0': marksData.marksObtained)}, testName)
       .then((res) => {
-        alert(res);
+        alert(res.data ? "Updated Successfully" : "Nothing updated")
       })
       .catch((err) => {
         alert(err);

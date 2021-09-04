@@ -773,7 +773,7 @@ function Form() {
     API.getCandidateMedical(cnic)
       .then((res) => {
         console.log(res);
-        setInitialMedicalData(res.candidateMedicalData);
+        setInitialMedicalData(res.data);
         setIsCnicVerified(true);
       })
       .catch((err) => {
@@ -784,9 +784,9 @@ function Form() {
 
   const handleSubmit = () => {
     console.log("Handle Submit: ", initialMedicalData);
-    API.updateCandidateData(cnic, initialMedicalData, null)
+    API.updateCandidateData(cnic, {candidateMedicalData: initialMedicalData, medicallyFit: null})
     .then(res => {
-      alert(res.updated)
+      alert(res.data ? "Updated Successfully" : "Nothing updated")
     }).catch(err => {
       alert(err)
     })

@@ -549,52 +549,55 @@ export default class API {
   // };
 
   static getCandidateMedical = (cnic) => {
-    return new Promise((resolve, reject) => {
-      resolve({
-        candidateMedicalData: {
-          registrationNo: "123",
-          name: "john",
-          height: 20,
-          chest: {
-            chest0: 20,
-            chest1: 40,
-          },
-          weight: 60,
-          temperature: 20,
-          pulseRate: "20/30",
-          bloodPressure: {
-            bp0: 20,
-            bp1: 40,
-          },
-          medicalStatusUpdate: "Fit By RMO",
-          remarks: "new remarks",
-          commentsByRMO: "comments here",
-          addedDeformityList: [
-            {
-              id: 1,
-              label: "Lid Swelling",
-            },
-            {
-              id: 2,
-              label: "Bone Fracture",
-            },
-          ],
-          someVisibleDeformity: false,
-        },
-      });
-    });
+
+    // return axios.put(`${baseURL}/tests/${cnic}/summary`, data)
+    return axios.get(`${baseURL}/medical/${cnic}`)
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //     candidateMedicalData: {
+    //       registrationNo: "123",
+    //       name: "john",
+    //       height: 20,
+    //       chest: {
+    //         chest0: 20,
+    //         chest1: 40,
+    //       },
+    //       weight: 60,
+    //       temperature: 20,
+    //       pulseRate: "20/30",
+    //       bloodPressure: {
+    //         bp0: 20,
+    //         bp1: 40,
+    //       },
+    //       medicalStatusUpdate: "Fit By RMO",
+    //       remarks: "new remarks",
+    //       commentsByRMO: "comments here",
+    //       addedDeformityList: [
+    //         {
+    //           id: 1,
+    //           label: "Lid Swelling",
+    //         },
+    //         {
+    //           id: 2,
+    //           label: "Bone Fracture",
+    //         },
+    //       ],
+    //       someVisibleDeformity: false,
+    //     },
+    //   });
+    // });
   };
 
   // update candidate medical data with medical fit true or false
   static updateCandidateMedical = (
     cnic,
-    candidateMedicalData,
-    medicallyFit
+    data
   ) => {
-    return new Promise((resolve, reject) => {
-      resolve({
-        updated: "Successfully",
-      });
-    });
+    return axios.put(`${baseURL}/medical/${cnic}`, data)
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //     updated: "Successfully",
+    //   });
+    // });
   };
 }

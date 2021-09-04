@@ -309,7 +309,7 @@ function WoaWos() {
                       type="date"
                       name="dod"
                       placeholder="Provide DOD"
-                      value={candidateWoaWosData.dod.split("T")[0]}
+                      value={candidateWoaWosData.dod}
                       onChange={handleFieldsChange}
                     />
                   </Grid>

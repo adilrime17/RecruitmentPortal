@@ -64,7 +64,7 @@ function TestsToAppear() {
     API.updateCandidateTestsToAppear(cnic, {testsToAppear: testToAppear, chargesPaid})
       .then((res) => {
         console.log(res);
-        alert(res);
+        alert(res.data ? "Updated Successfully" : "Nothing updated")
       })
       .catch((err) => {
         alert(err);
