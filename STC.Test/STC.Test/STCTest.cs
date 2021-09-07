@@ -6,6 +6,7 @@ using STC.Core.EligibilityCheck;
 using STC.Core.Stores;
 using STC.Data;
 using STC.Data.Models;
+using System;
 using System.Collections.Generic;
 
 namespace STC.Test
@@ -26,7 +27,7 @@ namespace STC.Test
                 using (var transaction = dbContext.Database.BeginTransaction())
                 {
                     // data
-                    string cnic = "6110117400533";
+                    string cnic = "1234512345671";
 
                     // stores
                     CandidateStore candidateStore = new CandidateStore(dbContext, new EligibilityCheckService(dbContext));
@@ -167,7 +168,6 @@ namespace STC.Test
                             Dlh = true,
                             Hafiz = false,
                             Pet = true,
-                            Dlh = true,
                             Dit = false
                         },
                         ChargesPaid = true
@@ -179,7 +179,7 @@ namespace STC.Test
                     Assert.IsNotNull(testsSlipResponse);
 
                     // summary
-                    IList<CandidateSummaryResponse> candidateSummaryResponses = candidateStore.GetSummary();
+                    IList<CandidateSummaryResponse> candidateSummaryResponses = candidateStore.GetSummary(DateTime.Now);
                     Assert.IsTrue(candidateSummaryResponses.Count > 0);
 
                     CandidateTestDetailResponse candidateTestDetailResponse = testsStore.GetCandidateTestDetail(cnic, "intelligence");

@@ -18,6 +18,7 @@ namespace STC.Common.Requests
         public string MedicalStatusUpdate { get; set; }
         public string Remarks { get; set; }
         public string CommentsByRMO { get; set; }
+        public string Status { get; set; }
         public IList<SelectResponse> AddedDeformityList { get; set; }
     }
 

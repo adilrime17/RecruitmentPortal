@@ -31,42 +31,59 @@ namespace STC.Core.Stores
             }
             response.TestsToAppear = new TestsToAppear();
             response.TestsToAppear.RegistrationNo = candidate.CandidateHasCourses.First(x => x.CourseId == 1).RegistrationNumber;
-            foreach(CandidateTestScore test in candidateTestScore)
+            if(candidateTestScore.Count < 1)
             {
-                switch(test.Test.Name)
+                response.TestsToAppear.Personality = true;
+                response.TestsToAppear.Intelligence = true;
+                response.TestsToAppear.WrittenUnderMatric = candidate.MaxQualificationId == 1;
+                response.TestsToAppear.WrittenMatric = candidate.MaxQualificationId > 1;
+                response.TestsToAppear.Tech = false;
+                response.TestsToAppear.Clerk = false;
+                response.TestsToAppear.Dlh = candidate.DLH;
+                response.TestsToAppear.Dit = candidate.DIT;
+                response.TestsToAppear.Hafiz = candidate.Hafiz;
+                response.TestsToAppear.Pet = false;
+            }
+            else
+            {
+                foreach (CandidateTestScore test in candidateTestScore)
                 {
-                    case "Personality Test":
-                        response.TestsToAppear.Personality = true;
-                        break;
-                    case "Int Test":
-                        response.TestsToAppear.Intelligence = true;
-                        break;
-                    case "Written U/Matri":
-                        response.TestsToAppear.WrittenUnderMatric = candidate.MaxQualificationId == 1;
-                        break;
-                    case "Written test":
-                        response.TestsToAppear.WrittenMatric = candidate.MaxQualificationId > 1;
-                        break;
-                    case "Tech test":
-                        response.TestsToAppear.Tech = true;
-                        break;
-                    case "Clk Test":
-                        response.TestsToAppear.Clerk = true;
-                        break;
-                    case "DLH test":
-                        response.TestsToAppear.Dlh = candidate.DLH;
-                        break;
-                    case "Computer Diploma":
-                        response.TestsToAppear.Dit = candidate.DIT;
-                        break;
-                    case "Hifz Test":
-                        response.TestsToAppear.Hafiz = candidate.Hafiz;
-                        break;
-                    case "PET":
-                        response.TestsToAppear.Pet = true;
-                        break;
+                    switch (test.Test.Name)
+                    {
+                        case "Personality Test":
+                            response.TestsToAppear.Personality = true;
+                            break;
+                        case "Int Test":
+                            response.TestsToAppear.Intelligence = true;
+                            break;
+                        case "Written U/Matri":
+                            response.TestsToAppear.WrittenUnderMatric = true;
+                            break;
+                        case "Written test":
+                            response.TestsToAppear.WrittenMatric = true;
+                            break;
+                        case "Tech test":
+                            response.TestsToAppear.Tech = true;
+                            break;
+                        case "Clk Test":
+                            response.TestsToAppear.Clerk = true;
+                            break;
+                        case "DLH test":
+                            response.TestsToAppear.Dlh = true;
+                            break;
+                        case "Computer Diploma":
+                            response.TestsToAppear.Dit = true;
+                            break;
+                        case "Hifz Test":
+                            response.TestsToAppear.Hafiz = true;
+                            break;
+                        case "PET":
+                            response.TestsToAppear.Pet = true;
+                            break;
+                    }
                 }
             }
+
             CandidateTestCharge candidateTestCharge = candidate.CandidateTestCharges.FirstOrDefault(x => x.CourseId == 1);
             response.ChargesPaid = candidateTestCharge != null ? candidateTestCharge.ChargesPaid : false;
             return response;
@@ -307,7 +324,7 @@ namespace STC.Core.Stores
         public CandidateMarksSummaryResponse GetCandidateMarksSummary(string cnic)
         {
             CandidateMarksSummaryResponse response = new CandidateMarksSummaryResponse();
-            Candidate candidate = _dbContext.Candidates.Include(x => x.CandidateHasCourses).Include(x => x.District).First(x => x.Cnic == cnic);
+            Candidate candidate = _dbContext.Candidates.Include(x => x.CandidateMedicalInfos).Include(x => x.CandidateHasCourses).Include(x => x.District).First(x => x.Cnic == cnic);
             IList<CandidateTestScore> candidateTestScore = _dbContext.CandidateTestScores.Where(x => x.CandidateCnic == cnic && x.CourseId == 1).ToList();
             IList<CourseHasTest> courseHasTests = _dbContext.CourseHasTests.Where(x => x.CourseId == 1).ToList();
             response.RegistrationNo = candidate.CandidateHasCourses.First(x => x.CourseId == 1).RegistrationNumber;
@@ -350,11 +367,6 @@ namespace STC.Core.Stores
             if(obtainedMarks != null)
             {
                 response.Clerk = obtainedMarks.HasValue ? obtainedMarks.Value : 0;
-            }
-            obtainedMarks = candidateTestScore.FirstOrDefault(x => x.TestId == 5)?.ObtainedMarks;
-            if (obtainedMarks != null)
-            {
-                response.Tech = obtainedMarks.HasValue ? obtainedMarks.Value : 0;
             }
             obtainedMarks = candidateTestScore.FirstOrDefault(x => x.TestId == 5)?.ObtainedMarks;
             if (obtainedMarks != null)

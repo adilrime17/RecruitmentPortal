@@ -91,7 +91,9 @@ function Form() {
 
   const handleSubmit = (medicallyFit) => {
     console.log("Handle Submit: ", initialMedicalData);
-    API.updateCandidateData(cnic, {candidateMedicalData: initialMedicalData, medicallyFit: medicallyFit})
+    let initialCopy = initialMedicalData
+    initialCopy.temperature = parseFloat(initialCopy.temperature)
+    API.updateCandidateMedical(cnic, {candidateMedicalData: initialCopy, medicallyFit: medicallyFit})
     .then(res => {
       alert(res.data ? "Updated Successfully" : "Nothing updated")
     }).catch(err => {

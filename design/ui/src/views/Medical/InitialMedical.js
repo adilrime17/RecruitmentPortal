@@ -784,7 +784,16 @@ function Form() {
 
   const handleSubmit = () => {
     console.log("Handle Submit: ", initialMedicalData);
-    API.updateCandidateData(cnic, {candidateMedicalData: initialMedicalData, medicallyFit: null})
+    let initialCopy = initialMedicalData
+    initialCopy.temperature = parseFloat(initialCopy.temperature)
+    initialCopy.pulseRate = parseFloat(initialCopy.pulseRate)
+    initialCopy.bloodPressure.bp0 = parseInt(initialCopy.bloodPressure.bp0)
+    initialCopy.bloodPressure.bp1 = parseInt(initialCopy.bloodPressure.bp1)
+    initialCopy.addedDeformityList = initialCopy.addedDeformityList.map(x => {
+      x.id = "" + x.id;
+      return x;
+    })
+    API.updateCandidateMedical(cnic, {candidateMedicalData: initialCopy, medicallyFit: false})
     .then(res => {
       alert(res.data ? "Updated Successfully" : "Nothing updated")
     }).catch(err => {
