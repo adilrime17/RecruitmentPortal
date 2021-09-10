@@ -166,6 +166,7 @@ function WoaWos() {
                         name="cnic"
                         placeholder="Provide only numbers without dashes"
                         value={cnic}
+                        inputProps={{ maxLength: 13 }}
                         endAdornment={
                           <InputAdornment position="end">
                             {isCnicVerified ? (
@@ -309,7 +310,7 @@ function WoaWos() {
                       type="date"
                       name="dod"
                       placeholder="Provide DOD"
-                      value={candidateWoaWosData.dod}
+                      value={candidateWoaWosData.dod.split("T")[0]}
                       onChange={handleFieldsChange}
                     />
                   </Grid>

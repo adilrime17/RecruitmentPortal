@@ -24,7 +24,8 @@ import {
 import API from "../../utils/api";
 import CustomTextField from "components/CustomFields/CustomTextField";
 import CustomCheckboxField from "components/CustomFields/CustomCheckboxField";
-import CustomSelectField from "components/CustomFields/CustomSelectField";
+// import CustomSelectField from "components/CustomFields/CustomSelectField";
+import CustomSelectFieldWithId from "components/CustomFields/CustomSelectFieldWithId";
 import { useHistory } from 'react-router-dom'
 
 const useStyles = makeStyles(componentStyles);
@@ -233,6 +234,7 @@ function Form() {
                         name="cnic"
                         placeholder="Provide only numbers without dashes"
                         value={cnic}
+                        inputProps={{ maxLength: 13 }}
                         endAdornment={
                           <InputAdornment position="end">
                             {isCnicVerified ? (
@@ -344,7 +346,7 @@ function Form() {
                     />
                   </Grid>
                   <Grid item xs={12} lg={4}>
-                    <CustomSelectField
+                    <CustomSelectFieldWithId
                       label="District"
                       type="text"
                       name="district"
@@ -355,7 +357,7 @@ function Form() {
                     />
                   </Grid>
                   <Grid item xs={12} lg={4}>
-                    <CustomSelectField
+                    <CustomSelectFieldWithId
                       label="Class"
                       type="text"
                       name="locationClass"
@@ -373,12 +375,12 @@ function Form() {
                       type="date"
                       name="dateOfBirth"
                       placeholder="Provide Date of Birth"
-                      value={candidateData.dateOfBirth}
+                      value={candidateData.dateOfBirth.split("T")[0]}
                       onChange={handleFieldsChange}
                     />
                   </Grid>
                   <Grid item xs={12} lg={4}>
-                    <CustomSelectField
+                    <CustomSelectFieldWithId
                       label="Max Qualification"
                       type="text"
                       name="maxQualification"
