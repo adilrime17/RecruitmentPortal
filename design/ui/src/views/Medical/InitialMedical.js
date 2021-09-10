@@ -710,7 +710,7 @@ const medicalDeformityList = [
 ];
 
 const useStyles = makeStyles(componentStyles);
-const useStylesPopover = makeStyles((theme) => ({
+const useStylesPopover = makeStyles(() => ({
   root: {
     "& .MuiPopover-paper": {
       padding: "0px",

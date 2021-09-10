@@ -44,9 +44,9 @@ const StyledTableCell = withStyles((theme) => ({
 const useStyles = makeStyles(componentStyles);
 const cnicRegex = /^(\d{13})$/gm;
 
-function createData(test, dateTime, status) {
-  return { test, dateTime, status };
-}
+// function createData(test, dateTime, status) {
+//   return { test, dateTime, status };
+// }
 
 function PrintSlip() {
   const classes = useStyles();
