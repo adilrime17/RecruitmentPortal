@@ -80,6 +80,7 @@ namespace STC.Core.Stores
                 candidate.DLH = request.Dlh;
                 candidate.DIT = request.Dit;
                 candidate.Hafiz = request.Hafiz;
+                candidate.SvasXmatch = request.SvasXmatch;
                 CandidateMedicalInfo candidateMedicalInfo = new CandidateMedicalInfo();
                 candidateMedicalInfo.CourseId = 1;
                 candidateMedicalInfo.ChestIn = request.Chest.Chest0;
@@ -156,8 +157,8 @@ namespace STC.Core.Stores
                 Unit = candidate.CandidateArmyInfo?.Unit,
                 Corps = candidate.CandidateArmyInfo?.Corps,
                 Contact = candidate.GuardianPhone,
-                Dod = candidate.CandidateArmyInfo?.DOD.ToString()
-            };           
+                Dod = candidate.CandidateArmyInfo?.DOD?.ToUniversalTime().ToString("yyyy'-'MM'-'dd'T'HH':'mm':'ss'")
+        };           
         }
 
         public bool UpdateArmyData(string cnic, CandidateArmyDataRequest request)
