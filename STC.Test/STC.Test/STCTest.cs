@@ -182,8 +182,14 @@ namespace STC.Test
                     IList<CandidateSummaryResponse> candidateSummaryResponses = candidateStore.GetSummary();
                     Assert.IsTrue(candidateSummaryResponses.Count > 0);
 
+                    // intelligence
                     CandidateTestDetailResponse candidateTestDetailResponse = testsStore.GetCandidateTestDetail(cnic, "intelligence");
                     Assert.IsNotNull(candidateTestDetailResponse);
+
+                    bool updateCandidateTestDetailResponse = testsStore.UpdateCandidateTestDetail(cnic, "intelligence", new CandidateTestDetailRequest()
+                    {
+                        TestResults = 50
+                    });
 
                     transaction.Rollback();
                 }
