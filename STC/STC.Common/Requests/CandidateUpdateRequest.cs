@@ -24,6 +24,7 @@ namespace STC.Common.Requests
         public bool Dlh { get; set; }
         public bool Dit { get; set; }
         public bool Hafiz { get; set; }
+        public bool VisibleDeformity { get; set; }
         public float Height { get; set; }
         public ChestSize Chest { get; set; } = new ChestSize();
         public float Weight { get; set; }

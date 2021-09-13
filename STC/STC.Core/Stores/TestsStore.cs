@@ -412,18 +412,30 @@ namespace STC.Core.Stores
                 throw new Exception("candidate test does not exist");
             }
             candidateTestScore.ObtainedMarks = request.TestResults;
-
-            PhysicalTestScore physicalTestScore = new PhysicalTestScore()
+            PhysicalTestScore physicalTestScore = _dbContext.PhysicalTestScores.FirstOrDefault(x => x.CandidateCnic == cnic && x.CourseId == 1);
+            if(physicalTestScore == null)
             {
-                CandidateCnic = cnic,
-                CourseId = 1,
-                OneMile = request.OneMile,
-                PullUp = request.PullUp,
-                PushUp = request.PushUp,
-                Crunches = request.Crunches,
-                Ditch = request.Ditch
-            };
-            _dbContext.PhysicalTestScores.Add(physicalTestScore);
+                physicalTestScore = new PhysicalTestScore()
+                {
+                    CandidateCnic = cnic,
+                    CourseId = 1,
+                    OneMile = request.OneMile,
+                    PullUp = request.PullUp,
+                    PushUp = request.PushUp,
+                    Crunches = request.Crunches,
+                    Ditch = request.Ditch
+                };
+                _dbContext.PhysicalTestScores.Add(physicalTestScore);
+            }
+            else
+            {
+                physicalTestScore.OneMile = request.OneMile;
+                physicalTestScore.PullUp = request.PullUp;
+                physicalTestScore.PushUp = request.PushUp;
+                physicalTestScore.Crunches = request.Crunches;
+                physicalTestScore.Ditch = request.Ditch;
+            }
+
             return _dbContext.SaveChanges() > 0;
         }
     }

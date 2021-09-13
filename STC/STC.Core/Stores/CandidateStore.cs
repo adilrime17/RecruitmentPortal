@@ -54,7 +54,8 @@ namespace STC.Core.Stores
                         Chest0 = x.CandidateMedicalInfos.OrderBy(y => y.Id).LastOrDefault().ChestIn,
                         Chest1 = x.CandidateMedicalInfos.OrderBy(y => y.Id).LastOrDefault().ChestOut
                     },
-                    Weight = x.CandidateMedicalInfos.OrderBy(y => y.Id).LastOrDefault().Weight
+                    Weight = x.CandidateMedicalInfos.OrderBy(y => y.Id).LastOrDefault().Weight,
+                    VisibleDeformity = x.CandidateMedicalInfos.OrderBy(y => y.Id).LastOrDefault().VisibleDeformity
                 })
                 .FirstOrDefault();
         }
@@ -87,6 +88,7 @@ namespace STC.Core.Stores
                 candidateMedicalInfo.ChestOut = request.Chest.Chest1;
                 candidateMedicalInfo.Weight = request.Weight;
                 candidateMedicalInfo.Height = request.Height;
+                candidateMedicalInfo.VisibleDeformity = request.VisibleDeformity;
                 candidate.CandidateMedicalInfos.Add(candidateMedicalInfo);
                 _dbContext.Candidates.Add(candidate);
                 _dbContext.SaveChanges();
@@ -139,6 +141,7 @@ namespace STC.Core.Stores
             candidateMedicalInfo.ChestOut = request.Chest.Chest1;
             candidateMedicalInfo.Weight = request.Weight;
             candidateMedicalInfo.Height = request.Height;
+            candidateMedicalInfo.VisibleDeformity = request.VisibleDeformity;
             return _dbContext.SaveChanges() > 0;
         }
 
