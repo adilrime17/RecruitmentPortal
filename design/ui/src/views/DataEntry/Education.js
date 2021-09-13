@@ -63,10 +63,15 @@ function Education() {
     maxQualification: "",
     candidateEducationalData: [],
   });
-  const [qualificationLevel, setQualificationLevel] = useState([]);
-  const [qualificationDegree, setQualificationDegree] = useState([])
-  const [qualificationMajors, setQualificationMajors] = useState([]);
-  const [qualificationMajorsSubjects, setQualificationMajorsSubjects] = useState([]);
+  // const [qualificationLevel, setQualificationLevel] = useState(["U/ Matric", "SSC", "HSSC", "Bachler", "Master"]);
+  // const [qualificationDegree, setQualificationDegree] = useState(["5th", "6th", "7th", "8th", "9th", "10th", "FSc", "ICS", "I.Com", "D.Com", "FA", "DAE", "BA", "BSc", "B.Com", "BBA", "BCS", "MA", "MSc", "BS", "BSCS", "MBA", "M.Com"])
+  // const [qualificationMajors, setQualificationMajors] = useState(["Science", "Arts", "PM", "PE", "Electrical", "Electronics", "Mech", "Civ", "Refrigerator", "IT"]);
+  // const [qualificationMajorsSubjects, setQualificationMajorsSubjects] = useState(["CS", "Bio", "EW", "Pol", "Tech"]);
+
+  const qualificationLevel = ["U/ Matric", "SSC", "HSSC", "Bachler", "Master"]
+  const qualificationDegree = ["5th", "6th", "7th", "8th", "9th", "10th", "FSc", "ICS", "I.COM", "D.Com", "FA", "DAE", "BA", "BSc", "B.Com", "BBA", "BCS", "MA", "MSc", "BS", "BSCS", "MBA", "M.Com"]
+  const qualificationMajors = ["Science", "Arts", "PM", "PE", "Electrical", "Electronics", "Mech", "Civ", "Refrigerator", "IT"]
+  const qualificationMajorsSubjects = ["CS", "Bio", "EW", "Pol", "Tech"]
   
 
   // const [rows, setRows] = useState([])
@@ -82,7 +87,7 @@ function Education() {
     Promise.all([
       
       API.getCandidateEducationalData(cnic),
-      API.getQualificationLevel(),
+      // API.getQualificationLevel(),
       // API.getQualificationDegree(),
       // API.getQualificationMajorList(),
       // API.getQualificationMajorSubjectList()
@@ -96,7 +101,7 @@ function Education() {
           maxQualification: "",
           candidateEducationalData: []
         });
-        setQualificationLevel(res[1].data);
+        // setQualificationLevel(res[1].data);
         // setQualificationDegree(res[2].data);
         // setQualificationMajors(res[3].data);
         // setQualificationMajorsSubjects(res[4].data);
@@ -115,7 +120,13 @@ function Education() {
     API.updateCandidateEducationalData(cnic, candidateEducationData.candidateEducationalData)
       .then((res) => {
         console.log(res);
-        alert(res);
+        alert(res.data ? "Updated Successfully" : "Nothing updated")
+        // setCandidateEducationData({
+        //   registrationNo: "",
+        //   ncse: false,
+        //   maxQualification: "",
+        //   candidateEducationalData: []
+        // });
       })
       .catch((err) => {
         alert(err);
@@ -139,38 +150,38 @@ function Education() {
 
   const handleTableEducationData = (index, key, value) => {
 
-    if(key === 'level') {
-      let id = qualificationLevel.find(x => x.label === value).id
-      console.log("Hello world: ", id);
-      API.getQualificationDegree(id)
-      .then(res => {
-        setQualificationDegree(res.data);
-      })
-      .catch(err => {
-        alert(err)
-      })
-    } else if(key === 'degree') {
-      let id = qualificationDegree.find(x => x.label === value).id
-      console.log("Hello world: ", id);
-      API.getQualificationMajorList(id)
-      .then(res => {
-        console.log(res);
-        setQualificationMajors(res.data);
-      })
-      .catch(err => {
-        alert(err)
-      })
-    } else if(key === 'major') {
-      let id = qualificationMajors.find(x => x.label === value).id
-      API.getQualificationMajorSubjectList(id)
-      .then(res => {
-        console.log(res);
-        setQualificationMajorsSubjects(res.data);
-      })
-      .catch(err => {
-        alert(err)
-      })
-    }
+    // if(key === 'level') {
+    //   let id = qualificationLevel.find(x => x.label === value).id
+    //   console.log("Hello world: ", id);
+    //   API.getQualificationDegree(id)
+    //   .then(res => {
+    //     setQualificationDegree(res.data);
+    //   })
+    //   .catch(err => {
+    //     alert(err)
+    //   })
+    // } else if(key === 'degree') {
+    //   let id = qualificationDegree.find(x => x.label === value).id
+    //   console.log("Hello world: ", id);
+    //   API.getQualificationMajorList(id)
+    //   .then(res => {
+    //     console.log(res);
+    //     setQualificationMajors(res.data);
+    //   })
+    //   .catch(err => {
+    //     alert(err)
+    //   })
+    // } else if(key === 'major') {
+    //   let id = qualificationMajors.find(x => x.label === value).id
+    //   API.getQualificationMajorSubjectList(id)
+    //   .then(res => {
+    //     console.log(res);
+    //     setQualificationMajorsSubjects(res.data);
+    //   })
+    //   .catch(err => {
+    //     alert(err)
+    //   })
+    // }
 
 
     let temp = candidateEducationData.candidateEducationalData;
@@ -260,6 +271,7 @@ function Education() {
                         name="cnic"
                         placeholder="Provide only numbers without dashes"
                         value={cnic}
+                        inputProps={{ maxLength: 13 }}
                         endAdornment={
                           <InputAdornment position="end">
                             {isCnicVerified ? (
@@ -415,10 +427,10 @@ function Education() {
                                     >
                                       {qualificationLevel.map((option) => (
                                         <MenuItem
-                                          key={option.id}
-                                          value={option.label}
+                                          key={option}
+                                          value={option}
                                         >
-                                          {option.label}
+                                          {option}
                                         </MenuItem>
                                       ))}
                                     </Box>
@@ -436,7 +448,7 @@ function Education() {
                                       // paddingRight="0.75rem"
                                       component={Select}
                                       autoComplete="off"
-                                      displayEmpty
+                                      // displayEmpty
                                       type="text"
                                       name="degree"
                                       value={row.degree}
@@ -444,10 +456,10 @@ function Education() {
                                     >
                                       {qualificationDegree.map((option) => (
                                         <MenuItem
-                                          key={option.id}
-                                          value={option.label}
+                                          key={option}
+                                          value={option}
                                         >
-                                          {option.label}
+                                          {option}
                                         </MenuItem>
                                       ))}
                                     </Box>
@@ -473,10 +485,10 @@ function Education() {
                                     >
                                       {qualificationMajors.map((option) => (
                                         <MenuItem
-                                          key={option.id}
-                                          value={option.label}
+                                          key={option}
+                                          value={option}
                                         >
-                                          {option.label}
+                                          {option}
                                         </MenuItem>
                                       ))}
                                     </Box>
@@ -503,10 +515,10 @@ function Education() {
                                       {qualificationMajorsSubjects.map(
                                         (option) => (
                                           <MenuItem
-                                            key={option.id}
-                                            value={option.label}
+                                            key={option}
+                                            value={option}
                                           >
-                                            {option.label}
+                                            {option}
                                           </MenuItem>
                                         )
                                       )}
@@ -519,7 +531,7 @@ function Education() {
                                     style={{ width: "70%" }}
                                     name="obtained"
                                     value={row.obtained}
-                                    onChange={(e) => handleTableEducationData(index, e.target.name, e.target.value)}
+                                    onChange={(e) => handleTableEducationData(index, e.target.name, parseInt(e.target.value))}
                                     variant="outlined"
                                   />
                                 </TableCell>
@@ -529,11 +541,12 @@ function Education() {
                                     style={{ width: "70%" }}
                                     name="total"
                                     value={row.total}
-                                    onChange={(e) => handleTableEducationData(index, e.target.name, e.target.value)}
+                                    onChange={(e) => handleTableEducationData(index, e.target.name, parseInt(e.target.value))}
                                     variant="outlined"
                                   />
                                 </TableCell>
                                 <TableCell align="center">
+                                  {row.obtained/row.total ? row.obtained/row.total > 0.90 ? 'A' : row.obtained/row.total > 0.80 ? 'B' : row.obtained/row.total > 0.70 ? 'C' : 'D' : ''}
                                   {row.grade}
                                 </TableCell>
                               </TableRow>

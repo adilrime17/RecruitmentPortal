@@ -23,7 +23,7 @@ import componentStyles from "assets/theme/views/admin/profile.js";
 import API from "../../utils/api";
 import CustomTextField from "components/CustomFields/CustomTextField";
 import CustomCheckboxField from "components/CustomFields/CustomCheckboxField";
-import CustomSelectField from "components/CustomFields/CustomSelectField";
+import CustomSelectFieldWithId from "components/CustomFields/CustomSelectFieldWithId";
 
 const useStyles = makeStyles(componentStyles);
 const cnicRegex = /^(\d{13})$/gm;
@@ -102,7 +102,7 @@ function PersonalInformation() {
     console.log("Handle Submit: ", candidateData);
     API.updateCandidateData(cnic, {...candidateData, cnic})
     .then(res => {
-      alert(res)
+      alert(res.data ? "Updated Successfully" : "Nothing updated")
     }).catch(err => {
       alert(err)
     })
@@ -210,6 +210,7 @@ function PersonalInformation() {
                         name="cnic"
                         placeholder="Provide only numbers without dashes"
                         value={cnic}
+                        inputProps={{ maxLength: 13 }}
                         endAdornment={
                           <InputAdornment position="end">
                             {isCnicVerified ? (
@@ -336,7 +337,7 @@ function PersonalInformation() {
                     />
                   </Grid>
                   <Grid item xs={12} lg={4}>
-                    <CustomSelectField
+                    <CustomSelectFieldWithId
                       label="District"
                       type="text"
                       name="district"
@@ -347,7 +348,7 @@ function PersonalInformation() {
                     />
                   </Grid>
                   <Grid item xs={12} lg={4}>
-                    <CustomSelectField
+                    <CustomSelectFieldWithId
                       label="Class"
                       type="text"
                       name="locationClass"
@@ -366,7 +367,7 @@ function PersonalInformation() {
                       type="date"
                       name="dateOfBirth"
                       placeholder="Provide Date of Birth"
-                      value={candidateData.dateOfBirth}
+                      value={candidateData.dateOfBirth.split("T")[0]}
                       onChange={handleFieldsChange}
                     />
                   </Grid>
@@ -394,7 +395,7 @@ function PersonalInformation() {
 
                 <Grid container>
                   <Grid item xs={12} lg={4}>
-                    <CustomSelectField
+                    <CustomSelectFieldWithId
                       label="Max Qualification"
                       type="text"
                       name="maxQualification"

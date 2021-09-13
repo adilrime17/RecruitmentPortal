@@ -40,6 +40,8 @@ namespace STC.Data.Models
         public int? BPLow { get; set; }
         [Column("b_p_high")]
         public int? BPHigh { get; set; }
+        [Column("deformity_list", TypeName = "text")]
+        public string DeformityList { get; set; }
         [Column("status_update")]
         [StringLength(250)]
         public string StatusUpdate { get; set; }

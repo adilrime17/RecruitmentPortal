@@ -44,9 +44,9 @@ const StyledTableCell = withStyles((theme) => ({
 const useStyles = makeStyles(componentStyles);
 const cnicRegex = /^(\d{13})$/gm;
 
-function createData(test, dateTime, status) {
-  return { test, dateTime, status };
-}
+// function createData(test, dateTime, status) {
+//   return { test, dateTime, status };
+// }
 
 function PrintSlip() {
   const classes = useStyles();
@@ -151,6 +151,7 @@ function PrintSlip() {
                         name="cnic"
                         placeholder="Provide only numbers without dashes"
                         value={cnic}
+                        inputProps={{ maxLength: 13 }}
                         endAdornment={
                           <InputAdornment position="end">
                             {isCnicVerified ? (

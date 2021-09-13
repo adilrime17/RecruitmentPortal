@@ -35,13 +35,13 @@ function WoaWos() {
     registrationNo: "",
     woa: false,
     wos: false,
-    armyNo: "123",
-    name: "john",
-    fatherName: "doe",
-    unit: "1",
-    corps: "2",
-    contact: "123123123",
-    dod: "22",
+    armyNo: "",
+    name: "",
+    fatherName: "",
+    unit: "",
+    corps: "",
+    contact: "",
+    dod: "",
   });
 
   const handleCnicVerify = () => {
@@ -61,7 +61,7 @@ function WoaWos() {
     API.updateCandidateWoaWosData(cnic, candidateWoaWosData)
       .then((res) => {
         console.log(res);
-        alert(res);
+        alert(res.data ? "Updated Successfully" : "Nothing updated")
       })
       .catch((err) => {
         alert(err);
@@ -166,6 +166,7 @@ function WoaWos() {
                         name="cnic"
                         placeholder="Provide only numbers without dashes"
                         value={cnic}
+                        inputProps={{ maxLength: 13 }}
                         endAdornment={
                           <InputAdornment position="end">
                             {isCnicVerified ? (
@@ -306,10 +307,10 @@ function WoaWos() {
                   <Grid item xs={12} lg={4}>
                     <CustomTextField
                       label="DOD"
-                      type="text"
+                      type="date"
                       name="dod"
                       placeholder="Provide DOD"
-                      value={candidateWoaWosData.dod}
+                      value={candidateWoaWosData.dod.split("T")[0]}
                       onChange={handleFieldsChange}
                     />
                   </Grid>

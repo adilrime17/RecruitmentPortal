@@ -32,8 +32,8 @@ function CustomSelectField({label, type, name, menuList, placeholder, value, onC
 				>
 					{menuList.map(
 						(option) => (
-							<MenuItem key={option} value={option}>
-								{option}
+							<MenuItem key={option.id} value={option.label}>
+								{option.label}
 							</MenuItem>
 						)
 					)}

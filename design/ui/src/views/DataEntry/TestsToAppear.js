@@ -54,17 +54,17 @@ function TestsToAppear() {
         setIsCnicVerified(true);
       })
       .catch((err) => {
-        console.log(err);
+        console.error(err.message);
         alert("Some error in handleCnicVerify Promise test to appear data");
       });
   };
 
   const handleSubmit = () => {
-    console.log("Handle Submit: ", {testToAppear, chargesPaid});
-    API.updateCandidateTestsToAppear(cnic, {testToAppear, chargesPaid})
+    console.log("Handle Submit: ", {testsToAppear: testToAppear, chargesPaid});
+    API.updateCandidateTestsToAppear(cnic, {testsToAppear: testToAppear, chargesPaid})
       .then((res) => {
         console.log(res);
-        alert(res);
+        alert(res.data ? "Updated Successfully" : "Nothing updated")
       })
       .catch((err) => {
         alert(err);
@@ -155,6 +155,7 @@ function TestsToAppear() {
                         name="cnic"
                         placeholder="Provide only numbers without dashes"
                         value={cnic}
+                        inputProps={{ maxLength: 13 }}
                         endAdornment={
                           <InputAdornment position="end">
                             {isCnicVerified ? (

@@ -493,6 +493,7 @@ CREATE TABLE IF NOT EXISTS `stc`.`candidate_medical_info` (
   `pulse_rate` FLOAT NULL,
   `b_p_low` INT NULL,
   `b_p_high` INT NULL,
+  `deformity_list` TEXT NULL,
   `status_update` VARCHAR(250) NULL,
   `remarks` VARCHAR(500) NULL,
   `comments_by_rmo` VARCHAR(500) NULL,

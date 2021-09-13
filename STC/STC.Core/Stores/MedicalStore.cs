@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json;
 
 namespace STC.Core.Stores
 {
@@ -43,6 +44,8 @@ namespace STC.Core.Stores
             response.MedicalStatusUpdate = candidateMedicalInfo.FinalStatus;
             response.Remarks = candidateMedicalInfo.Remarks;
             response.CommentsByRMO = candidateMedicalInfo.CommentsByRmo;
+            response.Status = candidateMedicalInfo.StatusUpdate;
+            response.AddedDeformityList = candidateMedicalInfo.DeformityList != null ? JsonSerializer.Deserialize<List<SelectResponse>>(candidateMedicalInfo.DeformityList) : null;
             return response;
         }
 
@@ -50,6 +53,8 @@ namespace STC.Core.Stores
         {
             CandidateMedicalInfo candidateMedicalInfo = new CandidateMedicalInfo()
             {
+                CandidateCnic = cnic,
+                CourseId = 1,
                 Height = request.CandidateMedicalData.Height,
                 ChestIn = request.CandidateMedicalData.Chest.Chest0,
                 ChestOut = request.CandidateMedicalData.Chest.Chest1,
@@ -58,9 +63,11 @@ namespace STC.Core.Stores
                 PulseRate = request.CandidateMedicalData.PulseRate,
                 BPLow = request.CandidateMedicalData.BloodPressure.Bp0,
                 BPHigh = request.CandidateMedicalData.BloodPressure.Bp1,
-                FinalStatus = request.CandidateMedicalData.MedicalStatusUpdate,
+                FinalStatus = request.MedicallyFit ? "Fit" : "Unfit",
                 Remarks = request.CandidateMedicalData.Remarks,
-                CommentsByRmo = request.CandidateMedicalData.CommentsByRMO
+                CommentsByRmo = request.CandidateMedicalData.CommentsByRMO,
+                StatusUpdate = request.CandidateMedicalData.Status,
+                DeformityList = JsonSerializer.Serialize(request.CandidateMedicalData.AddedDeformityList)
             };
             _dbContext.CandidateMedicalInfos.Add(candidateMedicalInfo);
             _dbContext.SaveChanges();

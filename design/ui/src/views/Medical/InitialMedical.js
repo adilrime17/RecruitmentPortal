@@ -710,7 +710,7 @@ const medicalDeformityList = [
 ];
 
 const useStyles = makeStyles(componentStyles);
-const useStylesPopover = makeStyles((theme) => ({
+const useStylesPopover = makeStyles(() => ({
   root: {
     "& .MuiPopover-paper": {
       padding: "0px",
@@ -728,33 +728,24 @@ function Form() {
   const [isCnicVerified, setIsCnicVerified] = useState(false);
   const [checkCnicFormat, setCheckCnicFormat] = useState(false);
   const [initialMedicalData, setInitialMedicalData] = useState({
-    registrationNo: "123",
-    name: "john",
-    height: 20,
+    registrationNo: "",
+    name: "",
+    height: 0,
     chest: {
-      chest0: 20,
-      chest1: 40,
+      chest0: 0,
+      chest1: 0,
     },
-    weight: 60,
-    temperature: 20,
-    pulseRate: "20/30",
+    weight: 0,
+    temperature: 0,
+    pulseRate: "0/0",
     bloodPressure: {
-      bp0: 20,
-      bp1: 40,
+      bp0: 0,
+      bp1: 0,
     },
-    medicalStatusUpdate: "Fit By RMO",
-    remarks: "new remarks",
-    commentsByRMO: "comments here",
-    addedDeformityList: [
-      {
-        id: 1,
-        label: "Lid Swelling",
-      },
-      {
-        id: 2,
-        label: "Bone Fracture",
-      },
-    ],
+    medicalStatusUpdate: "",
+    remarks: "",
+    commentsByRMO: "",
+    addedDeformityList: [],
     someVisibleDeformity: false,
   });
   const [addedDeformityList, setAddedDeformityList] = useState([]);
@@ -773,8 +764,9 @@ function Form() {
     API.getCandidateMedical(cnic)
       .then((res) => {
         console.log(res);
-        setInitialMedicalData(res.candidateMedicalData);
+        setInitialMedicalData(res.data);
         setIsCnicVerified(true);
+        setAddedDeformityList(res.data.addedDeformityList ? res.data.addedDeformityList : [])
       })
       .catch((err) => {
         console.log(err);
@@ -784,9 +776,18 @@ function Form() {
 
   const handleSubmit = () => {
     console.log("Handle Submit: ", initialMedicalData);
-    API.updateCandidateData(cnic, initialMedicalData, null)
+    let initialCopy = initialMedicalData
+    initialCopy.temperature = parseFloat(initialCopy.temperature)
+    initialCopy.pulseRate = parseFloat(initialCopy.pulseRate)
+    initialCopy.bloodPressure.bp0 = parseInt(initialCopy.bloodPressure.bp0)
+    initialCopy.bloodPressure.bp1 = parseInt(initialCopy.bloodPressure.bp1)
+    initialCopy.addedDeformityList = initialCopy.addedDeformityList ? initialCopy.addedDeformityList.map(x => {
+      x.id = "" + x.id;
+      return x;
+    }) : []
+    API.updateCandidateMedical(cnic, {candidateMedicalData: initialCopy, medicallyFit: false})
     .then(res => {
-      alert(res.updated)
+      alert(res.data ? "Updated Successfully" : "Nothing updated")
     }).catch(err => {
       alert(err)
     })
@@ -908,6 +909,7 @@ function Form() {
                         name="cnic"
                         placeholder="Provide only numbers without dashes"
                         value={cnic}
+                        inputProps={{ maxLength: 13 }}
                         endAdornment={
                           <InputAdornment position="end">
                             {isCnicVerified ? (
@@ -1118,15 +1120,8 @@ function Form() {
                           label="Status Update"
                           type="text"
                           name="status"
-                          placeholder="Status Update"
-                          menuList={[
-                            {id: 0, label: "FIT by RMO"},
-                            {id: 1, label: "UNFIT By RMO (Reason fetched from template)"},
-                            {id: 2, label: "TUF (Reason)"},
-                            {id: 3, label: "Referred to Specialist (Incl type of specialist from referrals)"},
-                            {id: 4, label: "UNFIT by ______ Specialist in __________."},
-                          ]}
-                          value={initialMedicalData.status}
+                          menuList={["FIT by RMO", "UNFIT By RMO (Reason fetched from template)", "TUF (Reason)", "Referred to Specialist (Incl type of specialist from referrals)", "UNFIT by ______ Specialist in __________."]}
+                          value={initialMedicalData.status ? initialMedicalData.status : ""}
                           onChange={handleFieldsChange}
                         />
                 </Grid>

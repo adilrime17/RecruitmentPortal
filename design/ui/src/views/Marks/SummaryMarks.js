@@ -148,6 +148,7 @@ function SummaryMarks() {
                         name="cnic"
                         placeholder="Provide only numbers without dashes"
                         value={cnic}
+                        inputProps={{ maxLength: 13 }}
                         endAdornment={
                           <InputAdornment position="end">
                             {isCnicVerified ? (
@@ -245,10 +246,7 @@ function SummaryMarks() {
                         type="text"
                         name="personality"
                         placeholder="Suitable/Unsuitable"
-                        menuList={[
-                          { id: 0, label: "Suitable" },
-                          { id: 1, label: "Unsuitable" },
-                        ]}
+                        menuList={["Suitable", "Unsuitable"]}
                         value={summaryMarks.personality}
                         onChange={handleFieldsChange}
                       />
@@ -290,10 +288,7 @@ function SummaryMarks() {
                         type="text"
                         name="dlh"
                         placeholder="Pass/Fail"
-                        menuList={[
-                          { id: 0, label: "Pass" },
-                          { id: 1, label: "Fail" },
-                        ]}
+                        menuList={["Pass","Fail"]}
                         value={summaryMarks.dlh}
                         onChange={handleFieldsChange}
                       />
@@ -304,10 +299,7 @@ function SummaryMarks() {
                         type="text"
                         name="dit"
                         placeholder="Pass/Fail"
-                        menuList={[
-                          { id: 0, label: "Pass" },
-                          { id: 1, label: "Fail" },
-                        ]}
+                        menuList={["Pass","Fail"]}
                         value={summaryMarks.dit}
                         onChange={handleFieldsChange}
                       />
@@ -318,10 +310,7 @@ function SummaryMarks() {
                         type="text"
                         name="pet"
                         placeholder="Pass/Fail"
-                        menuList={[
-                          { id: 0, label: "Pass" },
-                          { id: 1, label: "Fail" },
-                        ]}
+                        menuList={["Pass", "Fail"]}
                         value={summaryMarks.pet}
                         onChange={handleFieldsChange}
                       />
@@ -351,10 +340,7 @@ function SummaryMarks() {
                         type="text"
                         name="woswoa"
                         placeholder="Pass/Fail"
-                        menuList={[
-                          { id: 0, label: "Verified" },
-                          { id: 1, label: "Not Verified" },
-                        ]}
+                        menuList={["Verified", "Unverified"]}
                         value={summaryMarks.woswoa}
                         onChange={handleFieldsChange}
                       />
@@ -385,10 +371,7 @@ function SummaryMarks() {
                         type="text"
                         name="hafiz"
                         placeholder="Pass/Fail"
-                        menuList={[
-                          { id: 0, label: "Pass" },
-                          { id: 1, label: "Fail" },
-                        ]}
+                        menuList={["Pass", "Fail"]}
                         value={summaryMarks.hafiz}
                         onChange={handleFieldsChange}
                       />
@@ -399,11 +382,7 @@ function SummaryMarks() {
                         type="text"
                         name="medicalStatus"
                         placeholder="Med Status"
-                        menuList={[
-                          { id: 0, label: "MUF" },
-                          { id: 1, label: "FIT" },
-                          { id: 2, label: "Ref" },
-                        ]}
+                        menuList={["MUF", "Fit", "Ref", "Unfit"]}
                         value={summaryMarks.medicalStatus}
                         onChange={handleFieldsChange}
                       />

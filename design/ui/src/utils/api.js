@@ -1,9 +1,10 @@
 import axios from 'axios'
-const baseURL =  "http://192.168.15.77:5000/api"
-// const baseURL =  "http://localhost:5000/api"
+// const baseURL =  "http://192.168.15.77:5000/api"
+const baseURL =  "http://localhost:5000/api"
 
 export default class API {
   static getAllDistricts = () => {
+    // return axios.get(`${baseURL}/district`)
     return axios.get(`${baseURL}/district`)
     // return new Promise((resolve, reject) => {
     //   resolve({
@@ -23,6 +24,7 @@ export default class API {
 
   // get
   static getAllLocationClasses = () => {
+    // return axios.get(`${baseURL}/locationclass`)
     return axios.get(`${baseURL}/locationclass`)
     // return new Promise((resolve, reject) => {
     //   resolve({
@@ -110,7 +112,7 @@ export default class API {
 
   // post - for personal data page
   static updateCandidateData = (cnic, data) => {
-    return axios.put(`${baseURL}/candidate​/${cnic}`, data)
+    return axios.put(`${baseURL}/candidate/${cnic}`, data)
     // return new Promise((resolve, reject) => {
     //   resolve({
     //     updated: "Successfully",
@@ -120,108 +122,108 @@ export default class API {
 
 
   static getCandidateEducationalData = (cnic) => {
-    // return axios.get(`${baseURL}​/education​/candidate​/${cnic}`)
-    return new Promise((resolve, reject) => {
-      resolve({
-      data: {
-        registrationNo: "sp121212-12",
-        ncse: false,
-        maxQualification: "Bachelor",
-        candidateEducationalData: [
-          {
-            level: "Matric",
-            degree: 'hhhh',
-            major: "S",
-            subject: "S",
-            obtained: 80,
-            total: 100,
-            grade: "A",
-          },
-          {
-            level: "Matric",
-            degree: 'hhhh',
-            major: "S",
-            subject: "S",
-            obtained: 80,
-            total: 100,
-            grade: "A",
-          },
-        ],
-      }});
-    });
+    return axios.get(`${baseURL}/education/candidate/${cnic}`)
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //   data: {
+    //     registrationNo: "sp121212-12",
+    //     ncse: false,
+    //     maxQualification: "Bachelor",
+    //     candidateEducationalData: [
+    //       {
+    //         level: "Matric",
+    //         degree: 'hhhh',
+    //         major: "S",
+    //         subject: "S",
+    //         obtained: 80,
+    //         total: 100,
+    //         grade: "A",
+    //       },
+    //       {
+    //         level: "Matric",
+    //         degree: 'hhhh',
+    //         major: "S",
+    //         subject: "S",
+    //         obtained: 80,
+    //         total: 100,
+    //         grade: "A",
+    //       },
+    //     ],
+    //   }});
+    // });
   };
 
 
   static getQualificationLevel = () => {
-    // return axios.get(`${baseURL}/education/level`)
-    return new Promise((resolve, reject) => {
-      resolve({
-        data: [
-          {
-            id: 0,
-            label: "Under Matric",
-          },
-          {
-            id: 1,
-            label: "Matric",
-          },
-        ],
-      });
-    });
+    return axios.get(`${baseURL}/education/level`)
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //     data: [
+    //       {
+    //         id: 0,
+    //         label: "Under Matric",
+    //       },
+    //       {
+    //         id: 1,
+    //         label: "Matric",
+    //       },
+    //     ],
+    //   });
+    // });
   };
 
   static getQualificationDegree = (id) => {
-    // return axios.get(`${baseURL}/education/level/${id}/degree`)
-    return new Promise((resolve, reject) => {
-      resolve({
-        data: [
-          {
-            id: 0,
-            label: "hello",
-          },
-          {
-            id: 1,
-            label: "world",
-          },
-        ],
-      });
-    });
+    return axios.get(`${baseURL}/education/level/${id}/degree`)
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //     data: [
+    //       {
+    //         id: 0,
+    //         label: "hello",
+    //       },
+    //       {
+    //         id: 1,
+    //         label: "world",
+    //       },
+    //     ],
+    //   });
+    // });
   };
 
   static getQualificationMajorList = (id) => {
-    // return axios.get(`${baseURL}/education/level/${id}/major`)
-    return new Promise((resolve, reject) => {
-      resolve({
-        data: [
-          {
-            id: 0,
-            label: "Science",
-          },
-          {
-            id: 1,
-            label: "Technology",
-          },
-        ],
-      });
-    });
+    return axios.get(`${baseURL}/education/level/${id}/major`)
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //     data: [
+    //       {
+    //         id: 0,
+    //         label: "Science",
+    //       },
+    //       {
+    //         id: 1,
+    //         label: "Technology",
+    //       },
+    //     ],
+    //   });
+    // });
   };
 
   static getQualificationMajorSubjectList = (id) => {
-    // return axios.get(`${baseURL}/education/major/${id}/subject`)
-    return new Promise((resolve, reject) => {
-      resolve({
-        data: [
-          {
-            id: 0,
-            label: "Science",
-          },
-          {
-            id: 1,
-            label: "Technology",
-          },
-        ],
-      });
-    });
+    return axios.get(`${baseURL}/education/major/${id}/subject`)
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //     data: [
+    //       {
+    //         id: 0,
+    //         label: "Science",
+    //       },
+    //       {
+    //         id: 1,
+    //         label: "Technology",
+    //       },
+    //     ],
+    //   });
+    // });
   };
 
   
@@ -238,124 +240,128 @@ export default class API {
   };
 
   static getCandidateWoaWosData = (cnic) => {
-    // return axios.get(`${baseURL}
-    // ​/candidate​/${cnic}​/army_data`)
-    return new Promise((resolve, reject) => {
-      resolve({
-        data: {
-          registrationNo: "sp121212-12",
-          woa: false,
-          wos: false,
-          armyNo: "123",
-          name: "john",
-          fatherName: "doe",
-          unit: "1",
-          corps: "2",
-          contact: "123123123",
-          dod: "22",
-        },
-      });
-    });
+    // return axios.get(`${baseURL}​/candidate​/${cnic}​/army_data`)
+    return axios.get(`${baseURL}/candidate/${cnic}/army_data`)
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //     data: {
+    //       registrationNo: "sp121212-12",
+    //       woa: false,
+    //       wos: false,
+    //       armyNo: "123",
+    //       name: "john",
+    //       fatherName: "doe",
+    //       unit: "1",
+    //       corps: "2",
+    //       contact: "123123123",
+    //       dod: "22",
+    //     },
+    //   });
+    // });
   };
 
   static updateCandidateWoaWosData = (cnic, data) => {
-    // return axios.put(`${baseURL}
-    // ​/candidate​/${cnic}​/army_data`, data)
-    return new Promise((resolve, reject) => {
-      resolve({
-        updated: "Successfully",
-      });
-    });
+    // return axios.put(`${baseURL}/candidate​/${cnic}​/army_data`, data)
+    return axios.put(`${baseURL}/candidate/${cnic}/army_data`, data)
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //     updated: "Successfully",
+    //   });
+    // });
   };
 
   static getCandidateTestsToAppear = (cnic) => {
     // return axios.get(`${baseURL}/tests​/${cnic}`)
-    return new Promise((resolve, reject) => {
-      resolve({
-        testsToAppear: {
-          registrationNo: "sp121212-12",
-          personality: false,
-          intelligence: false,
-          writtenMatric: false,
-          writtenUnderMatric: false,
-          clerk: false,
-          tech: false,
-          dit: false,
-          dlh: false,
-          hafiz: false,
-          pet: false,
-        },
-        chargesPaid: false,
-      });
-    });
+    return axios.get(`${baseURL}/tests/${cnic}`)
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //     testsToAppear: {
+    //       registrationNo: "sp121212-12",
+    //       personality: false,
+    //       intelligence: false,
+    //       writtenMatric: false,
+    //       writtenUnderMatric: false,
+    //       clerk: false,
+    //       tech: false,
+    //       dit: false,
+    //       dlh: false,
+    //       hafiz: false,
+    //       pet: false,
+    //     },
+    //     chargesPaid: false,
+    //   });
+    // });
   };
 
   static updateCandidateTestsToAppear = (cnic, data) => {
     // return axios.put(`${baseURL}/tests​/${cnic}`, data)
-    return new Promise((resolve, reject) => {
-      resolve({
-        updated: "Successfully",
-      });
-    });
+    return axios.put(`${baseURL}/tests/${cnic}`, data)
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //     updated: "Successfully",
+    //   });
+    // });
   };
 
   // if charges Paid is false then this will return
   // slipDetails: 'Charges not paid'
   static getCandidatePrintTestSlip = (cnic) => {
     // return axios.get(`${baseURL}​/tests​/${cnic}​/slip`)
-    return new Promise((resolve, reject) => {
-      resolve({
-        registrationNo: "sp23123123",
-        slipDetails: [
-          {
-            test: "Initial Test",
-            day: "Monday, June 15, 2009 1:45 PM",
-          },
-          {
-            test: "Personality Test",
-            day: "Monday, June 15, 2009 1:45 PM",
-          },
-          {
-            test: "Hafiz Test",
-            day: "Monday, June 15, 2009 1:45 PM",
-          },
-        ],
-      });
-    });
+    return axios.get(`${baseURL}/tests/${cnic}/slip`)
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //     registrationNo: "sp23123123",
+    //     slipDetails: [
+    //       {
+    //         test: "Initial Test",
+    //         day: "Monday, June 15, 2009 1:45 PM",
+    //       },
+    //       {
+    //         test: "Personality Test",
+    //         day: "Monday, June 15, 2009 1:45 PM",
+    //       },
+    //       {
+    //         test: "Hafiz Test",
+    //         day: "Monday, June 15, 2009 1:45 PM",
+    //       },
+    //     ],
+    //   });
+    // });
   };
 
   static getCandidatesSummary = (date) => {
     // return axios.get(`${baseURL}​/candidate/summary`)
-    return new Promise((resolve, reject) => {
-      resolve({
-        data: [
-          {
-            registrationNo: "sp12-2121",
-            name: "John Doe",
-            fathersName: "Doe John",
-            district: "Rawalpindi",
-            date: "Monday, June 15, 2009 1:45 PM",
-            amountPaid: "500",
-          },
-          {
-            registrationNo: "sp12-2121",
-            name: "John Doe",
-            fathersName: "Doe John",
-            district: "Rawalpindi",
-            date: "Monday, June 15, 2009 1:45 PM",
-            amountPaid: "500",
-          },
-          {
-            registrationNo: "sp12-2121",
-            name: "John Doe",
-            fathersName: "Doe John",
-            district: "Rawalpindi",
-            date: "Monday, June 15, 2009 1:45 PM",
-            amountPaid: "500",
-          },
-        ],
-      });
-    });
+    return axios.get(`${baseURL}/candidate/summary/${date}`)
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //     data: [
+    //       {
+    //         registrationNo: "sp12-2121",
+    //         name: "John Doe",
+    //         fathersName: "Doe John",
+    //         district: "Rawalpindi",
+    //         date: "Monday, June 15, 2009 1:45 PM",
+    //         amountPaid: "500",
+    //       },
+    //       {
+    //         registrationNo: "sp12-2121",
+    //         name: "John Doe",
+    //         fathersName: "Doe John",
+    //         district: "Rawalpindi",
+    //         date: "Monday, June 15, 2009 1:45 PM",
+    //         amountPaid: "500",
+    //       },
+    //       {
+    //         registrationNo: "sp12-2121",
+    //         name: "John Doe",
+    //         fathersName: "Doe John",
+    //         district: "Rawalpindi",
+    //         date: "Monday, June 15, 2009 1:45 PM",
+    //         amountPaid: "500",
+    //       },
+    //     ],
+    //   });
+    // });
   };
 
   // intelligence = {
@@ -466,62 +472,66 @@ export default class API {
   // test name could be intelligence, personality, writtenMatric, writtenUnderMatric, clerk, tech, dit, dlh, hafiz, pet
   static getCandidateTestDetail = (cnic, testName) => {
     // return axios.get(`${baseURL}​/tests​/${cnic}​/${testName}`)
-    return new Promise((resolve, reject) => {
-      resolve({
-        data: {
-          registrationNo: "123",
-          name: "john",
-          marksObtained: "40",
-          todayFail: "2",
-          totalFail: "100",
-          todayPass: "5",
-          totalPass: "100",
-        },
-      });
-    });
+    return axios.get(`${baseURL}/tests/${cnic}/${testName}`)
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //     data: {
+    //       registrationNo: "123",
+    //       name: "john",
+    //       marksObtained: "40",
+    //       todayFail: "2",
+    //       totalFail: "100",
+    //       todayPass: "5",
+    //       totalPass: "100",
+    //     },
+    //   });
+    // });
   };
 
   static updateCandidateTestMarks = (cnic, testResults, testName) => {
     // return axios.put(`${baseURL}​​/tests​/${cnic}​/${testName}`, testResults)
-    return new Promise((resolve, reject) => {
-      resolve({
-        updated: "successfully",
-      });
-    });
+    return axios.put(`${baseURL}/tests/${cnic}/${testName}`, testResults)
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //     updated: "successfully",
+    //   });
+    // });
   };
 
   static getCandidateMarksSummary = (cnic) => {
     // return axios.get(`${baseURL}/tests​/${cnic}​/summary`)
-    return new Promise((resolve, reject) => {
-      resolve({
-        data: {
-          registrationNo: "123",
-          name: "john",
-          district: "Rawalpindi",
-          personality: "Unsuitable",
-          initial: "20",
-          written: "30",
-          dlh: "Fail",
-          dit: "Fail",
-          pet: "Fail",
-          sponser: "Name here",
-          woswoa: "Verified",
-          clerk: "20",
-          tech: "30",
-          hafiz: "Fail",
-          medicalStatus: "FIT", // Ref - Muf
-        },
-      });
-    });
+    return axios.get(`${baseURL}/tests/${cnic}/summary`)
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //     data: {
+    //       registrationNo: "123",
+    //       name: "john",
+    //       district: "Rawalpindi",
+    //       personality: "Unsuitable",
+    //       initial: "20",
+    //       written: "30",
+    //       dlh: "Fail",
+    //       dit: "Fail",
+    //       pet: "Fail",
+    //       sponser: "Name here",
+    //       woswoa: "Verified",
+    //       clerk: "20",
+    //       tech: "30",
+    //       hafiz: "Fail",
+    //       medicalStatus: "FIT", // Ref - Muf
+    //     },
+    //   });
+    // });
   };
 
   static updateCandidateMarksSummary = (cnic, data) => {
     // return axios.put(`${baseURL}/tests​/${cnic}​/summary`, data)
-    return new Promise((resolve, reject) => {
-      resolve({
-        updated: "Successfully",
-      });
-    });
+    return axios.put(`${baseURL}/tests/${cnic}/summary`, data)
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //     updated: "Successfully",
+    //   });
+    // });
   };
 
   // static getMedicalStatusUpdate = () => {
@@ -539,52 +549,55 @@ export default class API {
   // };
 
   static getCandidateMedical = (cnic) => {
-    return new Promise((resolve, reject) => {
-      resolve({
-        candidateMedicalData: {
-          registrationNo: "123",
-          name: "john",
-          height: 20,
-          chest: {
-            chest0: 20,
-            chest1: 40,
-          },
-          weight: 60,
-          temperature: 20,
-          pulseRate: "20/30",
-          bloodPressure: {
-            bp0: 20,
-            bp1: 40,
-          },
-          medicalStatusUpdate: "Fit By RMO",
-          remarks: "new remarks",
-          commentsByRMO: "comments here",
-          addedDeformityList: [
-            {
-              id: 1,
-              label: "Lid Swelling",
-            },
-            {
-              id: 2,
-              label: "Bone Fracture",
-            },
-          ],
-          someVisibleDeformity: false,
-        },
-      });
-    });
+
+    // return axios.put(`${baseURL}/tests/${cnic}/summary`, data)
+    return axios.get(`${baseURL}/medical/${cnic}`)
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //     candidateMedicalData: {
+    //       registrationNo: "123",
+    //       name: "john",
+    //       height: 20,
+    //       chest: {
+    //         chest0: 20,
+    //         chest1: 40,
+    //       },
+    //       weight: 60,
+    //       temperature: 20,
+    //       pulseRate: "20/30",
+    //       bloodPressure: {
+    //         bp0: 20,
+    //         bp1: 40,
+    //       },
+    //       medicalStatusUpdate: "Fit By RMO",
+    //       remarks: "new remarks",
+    //       commentsByRMO: "comments here",
+    //       addedDeformityList: [
+    //         {
+    //           id: 1,
+    //           label: "Lid Swelling",
+    //         },
+    //         {
+    //           id: 2,
+    //           label: "Bone Fracture",
+    //         },
+    //       ],
+    //       someVisibleDeformity: false,
+    //     },
+    //   });
+    // });
   };
 
   // update candidate medical data with medical fit true or false
   static updateCandidateMedical = (
     cnic,
-    candidateMedicalData,
-    medicallyFit
+    data
   ) => {
-    return new Promise((resolve, reject) => {
-      resolve({
-        updated: "Successfully",
-      });
-    });
+    return axios.put(`${baseURL}/medical/${cnic}`, data)
+    // return new Promise((resolve, reject) => {
+    //   resolve({
+    //     updated: "Successfully",
+    //   });
+    // });
   };
 }

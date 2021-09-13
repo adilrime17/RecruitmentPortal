@@ -20,6 +20,8 @@ namespace STC.Data.Models
         [Key]
         [Column("id")]
         public int Id { get; set; }
+        [Column("education_major_id")]
+        public int EducationMajorId { get; set; }
         [Required]
         [Column("name")]
         [StringLength(250)]
@@ -30,8 +32,6 @@ namespace STC.Data.Models
         public DateTime? UpdateTime { get; set; }
         [Column("is_deleted")]
         public bool IsDeleted { get; set; }
-        [Column("education_major_id")]
-        public int EducationMajorId { get; set; }
 
         [ForeignKey(nameof(EducationMajorId))]
         [InverseProperty("EducationSubjects")]

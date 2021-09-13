@@ -49,10 +49,10 @@ namespace STC.Web.API.Controllers
         /// </summary>
         /// <param name="cnic"></param>
         /// <returns></returns>
-        [HttpGet("summary")]
-        public IEnumerable<CandidateSummaryResponse> GetSummary(string cnic)
+        [HttpGet("summary/{date}")]
+        public IEnumerable<CandidateSummaryResponse> GetSummary(DateTime date)
         {
-            return _store.GetSummary();
+            return _store.GetSummary(date);
         }
 
         // POST api/<CandidateController>/check_eligibility

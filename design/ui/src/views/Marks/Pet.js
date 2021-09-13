@@ -32,24 +32,25 @@ function Pet() {
   const [isCnicVerified, setIsCnicVerified] = useState(false);
   const [checkCnicFormat, setCheckCnicFormat] = useState(false);
   const [marksData, setMarksData] = useState({
-    registrationNo: "123",
-    name: "john",
-    totalPetObtained: "5",
-    oneMile: "1",
-    pullUp: "2",
-    pushUp: "2",
-    crunches: "3",
-    ditch: "clear",
-    todayFail: "2",
-    totalFail: "100",
-    todayPass: "5",
-    totalPass: "100",
+    registrationNo: "",
+    name: "",
+    totalPetObtained: "",
+    oneMile: "",
+    pullUp: "",
+    pushUp: "",
+    crunches: "",
+    ditch: "",
+    todayFail: "",
+    totalFail: "",
+    todayPass: "",
+    totalPass: "",
   });
 
   const handleCnicVerify = () => {
     API.getCandidateTestDetail(cnic, "pet")
       .then((res) => {
         console.log(res);
+        res.data.ditch = res.data.ditch ? 'Clear' : 'Unclear'
         setMarksData(res.data);
         setIsCnicVerified(true);
       })
@@ -61,9 +62,11 @@ function Pet() {
 
   const handleSubmit = () => {
     console.log("Handle Submit: ", marksData);
-    API.updateCandidateTestMarks(cnic, marksData, "pet")
+    let data = marksData
+    data.ditch = data.ditch === 'Clear' ? true : false
+    API.updateCandidateTestMarks(cnic, data, "pet")
       .then((res) => {
-        alert(res);
+        alert(res.data ? "Updated Successfully" : "Nothing updated")
       })
       .catch((err) => {
         alert(err);
@@ -145,6 +148,7 @@ function Pet() {
                         name="cnic"
                         placeholder="Provide only numbers without dashes"
                         value={cnic}
+                        inputProps={{ maxLength: 13 }}
                         endAdornment={
                           <InputAdornment position="end">
                             {isCnicVerified ? (
@@ -272,10 +276,7 @@ function Pet() {
                           type="text"
                           name="ditch"
                           placeholder="Clear/Unclear"
-                          menuList={[
-                            { id: 0, label: "Unclear" },
-                            { id: 1, label: "Clear" },
-                          ]}
+                          menuList={["Unclear", "Clear"]}
                           value={marksData.ditch}
                           onChange={handleFieldsChange}
                         />

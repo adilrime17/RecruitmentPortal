@@ -45,20 +45,23 @@ function TestMarks({ type, testName, testLabel }) {
     API.getCandidateTestDetail(cnic, testName)
       .then((res) => {
         console.log(res);
+        if (testName === 'hafiz') {
+          res.data.marksObtained = res.data.marksObtained === 0 ? 'Fail' : 'Pass'
+        }
         setMarksData(res.data);
         setIsCnicVerified(true);
       })
       .catch((err) => {
-        console.log(err);
-        alert("Some error in handleCnicVerify Promise intelligence test");
+        console.log(err.message);
+        alert(err.message);
       });
   };
 
   const handleSubmit = () => {
     console.log("Handle Submit: ", marksData);
-    API.updateCandidateTestMarks(cnic, {testResults: marksData.marksObtained}, testName)
+    API.updateCandidateTestMarks(cnic, {testResults: parseInt(marksData.marksObtained === 'Pass' ? '1' : marksData.marksObtained === 'Fail' ? '0': marksData.marksObtained)}, testName)
       .then((res) => {
-        alert(res);
+        alert(res.data ? "Updated Successfully" : "Nothing updated")
       })
       .catch((err) => {
         alert(err);
@@ -140,6 +143,7 @@ function TestMarks({ type, testName, testLabel }) {
                         name="cnic"
                         placeholder="Provide only numbers without dashes"
                         value={cnic}
+                        inputProps={{ maxLength: 13 }}
                         endAdornment={
                           <InputAdornment position="end">
                             {isCnicVerified ? (
@@ -228,7 +232,7 @@ function TestMarks({ type, testName, testLabel }) {
                         type="text"
                         name="marksObtained"
                         placeholder="Results"
-                        menuList={[{id: 0, label: 'Pass'}, {id: 1, label: 'Fail'}]}
+                        menuList={['Pass', 'Fail']}
                         value={marksData.marksObtained}
                         onChange={handleFieldsChange}
                       />

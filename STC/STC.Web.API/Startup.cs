@@ -10,6 +10,7 @@ using NSwag;
 using STC.Core.EligibilityCheck;
 using STC.Core.Stores;
 using STC.Data;
+using STC.Web.API.Middlewares;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -95,6 +96,9 @@ namespace STC.Web.API
             app.UseRouting();
 
             app.UseAuthorization();
+
+            // global error handler
+            app.UseMiddleware<ErrorHandlerMiddleware>();
 
             app.UseEndpoints(endpoints =>
             {
