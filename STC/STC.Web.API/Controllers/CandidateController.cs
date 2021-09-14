@@ -47,7 +47,7 @@ namespace STC.Web.API.Controllers
         /// <summary>
         /// Get All Candidate summary
         /// </summary>
-        /// <param name="cnic"></param>
+        /// <param name="date"></param>
         /// <returns></returns>
         [HttpGet("summary/{date}")]
         public IEnumerable<CandidateSummaryResponse> GetSummary(DateTime date)

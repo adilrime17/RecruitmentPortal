@@ -61,7 +61,7 @@ namespace STC.Core.Stores
 
         public CheckEligibilityResponse CheckEligibility(CandidateCreateRequest request)
         {
-            Candidate candidate = _dbContext.Candidates.Include(x => x.CandidateMedicalInfos).FirstOrDefault(x => x.Cnic == request.Cnic);
+            Candidate candidate = _dbContext.Candidates.Include(x => x.CandidateMedicalInfos).Include(x => x.CandidateHasCourses).FirstOrDefault(x => x.Cnic == request.Cnic);
             if (candidate == null)
             {
                 candidate = new Candidate();
@@ -80,6 +80,7 @@ namespace STC.Core.Stores
                 candidate.DLH = request.Dlh;
                 candidate.DIT = request.Dit;
                 candidate.Hafiz = request.Hafiz;
+                candidate.SvasXmatch = request.SvasXmatch;
                 CandidateMedicalInfo candidateMedicalInfo = new CandidateMedicalInfo();
                 candidateMedicalInfo.CourseId = 1;
                 candidateMedicalInfo.ChestIn = request.Chest.Chest0;
@@ -88,6 +89,32 @@ namespace STC.Core.Stores
                 candidateMedicalInfo.Height = request.Height;
                 candidate.CandidateMedicalInfos.Add(candidateMedicalInfo);
                 _dbContext.Candidates.Add(candidate);
+                _dbContext.SaveChanges();
+            }
+            else
+            {
+                candidate.DistrictId = _dbContext.Districts.First(x => x.Name == request.District).Id;
+                candidate.LocationClassId = _dbContext.LocationClasses.First(x => x.Name == request.LocationClass).Id;
+                candidate.MaxQualificationId = _dbContext.Qualifications.First(x => x.Name == request.MaxQualification).Id;
+                candidate.NCSE = request.Ncse;
+                candidate.FirstName = request.FirstName;
+                candidate.MiddleName = request.MiddleName;
+                candidate.LastName = request.LastName;
+                candidate.FatherName = request.FatherName;
+                candidate.DateOfBirth = request.DateOfBirth;
+                candidate.WOS = request.Wos;
+                candidate.WOA = request.Woa;
+                candidate.DLH = request.Dlh;
+                candidate.DIT = request.Dit;
+                candidate.Hafiz = request.Hafiz;
+                candidate.SvasXmatch = request.SvasXmatch;
+                CandidateMedicalInfo candidateMedicalInfo = new CandidateMedicalInfo();
+                candidateMedicalInfo.CourseId = 1;
+                candidateMedicalInfo.ChestIn = request.Chest.Chest0;
+                candidateMedicalInfo.ChestOut = request.Chest.Chest1;
+                candidateMedicalInfo.Weight = request.Weight;
+                candidateMedicalInfo.Height = request.Height;
+                candidate.CandidateMedicalInfos.Add(candidateMedicalInfo);
                 _dbContext.SaveChanges();
             }
             // perform eligibility check and return
@@ -100,9 +127,15 @@ namespace STC.Core.Stores
                     CandidateCnic = candidate.Cnic,
                     CourseId = 1,
                     RegistrationNumber = _dbContext.Courses.First(x => x.Id == 1).Name + "-" + candidate.Cnic + "-" + 1,
+                    RegisteredDate = DateTime.Now,
                     Status = _dbContext.Statuses.First(x => x.Id == (check ? "eligible" : "non-eligible"))
                 };
                 _dbContext.CandidateHasCourses.Add(candidateHasCourse);
+                _dbContext.SaveChanges();
+            }
+            else
+            {
+                candidateHasCourse.Status = _dbContext.Statuses.First(x => x.Id == (check ? "eligible" : "non-eligible"));
                 _dbContext.SaveChanges();
             }
 
@@ -156,8 +189,8 @@ namespace STC.Core.Stores
                 Unit = candidate.CandidateArmyInfo?.Unit,
                 Corps = candidate.CandidateArmyInfo?.Corps,
                 Contact = candidate.GuardianPhone,
-                Dod = candidate.CandidateArmyInfo?.DOD.ToString()
-            };           
+                Dod = candidate.CandidateArmyInfo?.DOD?.ToString("yyyy-MM-ddTHH:mm:ss")
+        };           
         }
 
         public bool UpdateArmyData(string cnic, CandidateArmyDataRequest request)
@@ -194,15 +227,16 @@ namespace STC.Core.Stores
         public IList<CandidateSummaryResponse> GetSummary(DateTime date)
         {
             IList<CandidateSummaryResponse> candidateSummaryResponses = new List<CandidateSummaryResponse>();
-            candidateSummaryResponses = _dbContext.CandidateHasCourses.Where(x => x.CourseId == 1 && x.CreateTime.Date == date.Date)
-                .Select(x => new CandidateSummaryResponse()
+            candidateSummaryResponses = _dbContext.CandidateHasCourses.Include(x => x.CandidateCnicNavigation).ThenInclude(x => x.District).Where(x => x.CourseId == 1 && x.CreateTime.Date == date.Date).ToList()
+                .Select(x => 
+                new CandidateSummaryResponse()
                 {
                     RegistrationNo = x.RegistrationNumber,
                     Name = x.CandidateCnicNavigation.FirstName + ' ' + x.CandidateCnicNavigation.MiddleName + ' ' + x.CandidateCnicNavigation.LastName,
                     FathersName = x.CandidateCnicNavigation.FatherName,
                     District = x.CandidateCnicNavigation.District.Name,
-                    Date = x.CandidateCnicNavigation.CandidateTestCharges.First(x => x.CourseId == 1).CreateTime.ToString(),
-                    AmountPaid = x.CandidateCnicNavigation.CandidateTestCharges.First(x => x.CourseId == 1).AmountPaid.Value
+                    Date = x.RegisteredDate.ToString(),
+                    AmountPaid = x.CandidateCnicNavigation.CandidateTestCharges.FirstOrDefault(x => x.CourseId == 1) != null ? x.CandidateCnicNavigation.CandidateTestCharges.FirstOrDefault(x => x.CourseId == 1).AmountPaid.Value : 0
                 }).ToList();
             return candidateSummaryResponses;
         }

@@ -45,6 +45,7 @@ namespace STC.Core.Stores
             response.Remarks = candidateMedicalInfo.Remarks;
             response.CommentsByRMO = candidateMedicalInfo.CommentsByRmo;
             response.Status = candidateMedicalInfo.StatusUpdate;
+            response.VisibleDeformity = candidateMedicalInfo.VisibleDeformity;
             response.AddedDeformityList = candidateMedicalInfo.DeformityList != null ? JsonSerializer.Deserialize<List<SelectResponse>>(candidateMedicalInfo.DeformityList) : null;
             return response;
         }
@@ -67,7 +68,8 @@ namespace STC.Core.Stores
                 Remarks = request.CandidateMedicalData.Remarks,
                 CommentsByRmo = request.CandidateMedicalData.CommentsByRMO,
                 StatusUpdate = request.CandidateMedicalData.Status,
-                DeformityList = JsonSerializer.Serialize(request.CandidateMedicalData.AddedDeformityList)
+                VisibleDeformity = request.CandidateMedicalData.VisibleDeformity,
+                DeformityList = JsonSerializer.Serialize(request.CandidateMedicalData.AddedDeformityList),
             };
             _dbContext.CandidateMedicalInfos.Add(candidateMedicalInfo);
             _dbContext.SaveChanges();

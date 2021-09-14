@@ -11,6 +11,6 @@ namespace STC.Common.Responses
         public string FathersName { get; set; }
         public string District { get; set; }
         public string Date { get; set; }
-        public float AmountPaid { get; set; }
+        public float? AmountPaid { get; set; }
     }
 }
