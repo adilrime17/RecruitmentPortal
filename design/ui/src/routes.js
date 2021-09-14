@@ -1,7 +1,6 @@
 import MainComponent from "views/admin/MainComponent";
 
 var routes = [
-  //>> Medical routes :
   {
     path: "/medical-eligibility",
     name: "Eligibility Check",
@@ -11,26 +10,6 @@ var routes = [
     layout: "/admin",
     key: 'medical'
   },
-  {
-    path: "/initial-medical",
-    name: "Initial Medical",
-    // icon: Tv,
-    // iconColor: "Primary",
-    component: MainComponent,
-    layout: "/admin",
-    key: 'medical'
-  },
-  {
-    path: "/final-medical",
-    name: "Final Medical",
-    // icon: Tv,
-    // iconColor: "Primary",
-    component: MainComponent,
-    layout: "/admin",
-    key: 'medical'
-  },
-
-  //>> Data Entry Routes :
   {
     path: "/personal-information",
     name: "Personal Information",
@@ -85,9 +64,6 @@ var routes = [
     layout: "/admin",
     key: 'data'
   },
-
-  // >> Marks Entry Routes :
-
   {
     path: "/intelligence-test",
     name: "Intelligence Test",
@@ -188,6 +164,24 @@ var routes = [
     component: MainComponent,
     layout: "/admin",
     key: 'marks'
+  },
+  {
+    path: "/initial-medical",
+    name: "Initial Medical",
+    // icon: Tv,
+    // iconColor: "Primary",
+    component: MainComponent,
+    layout: "/admin",
+    key: 'medical'
+  },
+  {
+    path: "/final-medical",
+    name: "Final Medical",
+    // icon: Tv,
+    // iconColor: "Primary",
+    component: MainComponent,
+    layout: "/admin",
+    key: 'medical'
   },
   // {
   //   path: "/view-print-nominal-rolls",

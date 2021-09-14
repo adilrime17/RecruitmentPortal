@@ -68,7 +68,7 @@ namespace STC.Core.Stores
                         case "Clk Test":
                             response.TestsToAppear.Clerk = true;
                             break;
-                        case "Driving Aptitude test":
+                        case "DLH test":
                             response.TestsToAppear.Dlh = true;
                             break;
                         case "Computer Diploma":
@@ -412,7 +412,6 @@ namespace STC.Core.Stores
                 throw new Exception("candidate test does not exist");
             }
             candidateTestScore.ObtainedMarks = request.TestResults;
-
             PhysicalTestScore physicalTestScore = _dbContext.PhysicalTestScores.FirstOrDefault(x => x.CandidateCnic == cnic && x.CourseId == 1);
             if(physicalTestScore == null)
             {
@@ -436,6 +435,7 @@ namespace STC.Core.Stores
                 physicalTestScore.Crunches = request.Crunches;
                 physicalTestScore.Ditch = request.Ditch;
             }
+
             return _dbContext.SaveChanges() > 0;
         }
     }

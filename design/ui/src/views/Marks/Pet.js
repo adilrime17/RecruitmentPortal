@@ -50,6 +50,7 @@ function Pet() {
     API.getCandidateTestDetail(cnic, "pet")
       .then((res) => {
         console.log(res);
+        res.data.ditch = res.data.ditch ? 'Clear' : 'Unclear'
         setMarksData(res.data);
         setIsCnicVerified(true);
       })
@@ -147,6 +148,7 @@ function Pet() {
                         name="cnic"
                         placeholder="Provide only numbers without dashes"
                         value={cnic}
+                        inputProps={{ maxLength: 13 }}
                         endAdornment={
                           <InputAdornment position="end">
                             {isCnicVerified ? (
@@ -274,10 +276,7 @@ function Pet() {
                           type="text"
                           name="ditch"
                           placeholder="Clear/Unclear"
-                          menuList={[
-                            { id: 0, label: "Unclear" },
-                            { id: 1, label: "Clear" },
-                          ]}
+                          menuList={["Unclear", "Clear"]}
                           value={marksData.ditch}
                           onChange={handleFieldsChange}
                         />
