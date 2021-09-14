@@ -80,6 +80,7 @@ namespace STC.Core.Stores
                 candidate.DLH = request.Dlh;
                 candidate.DIT = request.Dit;
                 candidate.Hafiz = request.Hafiz;
+                candidate.SvasXmatch = request.SvasXmatch;
                 CandidateMedicalInfo candidateMedicalInfo = new CandidateMedicalInfo();
                 candidateMedicalInfo.CourseId = 1;
                 candidateMedicalInfo.ChestIn = request.Chest.Chest0;
@@ -132,6 +133,7 @@ namespace STC.Core.Stores
             candidate.DLH = request.Dlh;
             candidate.DIT = request.Dit;
             candidate.Hafiz = request.Hafiz;
+            candidate.SvasXmatch = request.SvasXmatch;
             CandidateMedicalInfo candidateMedicalInfo = candidate.CandidateMedicalInfos.Where(x => x.CourseId == 1).OrderBy(x => x.Id).Last();
             candidateMedicalInfo.CourseId = 1;
             candidateMedicalInfo.ChestIn = request.Chest.Chest0;
