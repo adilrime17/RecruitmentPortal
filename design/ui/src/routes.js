@@ -157,15 +157,6 @@ var routes = [
     key: 'marks'
   },
   {
-    path: "/summary-marks",
-    name: "Summary Marks",
-    // icon: Tv,
-    // iconColor: "Primary",
-    component: MainComponent,
-    layout: "/admin",
-    key: 'marks'
-  },
-  {
     path: "/initial-medical",
     name: "Initial Medical",
     // icon: Tv,
@@ -182,6 +173,15 @@ var routes = [
     component: MainComponent,
     layout: "/admin",
     key: 'medical'
+  },
+  {
+    path: "/summary-marks",
+    name: "Summary Marks",
+    // icon: Tv,
+    // iconColor: "Primary",
+    component: MainComponent,
+    layout: "/admin",
+    key: 'marks'
   },
   // {
   //   path: "/view-print-nominal-rolls",
