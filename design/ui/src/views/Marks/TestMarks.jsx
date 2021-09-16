@@ -53,7 +53,7 @@ function TestMarks({ type, testName, testLabel }) {
       })
       .catch((err) => {
         console.log(err.message);
-        alert(err.message);
+        alert(err.response.data.message);
       });
   };
 
